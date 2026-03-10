@@ -1,0 +1,52 @@
+# Binaires compilés
+*.o
+*.obj
+*.out
+*.exe
+*.a
+*.so
+*.so.*
+*.dylib
+
+# Dossiers de build
+build/
+cmake-build-*/
+CMakeFiles/
+CMakeCache.txt
+cmake_install.cmake
+Makefile
+
+# Fichiers temporaires
+*.tmp
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+*.kate-swp
+
+# Fichiers de debug
+*.dSYM/
+core
+core.*
+vgcore.*
+
+# IDE
+.vscode/
+.idea/
+*.code-workspace
+
+# Résultats de tests / profiling
+*.gcda
+*.gcno
+*.gcov
+*.profraw
+*.profdata
+perf.data
+perf.data.old
+callgrind.out.*
+
+# Fichiers texte temporaires à la racine
+*.txt
+!README.txt
+!LICENSE.txt
