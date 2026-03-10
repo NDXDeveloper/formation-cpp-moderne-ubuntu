@@ -43,15 +43,15 @@ Décomposons chaque partie :
 La forme la plus minimale — une lambda sans capture, sans paramètre, sans valeur de retour :
 
 ```cpp
-auto greet = [] { std::print("Hello\n"); };
-greet();  // Affiche : Hello
+auto greet = [] { std::print("Hello\n"); };  
+greet();  // Affiche : Hello  
 ```
 
 Ajout de paramètres :
 
 ```cpp
-auto add = [](int a, int b) { return a + b; };
-std::print("{}\n", add(3, 4));  // Affiche : 7
+auto add = [](int a, int b) { return a + b; };  
+std::print("{}\n", add(3, 4));  // Affiche : 7  
 ```
 
 Le type de retour est déduit comme `int` car l'expression `a + b` avec deux `int` produit un `int`. Si la déduction est ambiguë ou si on souhaite forcer un type particulier, on utilise le trailing return type :
@@ -81,8 +81,8 @@ static_assert(square(5) == 25);
 Chaque expression lambda produit un objet dont le type est **unique et anonyme**, généré par le compilateur. Deux lambdas ayant exactement le même corps et les mêmes captures ont pourtant des types distincts :
 
 ```cpp
-auto f = [](int x) { return x + 1; };
-auto g = [](int x) { return x + 1; };
+auto f = [](int x) { return x + 1; };  
+auto g = [](int x) { return x + 1; };  
 
 // f et g ont des types différents !
 // static_assert(std::is_same_v<decltype(f), decltype(g)>);  // Erreur : false
@@ -95,13 +95,13 @@ Cette caractéristique a des conséquences pratiques directes :
 - **Chaque lambda a une taille propre**, qui dépend de ce qu'elle capture. Une lambda sans capture a une taille de 1 octet (le minimum pour avoir une adresse unique). Une lambda capturant un `std::string` par valeur aura au moins la taille de ce `std::string`.
 
 ```cpp
-auto empty = [] {};
-auto with_int = [x = 42] {};
-auto with_str = [s = std::string("hello")] {};
+auto empty = [] {};  
+auto with_int = [x = 42] {};  
+auto with_str = [s = std::string("hello")] {};  
 
-std::print("Taille lambda vide     : {} octets\n", sizeof(empty));     // 1
-std::print("Taille lambda avec int : {} octets\n", sizeof(with_int));  // 4
-std::print("Taille lambda avec str : {} octets\n", sizeof(with_str));  // 32 (typique)
+std::print("Taille lambda vide     : {} octets\n", sizeof(empty));     // 1  
+std::print("Taille lambda avec int : {} octets\n", sizeof(with_int));  // 4  
+std::print("Taille lambda avec str : {} octets\n", sizeof(with_str));  // 32 (typique)  
 ```
 
 ---
@@ -137,8 +137,8 @@ void sort_c_style(int* arr, size_t n) {
 Dès qu'une lambda **capture** quoi que ce soit, cette conversion n'est plus possible — la lambda porte un état interne, ce qu'un simple pointeur de fonction ne peut pas représenter :
 
 ```cpp
-int offset = 10;
-auto with_capture = [offset](int x) { return x + offset; };
+int offset = 10;  
+auto with_capture = [offset](int x) { return x + offset; };  
 
 // int (*ptr)(int) = with_capture;  // ERREUR de compilation
 ```
@@ -152,9 +152,9 @@ La clause de capture `[...]` est le mécanisme par lequel une lambda accède aux
 Voici un résumé des modes disponibles :
 
 ```cpp
-int x = 10;
-int y = 20;
-int z = 30;
+int x = 10;  
+int y = 20;  
+int z = 30;  
 
 // Aucune capture — pas d'accès aux variables locales
 auto a = []         { /* x, y, z inaccessibles */ };
@@ -181,8 +181,8 @@ auto g = [&, x]     { return x + y + z; };
 auto h = [val = x * 2] { return val; };
 
 // Init capture avec move (C++14) — transfert de propriété
-auto ptr = std::make_unique<int>(42);
-auto i = [p = std::move(ptr)] { return *p; };
+auto ptr = std::make_unique<int>(42);  
+auto i = [p = std::move(ptr)] { return *p; };  
 ```
 
 ### Tableau récapitulatif
@@ -232,8 +232,8 @@ Les deux captures par défaut ne peuvent pas coexister :
 Un point souvent source de confusion : **la capture a lieu au moment de la création de la lambda**, pas au moment de son appel. Pour les captures par valeur, c'est la valeur au moment de la définition qui est copiée :
 
 ```cpp
-int value = 10;
-auto snapshot = [value] { return value; };
+int value = 10;  
+auto snapshot = [value] { return value; };  
 
 value = 42;  // Modification après la création de la lambda
 
@@ -243,8 +243,8 @@ std::print("{}\n", snapshot());  // Affiche : 10 (pas 42 !)
 Pour les captures par référence, la lambda accède toujours à la variable originale — elle voit donc les modifications ultérieures :
 
 ```cpp
-int value = 10;
-auto live = [&value] { return value; };
+int value = 10;  
+auto live = [&value] { return value; };  
 
 value = 42;
 
@@ -267,12 +267,12 @@ int counter = 0;
 Le mot-clé `mutable` lève cette restriction en rendant l'`operator()` non-const :
 
 ```cpp
-int counter = 0;
-auto inc = [counter]() mutable { return ++counter; };
+int counter = 0;  
+auto inc = [counter]() mutable { return ++counter; };  
 
-std::print("{}\n", inc());  // Affiche : 1
-std::print("{}\n", inc());  // Affiche : 2
-std::print("{}\n", inc());  // Affiche : 3
+std::print("{}\n", inc());  // Affiche : 1  
+std::print("{}\n", inc());  // Affiche : 2  
+std::print("{}\n", inc());  // Affiche : 3  
 
 // La variable originale n'est PAS modifiée — c'est la copie interne qui l'est
 std::print("{}\n", counter);  // Affiche : 0
@@ -320,9 +320,9 @@ std::function<int()> create_counter() {
     return [count]() mutable { return ++count; };
 }
 
-auto counter = create_counter();
-std::print("{}\n", counter());  // 1
-std::print("{}\n", counter());  // 2
+auto counter = create_counter();  
+std::print("{}\n", counter());  // 1  
+std::print("{}\n", counter());  // 2  
 ```
 
 ### Règle pratique
@@ -354,12 +354,12 @@ Depuis C++17, les lambdas peuvent être utilisées dans des contextes `constexpr
 constexpr auto square = [](int x) { return x * x; };
 
 // Évaluation à la compilation
-static_assert(square(5) == 25);
-constexpr int result = square(7);
+static_assert(square(5) == 25);  
+constexpr int result = square(7);  
 
 // Évaluation à l'exécution — même lambda
-int runtime_val = 6;
-std::print("{}\n", square(runtime_val));  // 36
+int runtime_val = 6;  
+std::print("{}\n", square(runtime_val));  // 36  
 ```
 
 En C++17, les lambdas sont **implicitement** `constexpr` lorsque c'est possible. Ajouter `constexpr` explicitement sert à garantir que toute modification qui rendrait la lambda non-constexpr provoquera une erreur de compilation.

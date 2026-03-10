@@ -51,11 +51,11 @@ L'API de `std::flat_map` est volontairement identique à celle de `std::map`. Da
 // Remplacement direct de std::map
 std::flat_map<std::string, int> scores;
 
-scores["Alice"] = 95;
-scores["Bob"] = 87;
-scores["Clara"] = 92;
-scores.insert({"Dave", 88});
-scores.emplace("Eve", 91);
+scores["Alice"] = 95;  
+scores["Bob"] = 87;  
+scores["Clara"] = 92;  
+scores.insert({"Dave", 88});  
+scores.emplace("Eve", 91);  
 
 // Recherche — identique à std::map
 if (auto it = scores.find("Bob"); it != scores.end()) {
@@ -85,11 +85,11 @@ if (scores.contains("Alice")) {
 #include <string>
 #include <print>
 
-std::flat_set<std::string> tags;
-tags.insert("cpp");
-tags.insert("linux");
-tags.insert("devops");
-tags.insert("cpp");    // Ignoré — déjà présent
+std::flat_set<std::string> tags;  
+tags.insert("cpp");  
+tags.insert("linux");  
+tags.insert("devops");  
+tags.insert("cpp");    // Ignoré — déjà présent  
 
 for (const auto& tag : tags) {
     std::print("{} ", tag);
@@ -107,8 +107,8 @@ Quand les données sont déjà triées et sans doublons (par exemple après un t
 #include <string>
 
 // Données déjà triées par clé
-std::vector<std::string> keys = {"Alice", "Bob", "Clara"};
-std::vector<int> values = {95, 87, 92};
+std::vector<std::string> keys = {"Alice", "Bob", "Clara"};  
+std::vector<int> values = {95, 87, 92};  
 
 // Construction O(1) — pas de tri nécessaire
 std::flat_map<std::string, int> scores(std::sorted_unique, 
@@ -121,8 +121,8 @@ Ce constructeur déplace les vecteurs existants sans copie ni tri. C'est l'appro
 Pour `std::flat_set`, le tag équivalent est le même :
 
 ```cpp
-std::vector<int> sorted_data = {1, 3, 5, 7, 9};
-std::flat_set<int> s(std::sorted_unique, std::move(sorted_data));
+std::vector<int> sorted_data = {1, 3, 5, 7, 9};  
+std::flat_set<int> s(std::sorted_unique, std::move(sorted_data));  
 ```
 
 ## Conteneurs sous-jacents personnalisés
@@ -155,8 +155,8 @@ C'est la différence la plus importante au quotidien. Comme les données sont st
 ```cpp
 std::flat_map<std::string, int> fm = {{"a", 1}, {"b", 2}, {"c", 3}};
 
-auto it = fm.find("b");
-fm.insert({"d", 4});    // ATTENTION : it est potentiellement invalide !
+auto it = fm.find("b");  
+fm.insert({"d", 4});    // ATTENTION : it est potentiellement invalide !  
 
 // Avec std::map, it resterait valide après cette insertion
 ```
@@ -168,8 +168,8 @@ Cette invalidation est la contrepartie directe de la mémoire contiguë : quand 
 De même, les références et pointeurs vers les éléments ne sont pas stables après une modification du conteneur. Si du code externe conserve un `const std::string&` vers une clé, cette référence peut devenir invalide après une insertion :
 
 ```cpp
-const auto& key_ref = fm.begin()->first;
-fm.insert({"new_key", 42});
+const auto& key_ref = fm.begin()->first;  
+fm.insert({"new_key", 42});  
 // key_ref est potentiellement un dangling reference
 ```
 
@@ -181,11 +181,11 @@ fm.insert({"new_key", 42});
 std::flat_map<std::string, int> scores = {{"Alice", 95}, {"Bob", 87}, {"Clara", 92}};
 
 // Accès en lecture aux conteneurs internes
-const auto& k = scores.keys();      // const vector<string>&
-const auto& v = scores.values();     // const vector<int>&
+const auto& k = scores.keys();      // const vector<string>&  
+const auto& v = scores.values();     // const vector<int>&  
 
-std::print("Clés : ");
-for (const auto& key : k) std::print("{} ", key);
+std::print("Clés : ");  
+for (const auto& key : k) std::print("{} ", key);  
 // Clés : Alice Bob Clara
 
 // Extraction des conteneurs (transfert de propriété)
@@ -234,10 +234,10 @@ Ce profil correspond en pratique à un grand nombre de cas d'usage réels : tabl
 ```cpp
 std::flat_map<std::string, int> fm;
 // Pas d'API reserve directe, mais on peut pré-construire les vecteurs
-std::vector<std::string> keys;
-std::vector<int> values;
-keys.reserve(1000);
-values.reserve(1000);
+std::vector<std::string> keys;  
+std::vector<int> values;  
+keys.reserve(1000);  
+values.reserve(1000);  
 // ... remplir et trier ...
 fm = std::flat_map(std::sorted_unique, std::move(keys), std::move(values));
 ```

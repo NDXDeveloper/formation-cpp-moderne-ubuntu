@@ -16,11 +16,11 @@ Et parce que la possession partagée introduit un risque spécifique — les **c
 #include <memory>
 
 // Deux shared_ptr partagent la même ressource
-auto p1 = std::make_shared<std::string>("Bonjour");
-auto p2 = p1;  // ✅ Copie autorisée — possession partagée
+auto p1 = std::make_shared<std::string>("Bonjour");  
+auto p2 = p1;  // ✅ Copie autorisée — possession partagée  
 
-std::print("{}\n", *p1);  // "Bonjour"
-std::print("{}\n", *p2);  // "Bonjour" — même objet
+std::print("{}\n", *p1);  // "Bonjour"  
+std::print("{}\n", *p2);  // "Bonjour" — même objet  
 
 // p1 et p2 pointent vers le même string
 std::print("Même adresse ? {}\n", p1.get() == p2.get());  // true
@@ -33,9 +33,9 @@ std::print("Même adresse ? {}\n", p1.get() == p2.get());  // true
 Le nom `shared_ptr` exprime que la **propriété est partagée**. Contrairement à `unique_ptr`, la copie est non seulement autorisée mais constitue le mécanisme central du smart pointer : chaque copie crée un nouveau co-propriétaire.
 
 ```cpp
-auto a = std::make_shared<int>(42);  // 1 propriétaire
-auto b = a;                          // 2 propriétaires — copie
-auto c = a;                          // 3 propriétaires — copie
+auto a = std::make_shared<int>(42);  // 1 propriétaire  
+auto b = a;                          // 2 propriétaires — copie  
+auto c = a;                          // 3 propriétaires — copie  
 
 // Les trois pointent vers le même int(42)
 // La ressource sera libérée quand a, b ET c seront tous détruits
@@ -84,9 +84,9 @@ Conséquences concrètes sur la taille :
 #include <memory>
 #include <iostream>
 
-std::print("sizeof(int*)              = {}\n", sizeof(int*));              // 8
-std::print("sizeof(unique_ptr<int>)   = {}\n", sizeof(std::unique_ptr<int>));  // 8
-std::print("sizeof(shared_ptr<int>)   = {}\n", sizeof(std::shared_ptr<int>));  // 16
+std::print("sizeof(int*)              = {}\n", sizeof(int*));              // 8  
+std::print("sizeof(unique_ptr<int>)   = {}\n", sizeof(std::unique_ptr<int>));  // 8  
+std::print("sizeof(shared_ptr<int>)   = {}\n", sizeof(std::shared_ptr<int>));  // 16  
 ```
 
 Un `shared_ptr` fait **le double** d'un `unique_ptr` : il stocke deux pointeurs (un vers la ressource, un vers le bloc de contrôle). Et le bloc de contrôle lui-même consomme de la mémoire supplémentaire sur le tas — typiquement 16 à 32 octets selon l'implémentation.
@@ -179,8 +179,8 @@ void creer_arbre() {
 Un `weak_ptr` ne permet pas d'accéder directement à la ressource — il n'a pas d'opérateurs `*` ni `->`. C'est volontaire : la ressource pourrait avoir été détruite entre-temps. Pour y accéder, il faut d'abord tenter de le **promouvoir** en `shared_ptr` via la méthode `lock()` :
 
 ```cpp
-auto shared = std::make_shared<std::string>("Hello");
-std::weak_ptr<std::string> weak = shared;
+auto shared = std::make_shared<std::string>("Hello");  
+std::weak_ptr<std::string> weak = shared;  
 
 // Tentative d'accès
 if (auto locked = weak.lock()) {

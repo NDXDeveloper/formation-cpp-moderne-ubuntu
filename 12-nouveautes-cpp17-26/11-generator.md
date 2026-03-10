@@ -228,18 +228,18 @@ std::generator<const std::string&> iterate_names(
 La déclaration complète de `std::generator` est en fait :
 
 ```cpp
-template <typename Ref, typename V = void, typename Allocator = void>
-class generator;
+template <typename Ref, typename V = void, typename Allocator = void>  
+class generator;  
 ```
 
 Le premier paramètre `Ref` est le type de référence — ce que `co_yield` produit. Le type valeur (`value_type` de l'itérateur) est déduit. Voici les combinaisons courantes :
 
 ```cpp
-std::generator<int>             // co_yield produit des int (copie)
-std::generator<const int&>      // co_yield produit des const int& (référence constante)
-std::generator<int&&>           // co_yield produit des int&& (référence rvalue)
-std::generator<std::string>     // co_yield produit des string (copie/move)
-std::generator<const std::string&>  // co_yield produit des références constantes
+std::generator<int>             // co_yield produit des int (copie)  
+std::generator<const int&>      // co_yield produit des const int& (référence constante)  
+std::generator<int&&>           // co_yield produit des int&& (référence rvalue)  
+std::generator<std::string>     // co_yield produit des string (copie/move)  
+std::generator<const std::string&>  // co_yield produit des références constantes  
 ```
 
 Pour les types coûteux à copier et dont la durée de vie est garantie (par exemple, itération sur un conteneur existant), la variante par référence constante évite les copies inutiles.
@@ -253,16 +253,16 @@ Le troisième paramètre template de `std::generator` permet de spécifier un al
 #include <memory_resource>
 
 // Générateur utilisant un allocateur polymorphique
-std::generator<int, void, std::pmr::polymorphic_allocator<>> 
-counting(std::pmr::memory_resource* mr) {
+std::generator<int, void, std::pmr::polymorphic_allocator<>>   
+counting(std::pmr::memory_resource* mr) {  
     for (int i = 0; ; ++i) {
         co_yield i;
     }
 }
 
 // Utilisation avec une arena
-std::pmr::monotonic_buffer_resource arena;
-auto gen = counting(&arena);
+std::pmr::monotonic_buffer_resource arena;  
+auto gen = counting(&arena);  
 ```
 
 En pratique, le HARE (Heap Allocation Elision, section 12.6) élimine souvent l'allocation du coroutine frame quand le générateur est consommé localement. Les allocateurs personnalisés sont surtout utiles quand le HARE ne s'applique pas — par exemple quand le générateur est stocké ou transféré entre fonctions.

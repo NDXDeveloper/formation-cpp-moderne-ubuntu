@@ -82,15 +82,15 @@ Cette intégration avec le système de formatage standard signifie que les stack
 
 auto trace = std::stacktrace::current();
 
-trace.size();    // Nombre de frames dans la pile
-trace.empty();   // true si aucune frame capturée
+trace.size();    // Nombre de frames dans la pile  
+trace.empty();   // true si aucune frame capturée  
 
-trace[0];        // Première entrée (le point de capture)
-trace[1];        // L'appelant du point de capture
+trace[0];        // Première entrée (le point de capture)  
+trace[1];        // L'appelant du point de capture  
 // ...
 
-trace.begin();   // Itérateur de début
-trace.end();     // Itérateur de fin
+trace.begin();   // Itérateur de début  
+trace.end();     // Itérateur de fin  
 
 // Itération standard
 for (const std::stacktrace_entry& frame : trace) {
@@ -369,8 +369,8 @@ En production, on peut compiler avec des symboles séparés pour ne pas gonfler 
 g++ -std=c++23 -O2 -g -o app main.cpp -lstdc++_libbacktrace
 
 # Extraire les symboles dans un fichier séparé
-objcopy --only-keep-debug app app.debug
-strip --strip-debug app
+objcopy --only-keep-debug app app.debug  
+strip --strip-debug app  
 
 # Déployer 'app' (léger) — garder 'app.debug' pour le diagnostic
 ```

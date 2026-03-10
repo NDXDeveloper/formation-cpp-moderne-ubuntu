@@ -43,16 +43,16 @@ Supposons qu'on veuille, à partir d'un vecteur d'entiers, extraire les nombres 
 std::vector<int> data = {5, 3, 8, 1, 6, 2, 7, 4, 9};
 
 // Étape 1 : copier les pairs dans un nouveau vecteur
-std::vector<int> evens;
-std::copy_if(data.begin(), data.end(), std::back_inserter(evens),
+std::vector<int> evens;  
+std::copy_if(data.begin(), data.end(), std::back_inserter(evens),  
              [](int n) { return n % 2 == 0; });
 
 // Étape 2 : trier
 std::sort(evens.begin(), evens.end());
 
 // Étape 3 : transformer (élever au carré)
-std::vector<int> result;
-std::transform(evens.begin(), evens.end(), std::back_inserter(result),
+std::vector<int> result;  
+std::transform(evens.begin(), evens.end(), std::back_inserter(result),  
                [](int n) { return n * n; });
 
 // result == {4, 16, 36, 64}
@@ -72,9 +72,9 @@ Le concept `std::ranges::range` formalise cette idée :
 #include <ranges>
 #include <vector>
 
-static_assert(std::ranges::range<std::vector<int>>);   // true
-static_assert(std::ranges::range<int[10]>);              // true
-static_assert(std::ranges::range<int>);                  // false — un int seul n'est pas un range
+static_assert(std::ranges::range<std::vector<int>>);   // true  
+static_assert(std::ranges::range<int[10]>);              // true  
+static_assert(std::ranges::range<int>);                  // false — un int seul n'est pas un range  
 ```
 
 ### Algorithmes ranges : plus besoin de paires d'itérateurs
@@ -215,8 +215,8 @@ auto big = nums | std::views::drop_while([](int n) { return n < 6; });
 
 ```cpp
 // iota : séquence croissante à partir d'une valeur
-auto from_one = std::views::iota(1);        // 1, 2, 3, 4, ... (infini !)
-auto range_10 = std::views::iota(1, 11);    // 1, 2, 3, ..., 10 (fini)
+auto from_one = std::views::iota(1);        // 1, 2, 3, 4, ... (infini !)  
+auto range_10 = std::views::iota(1, 11);    // 1, 2, 3, ..., 10 (fini)  
 
 // Combinaison : les 5 premiers carrés parfaits
 auto perfect_squares = std::views::iota(1)
@@ -236,21 +236,21 @@ auto perfect_squares = std::views::iota(1)
 #include <string_view>
 
 // reverse : parcours inverse
-std::vector<int> v = {1, 2, 3, 4, 5};
-auto reversed = v | std::views::reverse;
+std::vector<int> v = {1, 2, 3, 4, 5};  
+auto reversed = v | std::views::reverse;  
 // → 5, 4, 3, 2, 1
 
 // split (C++20) : découper une chaîne
-std::string csv = "Alice,Bob,Clara,Dave";
-for (auto word : csv | std::views::split(',')) {
+std::string csv = "Alice,Bob,Clara,Dave";  
+for (auto word : csv | std::views::split(',')) {  
     // word est un sous-range de caractères
     auto sv = std::string_view(word.begin(), word.end());
     // sv successivement : "Alice", "Bob", "Clara", "Dave"
 }
 
 // join : aplatir un range de ranges
-std::vector<std::vector<int>> nested = {{1, 2}, {3, 4}, {5}};
-auto flat = nested | std::views::join;
+std::vector<std::vector<int>> nested = {{1, 2}, {3, 4}, {5}};  
+auto flat = nested | std::views::join;  
 // → 1, 2, 3, 4, 5
 ```
 
@@ -275,8 +275,8 @@ for (auto [i, name] : std::views::enumerate(names)) {
 // [2] Clara
 
 // zip (C++23) : combine plusieurs ranges en parallèle
-std::vector<int> scores = {95, 87, 92};
-for (auto [name, score] : std::views::zip(names, scores)) {
+std::vector<int> scores = {95, 87, 92};  
+for (auto [name, score] : std::views::zip(names, scores)) {  
     std::print("{} : {}\n", name, score);
 }
 // Alice : 95
@@ -358,12 +358,12 @@ auto top_temps = readings
     | std::views::transform([](const Measurement& m) { return m.temperature; })
     | std::ranges::to<std::vector>(); // matérialiser pour trier
 
-std::ranges::sort(top_temps, std::greater{});
-auto top_5 = top_temps 
+std::ranges::sort(top_temps, std::greater{});  
+auto top_5 = top_temps   
     | std::views::take(5);
 
-std::print("Top 5 températures :\n");
-for (auto [i, temp] : std::views::enumerate(top_5)) {
+std::print("Top 5 températures :\n");  
+for (auto [i, temp] : std::views::enumerate(top_5)) {  
     std::print("  {}. {:.1f}°C\n", i + 1, temp);
 }
 ```

@@ -62,8 +62,8 @@ if (result) {                           // Test de présence (convertible en boo
 }
 
 // Ou avec value_or pour fournir une valeur par défaut :
-int score = find_score("Charlie").value_or(0);
-std::print("Score de Charlie : {}\n", score);  // 0 — Charlie n'existe pas
+int score = find_score("Charlie").value_or(0);  
+std::print("Score de Charlie : {}\n", score);  // 0 — Charlie n'existe pas  
 ```
 
 Le type `std::optional<int>` dans la signature de `find_score` communique immédiatement que la fonction peut légitimement ne rien retourner. Pas besoin de lire la documentation pour deviner quelle valeur magique signifie « absent ».
@@ -77,12 +77,12 @@ Un `std::optional` peut être construit de plusieurs façons :
 #include <string>
 
 // Vide
-std::optional<std::string> empty;                    // Vide par défaut
-std::optional<std::string> also_empty = std::nullopt; // Explicitement vide
+std::optional<std::string> empty;                    // Vide par défaut  
+std::optional<std::string> also_empty = std::nullopt; // Explicitement vide  
 
 // Avec valeur
-std::optional<std::string> name = "Alice";            // Conversion implicite
-std::optional<int> score{95};                         // Construction directe
+std::optional<std::string> name = "Alice";            // Conversion implicite  
+std::optional<int> score{95};                         // Construction directe  
 
 // Construction in-place (évite une copie/déplacement)
 std::optional<std::string> built(std::in_place, 5, 'x');  // Contient "xxxxx"
@@ -91,18 +91,18 @@ std::optional<std::string> built(std::in_place, 5, 'x');  // Contient "xxxxx"
 `std::make_optional` offre une syntaxe concise avec déduction de type :
 
 ```cpp
-auto name = std::make_optional<std::string>("Alice");
-auto score = std::make_optional(95);  // std::optional<int>
+auto name = std::make_optional<std::string>("Alice");  
+auto score = std::make_optional(95);  // std::optional<int>  
 ```
 
 L'affectation fonctionne naturellement :
 
 ```cpp
-std::optional<int> value;
-value = 42;              // Contient maintenant 42
-value = std::nullopt;    // Vidé
-value = 100;             // Contient maintenant 100
-value.reset();           // Vidé (équivalent à = std::nullopt)
+std::optional<int> value;  
+value = 42;              // Contient maintenant 42  
+value = std::nullopt;    // Vidé  
+value = 100;             // Contient maintenant 100  
+value.reset();           // Vidé (équivalent à = std::nullopt)  
 ```
 
 ### Accès à la valeur
@@ -192,8 +192,8 @@ Ces trois opérations éliminent un pattern courant de `if` imbriqués :
 
 ```cpp
 // Avant C++23 : cascade de vérifications
-auto env = get_env("PORT");
-if (env) {
+auto env = get_env("PORT");  
+if (env) {  
     auto parsed = parse_int(*env);
     if (parsed) {
         use_port(*parsed);
@@ -222,9 +222,9 @@ union Value {
     char str[32];
 };
 
-Value v;
-v.i = 42;
-double d = v.d;  // Comportement indéfini : on lit un int comme un double
+Value v;  
+v.i = 42;  
+double d = v.d;  // Comportement indéfini : on lit un int comme un double  
 ```
 
 Pour pallier ce problème, les projets C++ utilisaient typiquement une union accompagnée d'un discriminant manuel — un champ `enum` ou `int` indiquant le type actif. Ce pattern est fastidieux à maintenir, sujet aux erreurs, et n'offre aucune vérification à la compilation.
@@ -240,16 +240,16 @@ Pour pallier ce problème, les projets C++ utilisaient typiquement une union acc
 
 std::variant<int, double, std::string> value;
 
-value = 42;                  // Contient un int
-value = 3.14;                // Contient maintenant un double
-value = "hello"s;            // Contient maintenant un string
+value = 42;                  // Contient un int  
+value = 3.14;                // Contient maintenant un double  
+value = "hello"s;            // Contient maintenant un string  
 ```
 
 Contrairement aux unions C, accéder au mauvais type est détecté et produit une exception :
 
 ```cpp
-value = 42;
-std::get<double>(value);     // Lance std::bad_variant_access !
+value = 42;  
+std::get<double>(value);     // Lance std::bad_variant_access !  
 ```
 
 ### Accès à la valeur
@@ -300,8 +300,8 @@ Pour un traitement différencié par type, l'approche classique utilise un « ov
 
 ```cpp
 // Helper pour créer un overload set (idiome standard)
-template <class... Ts>
-struct overloaded : Ts... { using Ts::operator()...; };
+template <class... Ts>  
+struct overloaded : Ts... { using Ts::operator()...; };  
 
 // Utilisation :
 JsonValue val = 3.14;
@@ -329,9 +329,9 @@ Le compilateur garantit à la compilation que toutes les alternatives sont couve
 #include <memory>
 
 // Nœud JSON simplifié
-struct JsonNode;
-using JsonArray = std::vector<JsonNode>;
-using JsonObject = std::vector<std::pair<std::string, JsonNode>>;
+struct JsonNode;  
+using JsonArray = std::vector<JsonNode>;  
+using JsonObject = std::vector<std::pair<std::string, JsonNode>>;  
 
 struct JsonNode {
     std::variant<
@@ -350,10 +350,10 @@ struct JsonNode {
 ```cpp
 #include <variant>
 
-struct Idle {};
-struct Connecting { std::string host; int port; };
-struct Connected { int socket_fd; };
-struct Error { std::string message; };
+struct Idle {};  
+struct Connecting { std::string host; int port; };  
+struct Connected { int socket_fd; };  
+struct Error { std::string message; };  
 
 using ConnectionState = std::variant<Idle, Connecting, Connected, Error>;
 
@@ -415,8 +415,8 @@ Parfois, on a besoin de stocker une valeur dont le type n'est pas connu à la co
 
 ```cpp
 // void* : aucune sécurité de type
-void* data = new int(42);
-double d = *static_cast<double*>(data);  // Comportement indéfini silencieux
+void* data = new int(42);  
+double d = *static_cast<double*>(data);  // Comportement indéfini silencieux  
 ```
 
 ### La solution : std::any
@@ -430,9 +430,9 @@ double d = *static_cast<double*>(data);  // Comportement indéfini silencieux
 
 std::any value;
 
-value = 42;                          // Contient un int
-value = std::string("hello");        // Contient maintenant un string
-value = 3.14;                        // Contient maintenant un double
+value = 42;                          // Contient un int  
+value = std::string("hello");        // Contient maintenant un string  
+value = 3.14;                        // Contient maintenant un double  
 
 // Extraction sûre avec std::any_cast
 try {
@@ -459,11 +459,11 @@ if (auto* ptr = std::any_cast<double>(&value)) {
 
 std::any a = 42;
 
-a.has_value();          // true — contient une valeur
-a.type();               // typeid(int) — le type_info du contenu
-a.type() == typeid(int) // true
-a.reset();              // Vide le conteneur
-a.has_value();          // false
+a.has_value();          // true — contient une valeur  
+a.type();               // typeid(int) — le type_info du contenu  
+a.type() == typeid(int) // true  
+a.reset();              // Vide le conteneur  
+a.has_value();          // false  
 
 // Construction in-place
 a.emplace<std::string>(5, 'x');  // Contient "xxxxx"

@@ -86,8 +86,8 @@ Il est important de comprendre que les lambdas ne sont pas de la magie — elles
 Ainsi, cette lambda :
 
 ```cpp
-int factor = 3;
-auto multiply = [factor](int x) { return x * factor; };
+int factor = 3;  
+auto multiply = [factor](int x) { return x * factor; };  
 ```
 
 est transformée par le compilateur en quelque chose d'équivalent à :
@@ -101,8 +101,8 @@ public:
     int operator()(int x) const { return x * factor; }
 };
 
-int factor = 3;
-auto multiply = __lambda_unique_name{factor};
+int factor = 3;  
+auto multiply = __lambda_unique_name{factor};  
 ```
 
 Cette équivalence a deux conséquences majeures. Premièrement, les lambdas n'introduisent **aucun surcoût** par rapport à un foncteur écrit manuellement — le compilateur applique les mêmes optimisations, et l'inlining est courant. Deuxièmement, chaque lambda a un **type unique** connu du compilateur seul, ce qui explique pourquoi `auto` est le moyen naturel de stocker une lambda.

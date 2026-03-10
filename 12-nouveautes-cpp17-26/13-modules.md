@@ -125,16 +125,16 @@ export namespace math {
 
 ```cpp
 // math_utils.cppm — interface principale
-export module math_utils;
-export import :geometry;     // Ré-exporter la partition geometry
+export module math_utils;  
+export import :geometry;     // Ré-exporter la partition geometry  
 ```
 
 **Header unit** — Un header classique importé avec la syntaxe `import` plutôt que `#include`. Le compilateur le traite comme un module implicite :
 
 ```cpp
-import <vector>;             // Header unit — traité comme un module
-import <string>;
-import "my_header.h";       // Header unit pour un header utilisateur
+import <vector>;             // Header unit — traité comme un module  
+import <string>;  
+import "my_header.h";       // Header unit pour un header utilisateur  
 ```
 
 Les header units offrent une migration incrémentale : on peut remplacer les `#include` par des `import` sans réécrire les headers eux-mêmes.
@@ -147,8 +147,8 @@ Les header units offrent une migration incrémentale : on peut remplacer les `#i
 export module my_lib;
 
 // Exporté — visible par les importateurs
-export class PublicApi {
-public:
+export class PublicApi {  
+public:  
     void do_something();
 };
 
@@ -213,14 +213,14 @@ Avec les headers, chaque `.cpp` peut être compilé indépendamment (en parallè
 **CMake** (version 3.28+) supporte les modules C++20 de manière expérimentale, avec un support de plus en plus stable dans les versions récentes. La détection automatique des dépendances inter-modules utilise le *dependency scanning* standardisé par le format P1689 :
 
 ```cmake
-cmake_minimum_required(VERSION 3.28)
-project(my_project CXX)
+cmake_minimum_required(VERSION 3.28)  
+project(my_project CXX)  
 
-set(CMAKE_CXX_STANDARD 20)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_STANDARD 20)  
+set(CMAKE_CXX_STANDARD_REQUIRED ON)  
 
-add_executable(app)
-target_sources(app
+add_executable(app)  
+target_sources(app  
     PUBLIC FILE_SET CXX_MODULES FILES
         math_utils.cppm
     PRIVATE

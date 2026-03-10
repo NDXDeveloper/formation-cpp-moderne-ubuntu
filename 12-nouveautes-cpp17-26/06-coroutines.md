@@ -125,9 +125,9 @@ struct Generator<T>::promise_type {
 ```cpp
 std::coroutine_handle<promise_type> handle;
 
-handle.resume();    // Reprend l'exécution jusqu'au prochain point de suspension
-handle.done();      // true si la coroutine est terminée
-handle.destroy();   // Libère la mémoire de la coroutine
+handle.resume();    // Reprend l'exécution jusqu'au prochain point de suspension  
+handle.done();      // true si la coroutine est terminée  
+handle.destroy();   // Libère la mémoire de la coroutine  
 ```
 
 ### Vue d'ensemble du cycle de vie
@@ -161,9 +161,9 @@ Pour comprendre concrètement le mécanisme, voici une implémentation minimale 
 #include <optional>
 #include <utility>
 
-template <typename T>
-class Generator {
-public:
+template <typename T>  
+class Generator {  
+public:  
     struct promise_type {
         std::optional<T> current_value;
 

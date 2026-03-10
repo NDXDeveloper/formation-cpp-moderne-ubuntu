@@ -54,8 +54,8 @@ FileError read_file(const std::string& path, std::string& out_content) {
 }
 
 // Côté appelant — facile d'ignorer le code d'erreur
-std::string content;
-read_file("/etc/config.yaml", content);   // Code retour ignoré silencieusement
+std::string content;  
+read_file("/etc/config.yaml", content);   // Code retour ignoré silencieusement  
 ```
 
 Les paramètres de sortie mélangent entrées et sorties dans la signature. Le code d'erreur de retour peut être ignoré sans avertissement. Et la distinction entre « pas d'erreur » et un code d'erreur valide repose sur une convention (valeur zéro, enum par défaut) qui n'est pas vérifiée par le compilateur.
@@ -112,9 +112,9 @@ La signature est auto-documentée : `std::expected<std::string, FileError>` dit 
 L'erreur est retournée en l'enveloppant dans `std::unexpected`. C'est le marqueur qui distingue un retour d'erreur d'un retour de valeur :
 
 ```cpp
-return std::unexpected(FileError::NotFound);       // Retourne une erreur
-return content;                                     // Retourne une valeur (implicite)
-return std::expected<std::string, FileError>{content}; // Retourne une valeur (explicite)
+return std::unexpected(FileError::NotFound);       // Retourne une erreur  
+return content;                                     // Retourne une valeur (implicite)  
+return std::expected<std::string, FileError>{content}; // Retourne une valeur (explicite)  
 ```
 
 `std::unexpected` est nécessaire parce que, sans lui, le compilateur ne saurait pas si `return some_value` est une valeur de type `T` ou une erreur de type `E` — surtout quand `T` et `E` sont le même type ou quand il y a des conversions implicites.
@@ -139,10 +139,10 @@ L'API reflète celle de `std::optional` :
 ```cpp
 result.has_value();    // true si contient une valeur
 *result;               // Accès à la valeur (UB si erreur)
-result->size();        // Accès aux membres de la valeur
-result.value();        // Accès à la valeur (lance bad_expected_access si erreur)
-result.error();        // Accès à l'erreur (UB si valeur)
-result.value_or(def);  // Retourne la valeur ou un défaut
+result->size();        // Accès aux membres de la valeur  
+result.value();        // Accès à la valeur (lance bad_expected_access si erreur)  
+result.error();        // Accès à l'erreur (UB si valeur)  
+result.value_or(def);  // Retourne la valeur ou un défaut  
 ```
 
 ### Pattern avec if-init (idiomatique)
@@ -229,12 +229,12 @@ Comparons avec la version sans opérations monadiques :
 
 ```cpp
 // Sans monadiques : cascade de if
-auto content = read_file("/etc/port.conf");
-if (!content) return std::unexpected(content.error());
-auto parsed = parse_int(*content);
-if (!parsed) return std::unexpected(parsed.error());
-auto validated = validate_port(*parsed);
-if (!validated) return std::unexpected(validated.error());
+auto content = read_file("/etc/port.conf");  
+if (!content) return std::unexpected(content.error());  
+auto parsed = parse_int(*content);  
+if (!parsed) return std::unexpected(parsed.error());  
+auto validated = validate_port(*parsed);  
+if (!validated) return std::unexpected(validated.error());  
 // utiliser *validated
 ```
 

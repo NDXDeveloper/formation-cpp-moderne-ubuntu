@@ -133,9 +133,9 @@ La bibliothèque `<simd>` standardise les opérations SIMD (Single Instruction, 
 ```cpp
 #include <simd>
 
-std::simd<float> a = {1.0f, 2.0f, 3.0f, 4.0f};
-std::simd<float> b = {5.0f, 6.0f, 7.0f, 8.0f};
-auto c = a + b;  // Opération SIMD — un seul instruction pour 4 additions
+std::simd<float> a = {1.0f, 2.0f, 3.0f, 4.0f};  
+std::simd<float> b = {5.0f, 6.0f, 7.0f, 8.0f};  
+auto c = a + b;  // Opération SIMD — un seul instruction pour 4 additions  
 ```
 
 C'est un ajout majeur pour le calcul scientifique, le traitement de signal, et les moteurs de jeux.
@@ -153,8 +153,8 @@ La bibliothèque `<linalg>` fournit des opérations d'algèbre linéaire basées
 Le caractère `_` devient un identifiant spécial qui peut être déclaré plusieurs fois dans un même scope sans erreur — résolvant enfin le problème des variables « ignorées » dans les structured bindings (section 12.1) :
 
 ```cpp
-auto [_, _, z] = get_point_3d();    // C++26 : valide, les deux _ sont ignorés
-auto [_, value] = map.insert({k, v}); // Ignore l'itérateur, garde le bool
+auto [_, _, z] = get_point_3d();    // C++26 : valide, les deux _ sont ignorés  
+auto [_, value] = map.insert({k, v}); // Ignore l'itérateur, garde le bool  
 ```
 
 ### constexpr amélioré et consteval étendu

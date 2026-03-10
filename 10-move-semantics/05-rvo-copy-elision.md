@@ -59,8 +59,8 @@ Le compilateur sait à l'avance que le temporaire dans le `return` est destiné 
 **Depuis C++17, le RVO sur les prvalues est obligatoire.** Ce n'est plus une optimisation optionnelle — le standard garantit que le constructeur de copie/déplacement n'est même pas nécessaire. Cela signifie que ce code compile même si le type est non-copiable et non-déplaçable :
 
 ```cpp
-class NonCopiable {
-public:
+class NonCopiable {  
+public:  
     NonCopiable() = default;
     NonCopiable(const NonCopiable&) = delete;
     NonCopiable(NonCopiable&&) = delete;
@@ -104,8 +104,8 @@ La copy elision peut aussi s'appliquer dans d'autres situations, moins courantes
 std::string s = std::string("Hello");  // Copy elision — un seul objet construit
 
 // Passage de temporaire à une fonction par valeur
-void traiter(std::string s);
-traiter(std::string("Hello"));         // Copy elision possible (C++17 garanti)
+void traiter(std::string s);  
+traiter(std::string("Hello"));         // Copy elision possible (C++17 garanti)  
 
 // Lancer et attraper une exception (copy elision optionnelle)
 throw std::runtime_error("erreur");    // Copy elision possible
@@ -241,8 +241,8 @@ Quand vous écrivez `return std::move(v)`, l'expression retournée n'est plus la
 Comparaison des scénarios :
 
 ```
-return v;              → NRVO : AUCUNE opération (0 copie, 0 move)
-return std::move(v);   → Pas de NRVO : 1 déplacement (constructeur de move)
+return v;              → NRVO : AUCUNE opération (0 copie, 0 move)  
+return std::move(v);   → Pas de NRVO : 1 déplacement (constructeur de move)  
 ```
 
 Un déplacement de `std::vector` est certes rapide (copie de 3 pointeurs), mais il est strictement plus coûteux que zéro opération. `return std::move(v)` est donc une **pessimisation**.
@@ -352,9 +352,9 @@ Sans NRVO (forcer avec `-fno-elide-constructors` sur GCC pré-C++17) :
 g++ -std=c++14 -fno-elide-constructors main.cpp
 
 # Comparer le code assembleur
-g++ -std=c++20 -O2 -S main.cpp -o avec_elision.s
-g++ -std=c++14 -O2 -fno-elide-constructors -S main.cpp -o sans_elision.s
-diff avec_elision.s sans_elision.s
+g++ -std=c++20 -O2 -S main.cpp -o avec_elision.s  
+g++ -std=c++14 -O2 -fno-elide-constructors -S main.cpp -o sans_elision.s  
+diff avec_elision.s sans_elision.s  
 ```
 
 > 💡 En C++17 et au-delà, `-fno-elide-constructors` ne peut pas désactiver la copy elision **obligatoire** (prvalues). Il ne peut désactiver que le NRVO, qui reste optionnel.
@@ -416,9 +416,9 @@ Ce chapitre a couvert l'ensemble de la sémantique de mouvement, de la théorie 
 La hiérarchie d'efficacité pour le transfert de données :
 
 ```
-Copy elision (RVO/NRVO)     →  0 opération   →  Le mieux
-Déplacement (move)          →  O(1)           →  Très bien
-Copie profonde (copy)       →  O(n)           →  Dernier recours
+Copy elision (RVO/NRVO)     →  0 opération   →  Le mieux  
+Déplacement (move)          →  O(1)           →  Très bien  
+Copie profonde (copy)       →  O(n)           →  Dernier recours  
 ```
 
 Et la règle finale qui synthétise les cinq sections :

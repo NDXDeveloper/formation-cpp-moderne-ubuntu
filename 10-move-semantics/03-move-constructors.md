@@ -15,8 +15,8 @@ Ces deux opérations spéciales sont les mécanismes concrets qui volent les res
 ### Signature
 
 ```cpp
-class T {
-public:
+class T {  
+public:  
     T(T&& other) noexcept;
 };
 ```
@@ -113,8 +113,8 @@ Session(Session&& other) noexcept
 ### Signature
 
 ```cpp
-class T {
-public:
+class T {  
+public:  
     T& operator=(T&& other) noexcept;
 };
 ```
@@ -157,8 +157,8 @@ class Buffer {
 L'auto-affectation par déplacement (`x = std::move(x)`) est un cas dégénéré qui ne devrait jamais se produire dans du code correct. Cependant, elle peut survenir indirectement — par exemple via un alias ou un échange d'éléments dans un algorithme. La garde `if (this != &other)` protège contre une corruption silencieuse :
 
 ```cpp
-Buffer buf(1024);
-buf = std::move(buf);  // Sans la garde : delete[] data_ puis data_ = data_
+Buffer buf(1024);  
+buf = std::move(buf);  // Sans la garde : delete[] data_ puis data_ = data_  
                         // Le buffer est détruit puis lu → UB
 ```
 
@@ -228,13 +228,13 @@ Quand un `std::vector` doit réallouer son buffer interne (parce que `push_back`
 Pour se protéger, `std::vector` utilise `std::move_if_noexcept` : il ne déplace que si le constructeur de déplacement est `noexcept`. Sinon, il copie.
 
 ```cpp
-class Bon {
-public:
+class Bon {  
+public:  
     Bon(Bon&&) noexcept;  // ✅ vector déplacera → O(1) par élément
 };
 
-class Mauvais {
-public:
+class Mauvais {  
+public:  
     Mauvais(Mauvais&&);   // ⚠️ vector copiera → O(n) par élément
 };
 
@@ -351,8 +351,8 @@ La Règle du 0 est la forme la plus sûre et la plus maintenable. Réservez la R
 Si vous devez déclarer l'une des cinq opérations (par exemple un destructeur virtuel pour le polymorphisme), utilisez `= default` pour demander au compilateur de générer les autres :
 
 ```cpp
-class Base {
-public:
+class Base {  
+public:  
     virtual ~Base() = default;                           // Nécessaire pour le polymorphisme
 
     Base(const Base&) = default;                         // Re-déclaré explicitement
@@ -370,8 +370,8 @@ Sans les `= default`, le destructeur virtuel aurait supprimé la génération im
 Vous pouvez interdire le déplacement (ou la copie) en supprimant les opérations :
 
 ```cpp
-class NonDeplacable {
-public:
+class NonDeplacable {  
+public:  
     NonDeplacable(NonDeplacable&&) = delete;
     NonDeplacable& operator=(NonDeplacable&&) = delete;
 
@@ -466,8 +466,8 @@ public:
 };
 
 // Vérifications à la compilation
-static_assert(std::is_nothrow_move_constructible_v<ResourceHandle>);
-static_assert(std::is_nothrow_move_assignable_v<ResourceHandle>);
+static_assert(std::is_nothrow_move_constructible_v<ResourceHandle>);  
+static_assert(std::is_nothrow_move_assignable_v<ResourceHandle>);  
 ```
 
 ---

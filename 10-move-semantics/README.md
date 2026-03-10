@@ -186,8 +186,8 @@ Un point revient sans cesse quand on parle de sémantique de mouvement : le mot-
 La raison est pratique : la STL utilise `std::move_if_noexcept` dans ses opérations internes. Si votre constructeur de déplacement n'est pas `noexcept`, les conteneurs **reviendront à la copie** par sécurité, annulant tout le bénéfice du mouvement :
 
 ```cpp
-class Widget {
-public:
+class Widget {  
+public:  
     // ✅ noexcept → vector utilisera le déplacement lors des réallocations
     Widget(Widget&& other) noexcept;
 

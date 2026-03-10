@@ -205,8 +205,8 @@ std::partial_sort(scores.begin(), scores.begin() + 3, scores.end(),
 `std::transform` applique une lambda à chaque élément et stocke le résultat dans un conteneur de destination :
 
 ```cpp
-std::vector<std::string> names = {"alice", "bob", "carol"};
-std::vector<std::string> upper_names(names.size());
+std::vector<std::string> names = {"alice", "bob", "carol"};  
+std::vector<std::string> upper_names(names.size());  
 
 std::transform(names.begin(), names.end(), upper_names.begin(),
     [](std::string s) {
@@ -232,9 +232,9 @@ std::transform(prices.begin(), prices.end(), prices.begin(),
 La version à deux itérateurs d'entrée combine les éléments de deux conteneurs :
 
 ```cpp
-std::vector<std::string> first_names = {"Alice", "Bob", "Carol"};
-std::vector<std::string> last_names = {"Smith", "Jones", "Lee"};
-std::vector<std::string> full_names(first_names.size());
+std::vector<std::string> first_names = {"Alice", "Bob", "Carol"};  
+std::vector<std::string> last_names = {"Smith", "Jones", "Lee"};  
+std::vector<std::string> full_names(first_names.size());  
 
 std::transform(first_names.begin(), first_names.end(),
                last_names.begin(), full_names.begin(),
@@ -258,8 +258,8 @@ struct Stats {
 
 std::vector<double> measurements = {23.5, 19.8, 27.3, 22.1, 25.6};
 
-Stats stats;
-std::for_each(measurements.begin(), measurements.end(),
+Stats stats;  
+std::for_each(measurements.begin(), measurements.end(),  
     [&stats](double v) {
         ++stats.count;
         stats.sum += v;
@@ -313,8 +313,8 @@ C'est plus concis, moins sujet aux erreurs, et disponible pour tous les conteneu
 Plutôt que de modifier le conteneur source, `std::copy_if` copie les éléments satisfaisant le prédicat dans un conteneur de destination :
 
 ```cpp
-std::vector<int> source = {1, -3, 5, -7, 2, -1, 8, -4};
-std::vector<int> positives;
+std::vector<int> source = {1, -3, 5, -7, 2, -1, 8, -4};  
+std::vector<int> positives;  
 
 std::copy_if(source.begin(), source.end(), std::back_inserter(positives),
     [](int v) { return v > 0; });
@@ -332,10 +332,10 @@ std::vector<int> data = {1, -3, 5, -7, 2, -1, 8, -4};
 auto boundary = std::partition(data.begin(), data.end(),
     [](int v) { return v >= 0; });
 
-std::print("Positifs : ");
-for (auto it = data.begin(); it != boundary; ++it) std::print("{} ", *it);
-std::print("\nNégatifs : ");
-for (auto it = boundary; it != data.end(); ++it) std::print("{} ", *it);
+std::print("Positifs : ");  
+for (auto it = data.begin(); it != boundary; ++it) std::print("{} ", *it);  
+std::print("\nNégatifs : ");  
+for (auto it = boundary; it != data.end(); ++it) std::print("{} ", *it);  
 // L'ordre relatif au sein de chaque groupe n'est pas garanti
 ```
 
@@ -359,8 +359,8 @@ int product = std::accumulate(values.begin(), values.end(), 1,
 // product = 120
 
 // Concaténation de chaînes
-std::vector<std::string> words = {"C++", "is", "powerful"};
-auto sentence = std::accumulate(words.begin(), words.end(), std::string{},
+std::vector<std::string> words = {"C++", "is", "powerful"};  
+auto sentence = std::accumulate(words.begin(), words.end(), std::string{},  
     [](const std::string& acc, const std::string& word) {
         return acc.empty() ? word : acc + " " + word;
     });
@@ -446,11 +446,11 @@ std::generate(ids.begin(), ids.end(),
 ### `std::generate_n` — générer un nombre fixe d'éléments
 
 ```cpp
-std::vector<double> samples;
-samples.reserve(100);
+std::vector<double> samples;  
+samples.reserve(100);  
 
-std::mt19937 rng(42);  // Générateur de nombres aléatoires
-std::normal_distribution<double> dist(0.0, 1.0);
+std::mt19937 rng(42);  // Générateur de nombres aléatoires  
+std::normal_distribution<double> dist(0.0, 1.0);  
 
 std::generate_n(std::back_inserter(samples), 100,
     [&rng, &dist]() { return dist(rng); });
@@ -520,9 +520,9 @@ auto is_expired = [now = std::chrono::system_clock::now()](const Session& s) {
 };
 
 // Utilisation avec différents algorithmes
-auto expired_count = std::count_if(sessions.begin(), sessions.end(), is_expired);
-auto first_expired = std::find_if(sessions.begin(), sessions.end(), is_expired);
-std::erase_if(sessions, is_expired);
+auto expired_count = std::count_if(sessions.begin(), sessions.end(), is_expired);  
+auto first_expired = std::find_if(sessions.begin(), sessions.end(), is_expired);  
+std::erase_if(sessions, is_expired);  
 ```
 
 La lambda `is_expired` est définie une seule fois avec son contexte (le timestamp `now`), puis réutilisée. C'est plus maintenable que de dupliquer la condition dans chaque appel.
@@ -541,9 +541,9 @@ auto cmp = [](const std::string& a, const std::string& b) {
 // Le type de la lambda doit être passé comme paramètre de template
 std::set<std::string, decltype(cmp)> words_by_length(cmp);
 
-words_by_length.insert("apple");
-words_by_length.insert("hi");
-words_by_length.insert("banana");
+words_by_length.insert("apple");  
+words_by_length.insert("hi");  
+words_by_length.insert("banana");  
 // Itération : "hi", "apple", "banana" (ordre par longueur)
 ```
 
@@ -555,8 +555,8 @@ auto cmp = [](const std::string& a, const std::string& b) {
     return a.size() < b.size();
 };
 
-std::set<std::string, decltype(cmp)> words_by_length;  // Pas besoin de passer cmp
-words_by_length.insert("apple");
+std::set<std::string, decltype(cmp)> words_by_length;  // Pas besoin de passer cmp  
+words_by_length.insert("apple");  
 ```
 
 Pour `std::priority_queue` :
@@ -578,8 +578,8 @@ L'en-tête `<numeric>` contient des algorithmes qui bénéficient particulièrem
 ### `std::inner_product` — produit scalaire généralisé
 
 ```cpp
-std::vector<double> prices = {10.0, 25.0, 5.0};
-std::vector<int> quantities = {3, 1, 8};
+std::vector<double> prices = {10.0, 25.0, 5.0};  
+std::vector<int> quantities = {3, 1, 8};  
 
 // Produit scalaire classique : somme des (prix × quantité)
 double total = std::inner_product(
@@ -599,8 +599,8 @@ double max_diff = std::inner_product(
 ### `std::adjacent_difference` avec lambda
 
 ```cpp
-std::vector<int> readings = {100, 103, 98, 105, 102};
-std::vector<int> changes(readings.size());
+std::vector<int> readings = {100, 103, 98, 105, 102};  
+std::vector<int> changes(readings.size());  
 
 std::adjacent_difference(readings.begin(), readings.end(), changes.begin(),
     [](int current, int previous) { return current - previous; });
@@ -675,13 +675,13 @@ Les lambdas génériques (section 11.2) permettent d'écrire des prédicats et d
 // Comparateur générique réutilisable
 auto descending = [](const auto& a, const auto& b) { return a > b; };
 
-std::vector<int> ints = {3, 1, 4, 1, 5};
-std::vector<double> doubles = {2.7, 1.4, 3.1};
-std::vector<std::string> words = {"banana", "apple", "cherry"};
+std::vector<int> ints = {3, 1, 4, 1, 5};  
+std::vector<double> doubles = {2.7, 1.4, 3.1};  
+std::vector<std::string> words = {"banana", "apple", "cherry"};  
 
-std::sort(ints.begin(), ints.end(), descending);
-std::sort(doubles.begin(), doubles.end(), descending);
-std::sort(words.begin(), words.end(), descending);
+std::sort(ints.begin(), ints.end(), descending);  
+std::sort(doubles.begin(), doubles.end(), descending);  
+std::sort(words.begin(), words.end(), descending);  
 ```
 
 Un pattern avancé consiste à créer des **fabriques de lambdas** — des fonctions qui retournent des lambdas configurées :
@@ -693,9 +693,9 @@ auto field_comparator = [](auto member_ptr) {
     };
 };
 
-std::sort(team.begin(), team.end(), field_comparator(&Employee::salary));
-std::sort(team.begin(), team.end(), field_comparator(&Employee::name));
-std::sort(team.begin(), team.end(), field_comparator(&Employee::age));
+std::sort(team.begin(), team.end(), field_comparator(&Employee::salary));  
+std::sort(team.begin(), team.end(), field_comparator(&Employee::name));  
+std::sort(team.begin(), team.end(), field_comparator(&Employee::age));  
 ```
 
 Une seule fabrique produit des comparateurs pour n'importe quel champ de n'importe quel type de structure.

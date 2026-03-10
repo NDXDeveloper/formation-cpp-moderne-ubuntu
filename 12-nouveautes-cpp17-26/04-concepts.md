@@ -23,8 +23,8 @@ Considérons une fonction template simple qui trie un conteneur :
 #include <vector>
 #include <list>
 
-template <typename Container>
-void sort_container(Container& c) {
+template <typename Container>  
+void sort_container(Container& c) {  
     std::sort(c.begin(), c.end());
 }
 ```
@@ -32,8 +32,8 @@ void sort_container(Container& c) {
 Cette fonction fonctionne avec `std::vector` mais pas avec `std::list`, car `std::sort` requiert des itérateurs à accès aléatoire (*random access iterators*), et `std::list` ne fournit que des itérateurs bidirectionnels. Que se passe-t-il quand on essaie ?
 
 ```cpp
-std::list<int> lst = {3, 1, 4, 1, 5};
-sort_container(lst);  // Erreur de compilation
+std::list<int> lst = {3, 1, 4, 1, 5};  
+sort_container(lst);  // Erreur de compilation  
 ```
 
 Le compilateur produit une cascade de messages d'erreur qui pointe vers les entrailles de l'implémentation de `std::sort` — des lignes enfouies dans les headers de la bibliothèque standard. Le message mentionne des opérations comme `operator-` entre itérateurs, qui n'ont aucun sens pour l'utilisateur appelant `sort_container`. On ne sait pas immédiatement que le vrai problème est la catégorie d'itérateur.
@@ -79,8 +79,8 @@ La bibliothèque standard de C++20 fournit un riche ensemble de concepts prédé
 #include <list>
 
 // Le concept std::sortable exprime exactement ce dont std::sort a besoin
-template <std::ranges::random_access_range Container>
-void sort_container(Container& c) {
+template <std::ranges::random_access_range Container>  
+void sort_container(Container& c) {  
     std::sort(c.begin(), c.end());
 }
 ```
@@ -112,8 +112,8 @@ C'est la forme la plus explicite. La contrainte est clairement séparée de la d
 **2. Le concept en lieu et place de `typename` :**
 
 ```cpp
-template <std::integral T>
-T add(T a, T b) {
+template <std::integral T>  
+T add(T a, T b) {  
     return a + b;
 }
 ```
@@ -123,8 +123,8 @@ C'est la forme la plus concise pour les cas simples. Le concept remplace directe
 **3. La clause `requires` en fin de signature (trailing) :**
 
 ```cpp
-template <typename T>
-T add(T a, T b) requires std::integral<T> {
+template <typename T>  
+T add(T a, T b) requires std::integral<T> {  
     return a + b;
 }
 ```
@@ -175,21 +175,21 @@ Au-delà des concepts standard, on peut définir des concepts spécifiques à so
 #include <concepts>
 #include <type_traits>
 
-template <typename T>
-concept Numeric = std::is_arithmetic_v<T> && !std::is_same_v<T, bool>;
+template <typename T>  
+concept Numeric = std::is_arithmetic_v<T> && !std::is_same_v<T, bool>;  
 ```
 
 Ce concept peut maintenant être utilisé exactement comme un concept standard :
 
 ```cpp
-template <Numeric T>
-T multiply(T a, T b) {
+template <Numeric T>  
+T multiply(T a, T b) {  
     return a * b;
 }
 
-multiply(3, 4);        // OK
-multiply(2.5, 1.5);    // OK
-multiply(true, false);  // Erreur : bool ne satisfait pas Numeric
+multiply(3, 4);        // OK  
+multiply(2.5, 1.5);    // OK  
+multiply(true, false);  // Erreur : bool ne satisfait pas Numeric  
 ```
 
 ### Concept avec requires expression
@@ -197,8 +197,8 @@ multiply(true, false);  // Erreur : bool ne satisfait pas Numeric
 Pour des contraintes plus riches — vérifier qu'un type supporte certaines opérations ou possède certains types membres — on utilise une *requires expression* :
 
 ```cpp
-template <typename T>
-concept Printable = requires(T value) {
+template <typename T>  
+concept Printable = requires(T value) {  
     // T doit être formatable avec std::print via std::format
     { std::format("{}", value) } -> std::convertible_to<std::string>;
 };
@@ -211,13 +211,13 @@ La `requires expression` est un bloc qui liste des exigences. Chaque ligne est u
 Les concepts peuvent être composés par combinaison logique :
 
 ```cpp
-template <typename T>
-concept Hashable = requires(T a) {
+template <typename T>  
+concept Hashable = requires(T a) {  
     { std::hash<T>{}(a) } -> std::convertible_to<std::size_t>;
 };
 
-template <typename T>
-concept HashableEquality = Hashable<T> && std::equality_comparable<T>;
+template <typename T>  
+concept HashableEquality = Hashable<T> && std::equality_comparable<T>;  
 ```
 
 Ce `HashableEquality` exprime exactement ce dont un `std::unordered_map` a besoin pour ses clés : un type qui est à la fois hachable et comparable pour l'égalité. L'intention est lisible directement dans le code.
@@ -230,8 +230,8 @@ Voici un concept plus élaboré qui capture l'idée d'un type sérialisable en J
 #include <concepts>
 #include <string>
 
-template <typename T>
-concept Serializable = requires(const T& obj) {
+template <typename T>  
+concept Serializable = requires(const T& obj) {  
     // Doit avoir une méthode to_json() retournant un string
     { obj.to_json() } -> std::convertible_to<std::string>;
 } && requires(const std::string& json) {
@@ -240,8 +240,8 @@ concept Serializable = requires(const T& obj) {
 };
 
 // Utilisation :
-template <Serializable T>
-void save(const T& obj, const std::string& path) {
+template <Serializable T>  
+void save(const T& obj, const std::string& path) {  
     std::string json = obj.to_json();
     // ... écriture dans le fichier ...
 }
@@ -302,26 +302,26 @@ Les concepts s'intègrent au système de surcharge de fonctions de C++. Quand pl
 #include <print>
 
 // Surcharge générale
-template <typename T>
-void describe(const T& value) {
+template <typename T>  
+void describe(const T& value) {  
     std::print("Valeur quelconque\n");
 }
 
 // Surcharge pour les types entiers (plus contrainte)
-template <std::integral T>
-void describe(const T& value) {
+template <std::integral T>  
+void describe(const T& value) {  
     std::print("Entier : {}\n", value);
 }
 
 // Surcharge pour les types flottants (plus contrainte)
-template <std::floating_point T>
-void describe(const T& value) {
+template <std::floating_point T>  
+void describe(const T& value) {  
     std::print("Flottant : {}\n", value);
 }
 
-describe(42);         // "Entier : 42" — std::integral est plus contraint que typename
-describe(3.14);       // "Flottant : 3.14"
-describe("hello"s);   // "Valeur quelconque" — ni integral ni floating_point
+describe(42);         // "Entier : 42" — std::integral est plus contraint que typename  
+describe(3.14);       // "Flottant : 3.14"  
+describe("hello"s);   // "Valeur quelconque" — ni integral ni floating_point  
 ```
 
 Cette résolution est plus élégante et plus prévisible que la machinerie SFINAE équivalente. Le compilateur comprend les relations de subsomption entre concepts : `std::integral` est « plus spécifique » que `typename`, donc la surcharge contrainte est préférée quand elle s'applique.
@@ -331,23 +331,23 @@ Cette résolution est plus élégante et plus prévisible que la machinerie SFIN
 Le compilateur peut ordonner les concepts entre eux quand l'un implique l'autre :
 
 ```cpp
-template <typename T>
-concept Animal = requires(T a) {
+template <typename T>  
+concept Animal = requires(T a) {  
     { a.name() } -> std::convertible_to<std::string>;
     { a.sound() } -> std::convertible_to<std::string>;
 };
 
-template <typename T>
-concept Pet = Animal<T> && requires(T a) {
+template <typename T>  
+concept Pet = Animal<T> && requires(T a) {  
     { a.owner() } -> std::convertible_to<std::string>;
 };
 
 // Pet subsume Animal — un Pet est toujours un Animal
-template <Animal T>
-void interact(const T& a) { /* comportement générique animal */ }
+template <Animal T>  
+void interact(const T& a) { /* comportement générique animal */ }  
 
-template <Pet T>
-void interact(const T& p) { /* comportement spécifique animal de compagnie */ }
+template <Pet T>  
+void interact(const T& p) { /* comportement spécifique animal de compagnie */ }  
 
 // Si Dog satisfait Pet, la surcharge Pet est choisie (plus contrainte)
 ```
@@ -368,15 +368,15 @@ Avec les bibliothèques standard pré-concepts, le compilateur produit une casca
 #include <algorithm>
 #include <list>
 
-std::list<int> lst = {3, 1, 2};
-std::ranges::sort(lst);
+std::list<int> lst = {3, 1, 2};  
+std::ranges::sort(lst);  
 ```
 
 Le message produit par GCC 15 ou Clang 20 ressemble à :
 
 ```
-error: no matching call to 'std::ranges::sort(std::list<int>&)'
-note: constraint not satisfied: 'std::list<int>' does not satisfy 'random_access_range'
+error: no matching call to 'std::ranges::sort(std::list<int>&)'  
+note: constraint not satisfied: 'std::list<int>' does not satisfy 'random_access_range'  
 ```
 
 Deux lignes. Le problème est identifié, nommé, et localisé au bon endroit — au point d'appel, pas dans les entrailles de la bibliothèque.

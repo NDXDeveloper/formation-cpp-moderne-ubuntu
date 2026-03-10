@@ -29,8 +29,8 @@ Le nom `unique_ptr` exprime un **invariant fort** : à tout instant, **exactemen
 **1. La copie est interdite.**
 
 ```cpp
-std::unique_ptr<int> a = std::make_unique<int>(42);
-std::unique_ptr<int> b = a;  // ❌ Erreur de compilation
+std::unique_ptr<int> a = std::make_unique<int>(42);  
+std::unique_ptr<int> b = a;  // ❌ Erreur de compilation  
 ```
 
 Si la copie était autorisée, deux `unique_ptr` pointeraient vers la même ressource, et tous deux tenteraient de la libérer lors de leur destruction — un *double free*, exactement le bug que les smart pointers sont censés prévenir. Le compilateur refuse donc purement et simplement cette opération.
@@ -38,8 +38,8 @@ Si la copie était autorisée, deux `unique_ptr` pointeraient vers la même ress
 **2. Le déplacement (*move*) est autorisé.**
 
 ```cpp
-std::unique_ptr<int> a = std::make_unique<int>(42);
-std::unique_ptr<int> b = std::move(a);  // ✅ Transfert de propriété
+std::unique_ptr<int> a = std::make_unique<int>(42);  
+std::unique_ptr<int> b = std::move(a);  // ✅ Transfert de propriété  
 
 // a est maintenant vide (nullptr)
 // b possède la ressource
@@ -100,19 +100,19 @@ Cette analogie illustre aussi une subtilité : d'autres personnes peuvent **conn
 **Objets dont la taille ou le type n'est connu qu'à l'exécution.** C'est le cas classique du polymorphisme : vous stockez un pointeur vers une classe de base, et l'objet concret est déterminé au runtime.
 
 ```cpp
-class Animal {
-public:
+class Animal {  
+public:  
     virtual ~Animal() = default;
     virtual void parler() const = 0;
 };
 
-class Chat : public Animal {
-public:
+class Chat : public Animal {  
+public:  
     void parler() const override { std::print("Miaou\n"); }
 };
 
-class Chien : public Animal {
-public:
+class Chien : public Animal {  
+public:  
     void parler() const override { std::print("Wouf\n"); }
 };
 

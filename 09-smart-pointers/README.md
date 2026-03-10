@@ -133,8 +133,8 @@ Les smart pointers n'ont pas toujours existé sous leur forme actuelle en C++. L
 
 ```cpp
 // ⚠️ Code C++98 — NE PAS REPRODUIRE
-std::auto_ptr<int> a(new int(42));
-std::auto_ptr<int> b = a;  // "copie" qui vide silencieusement a
+std::auto_ptr<int> a(new int(42));  
+std::auto_ptr<int> b = a;  // "copie" qui vide silencieusement a  
 // a est maintenant nul — surprise !
 ```
 

@@ -18,8 +18,8 @@ void process(const int* data, std::size_t size) {
     }
 }
 
-int arr[] = {1, 2, 3, 4, 5};
-process(arr, 5);  // Facile de se tromper sur la taille
+int arr[] = {1, 2, 3, 4, 5};  
+process(arr, 5);  // Facile de se tromper sur la taille  
 ```
 
 Cette signature est fragile. Rien ne lie `data` à `size` : on peut passer une taille incorrecte, un pointeur nul accompagné d'une taille non nulle, ou inverser les arguments de deux tableaux distincts. Ces erreurs sont silencieuses et produisent des comportements indéfinis.
@@ -27,8 +27,8 @@ Cette signature est fragile. Rien ne lie `data` à `size` : on peut passer une t
 ### L'approche template : générique mais lourde
 
 ```cpp
-template <typename Container>
-void process(const Container& c) {
+template <typename Container>  
+void process(const Container& c) {  
     for (const auto& elem : c) {
         // utiliser elem
     }
@@ -130,15 +130,15 @@ Malgré sa légèreté, `std::span` offre une interface familière :
 #include <vector>
 #include <print>
 
-std::vector<int> vec = {10, 20, 30, 40, 50};
-std::span<const int> s = vec;
+std::vector<int> vec = {10, 20, 30, 40, 50};  
+std::span<const int> s = vec;  
 
-s.size();       // 5
-s.empty();      // false
-s.front();      // 10
-s.back();       // 50
-s[2];           // 30
-s.data();       // Pointeur brut vers le premier élément
+s.size();       // 5  
+s.empty();      // false  
+s.front();      // 10  
+s.back();       // 50  
+s[2];           // 30  
+s.data();       // Pointeur brut vers le premier élément  
 
 // Itération standard
 for (int v : s) {
@@ -146,9 +146,9 @@ for (int v : s) {
 }
 
 // Sous-vues
-auto first_three = s.first(3);    // {10, 20, 30}
-auto last_two = s.last(2);        // {40, 50}
-auto middle = s.subspan(1, 3);    // {20, 30, 40}
+auto first_three = s.first(3);    // {10, 20, 30}  
+auto last_two = s.last(2);        // {40, 50}  
+auto middle = s.subspan(1, 3);    // {20, 30, 40}  
 ```
 
 Les méthodes `first`, `last` et `subspan` retournent elles-mêmes des `std::span`, ce qui permet de découper et passer des sous-intervalles sans copie ni allocation.
@@ -158,8 +158,8 @@ Les méthodes `first`, `last` et `subspan` retournent elles-mêmes des `std::spa
 La constance se gère au niveau du type d'élément, pas au niveau du span :
 
 ```cpp
-void read_only(std::span<const int> data);   // Ne peut pas modifier les éléments
-void read_write(std::span<int> data);         // Peut modifier les éléments
+void read_only(std::span<const int> data);   // Ne peut pas modifier les éléments  
+void read_write(std::span<int> data);         // Peut modifier les éléments  
 ```
 
 Un `std::span<const int>` est l'analogue d'un `const int*` + taille : le span lui-même peut être copié ou réaffecté, mais les éléments pointés ne sont pas modifiables. C'est la convention adoptée pour les paramètres de fonctions en lecture seule — l'équivalent d'un `const std::vector<int>&` sans en imposer le type concret.
@@ -173,8 +173,8 @@ void double_values(std::span<int> data) {
     }
 }
 
-std::vector<int> vec = {1, 2, 3};
-double_values(vec);
+std::vector<int> vec = {1, 2, 3};  
+double_values(vec);  
 // vec == {2, 4, 6} — modifié en place
 ```
 
@@ -183,8 +183,8 @@ double_values(vec);
 `std::span` existe en deux variantes selon que la taille est connue à la compilation ou non :
 
 ```cpp
-std::span<int>      dynamic_span;   // Taille connue à l'exécution seulement
-std::span<int, 5>   static_span;    // Taille fixe de 5, connue à la compilation
+std::span<int>      dynamic_span;   // Taille connue à l'exécution seulement  
+std::span<int, 5>   static_span;    // Taille fixe de 5, connue à la compilation  
 ```
 
 Le span dynamique (sans second paramètre template) est le plus courant. Le span statique encode la taille dans le type, ce qui permet au compilateur d'effectuer des vérifications supplémentaires et d'optimiser. Sa taille en mémoire est réduite à un seul pointeur, puisque la taille est une constante connue à la compilation.

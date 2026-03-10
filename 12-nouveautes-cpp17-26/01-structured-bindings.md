@@ -43,10 +43,10 @@ std::tuple<std::string, int, double> get_student_info() {
 }
 
 // Avant C++17 : extraction pénible
-auto info = get_student_info();
-std::string name = std::get<0>(info);
-int score = std::get<1>(info);
-double average = std::get<2>(info);
+auto info = get_student_info();  
+std::string name = std::get<0>(info);  
+int score = std::get<1>(info);  
+double average = std::get<2>(info);  
 ```
 
 ## La solution : structured bindings
@@ -99,8 +99,8 @@ std::tuple<std::string, int, double> get_student_info() {
 }
 
 // C++17 : extraction directe en une ligne
-auto [name, score, average] = get_student_info();
-std::print("{} — score: {}, moyenne: {}\n", name, score, average);
+auto [name, score, average] = get_student_info();  
+std::print("{} — score: {}, moyenne: {}\n", name, score, average);  
 ```
 
 C'est une transformation radicale par rapport à l'usage de `std::get<0>`, `std::get<1>`, etc.
@@ -116,8 +116,8 @@ struct Point {
     double z;
 };
 
-Point origin{0.0, 0.0, 0.0};
-auto [x, y, z] = origin;
+Point origin{0.0, 0.0, 0.0};  
+auto [x, y, z] = origin;  
 // x == 0.0, y == 0.0, z == 0.0
 ```
 
@@ -134,8 +134,8 @@ Cette décomposition fonctionne aussi avec les classes héritées, à condition 
 Les tableaux natifs de taille fixe sont également décomposables :
 
 ```cpp
-int rgb[3] = {255, 128, 0};
-auto [r, g, b] = rgb;
+int rgb[3] = {255, 128, 0};  
+auto [r, g, b] = rgb;  
 // r == 255, g == 128, b == 0
 ```
 
@@ -181,9 +181,9 @@ struct Config {
     int port;
 };
 
-Config cfg{"localhost", 8080};
-auto& [host, port] = cfg;
-port = 9090;
+Config cfg{"localhost", 8080};  
+auto& [host, port] = cfg;  
+port = 9090;  
 // cfg.port == 9090
 ```
 
@@ -214,8 +214,8 @@ std::tuple<bool, std::string, int> parse_config(const std::string& path) {
 }
 
 // Extraction lisible côté appelant
-auto [success, host, port] = parse_config("/etc/app/config.yaml");
-if (success) {
+auto [success, host, port] = parse_config("/etc/app/config.yaml");  
+if (success) {  
     std::print("Connexion à {}:{}\n", host, port);
 }
 ```
@@ -230,8 +230,8 @@ Les méthodes `insert`, `emplace` et `try_emplace` de `std::map` et `std::unorde
 
 ```cpp
 // Avant C++17
-auto result = my_map.insert({"key", 42});
-if (result.second) {
+auto result = my_map.insert({"key", 42});  
+if (result.second) {  
     std::cout << "Inséré : " << result.first->second << "\n";
 }
 ```
@@ -239,8 +239,8 @@ if (result.second) {
 Avec les structured bindings :
 
 ```cpp
-auto [it, inserted] = my_map.insert({"key", 42});
-if (inserted) {
+auto [it, inserted] = my_map.insert({"key", 42});  
+if (inserted) {  
     std::print("Inséré : {}\n", it->second);
 }
 ```
@@ -248,8 +248,8 @@ if (inserted) {
 Les noms `it` et `inserted` expriment directement le rôle de chaque composant du résultat. Ce pattern s'applique aussi à `try_emplace` :
 
 ```cpp
-auto [it, inserted] = my_map.try_emplace("key", 42);
-if (!inserted) {
+auto [it, inserted] = my_map.try_emplace("key", 42);  
+if (!inserted) {  
     std::print("La clé existait déjà, valeur actuelle : {}\n", it->second);
 }
 ```
@@ -295,8 +295,8 @@ Ce pattern élimine le besoin de maintenir un compteur d'index séparé.
 Le nombre de variables dans le binding doit correspondre exactement au nombre d'éléments de l'objet décomposé. Il n'est pas possible d'ignorer un élément — contrairement au `_` de Python ou de Rust :
 
 ```cpp
-auto [x, y, z] = get_point_3d();   // OK : 3 éléments, 3 variables
-auto [x, y] = get_point_3d();      // Erreur : 3 éléments, 2 variables
+auto [x, y, z] = get_point_3d();   // OK : 3 éléments, 3 variables  
+auto [x, y] = get_point_3d();      // Erreur : 3 éléments, 2 variables  
 ```
 
 Si seuls certains éléments sont nécessaires, il faut quand même les nommer tous. Une convention répandue est d'utiliser un nom explicitement « ignoré » :
@@ -350,8 +350,8 @@ namespace std {
 }
 
 // Maintenant valide :
-Person alice("Alice", 30);
-auto [name, age] = alice;
+Person alice("Alice", 30);  
+auto [name, age] = alice;  
 ```
 
 Ce mécanisme est le même que celui utilisé en interne par `std::pair` et `std::tuple`. Il est surtout utile pour les auteurs de bibliothèques qui souhaitent rendre leurs types décomposables.
@@ -383,9 +383,9 @@ auto [x, y] = get_point();
 est conceptuellement équivalente à :
 
 ```cpp
-auto __hidden = get_point();       // Variable cachée contenant l'objet complet
-auto& x = std::get<0>(__hidden);   // Référence vers le premier élément
-auto& y = std::get<1>(__hidden);   // Référence vers le second élément
+auto __hidden = get_point();       // Variable cachée contenant l'objet complet  
+auto& x = std::get<0>(__hidden);   // Référence vers le premier élément  
+auto& y = std::get<1>(__hidden);   // Référence vers le second élément  
 ```
 
 Les noms `x` et `y` ne sont pas des variables indépendantes : ce sont des alias vers les éléments de l'objet caché. C'est pourquoi modifier `x` quand le binding est par référence modifie effectivement l'objet sous-jacent. Cette distinction est subtile mais importante pour comprendre le comportement en présence de qualificateurs `const` et `&`.

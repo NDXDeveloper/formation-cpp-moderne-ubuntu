@@ -9,8 +9,8 @@ Quand vous écrivez une fonction **wrapper** — une fonction qui reçoit des ar
 Prenons un exemple concret. Vous voulez écrire une fonction `creer` qui transmet ses arguments au constructeur d'un objet :
 
 ```cpp
-class Widget {
-public:
+class Widget {  
+public:  
     Widget(const std::string& nom) {
         std::print("[copie] Widget créé avec '{}'\n", nom);
     }
@@ -20,14 +20,14 @@ public:
 };
 
 // Tentative naïve n°1 : paramètre par référence constante
-template <typename T>
-Widget creer_v1(const T& arg) {
+template <typename T>  
+Widget creer_v1(const T& arg) {  
     return Widget(arg);  // arg est TOUJOURS une lvalue → TOUJOURS copie
 }
 
 // Tentative naïve n°2 : paramètre par référence rvalue
-template <typename T>
-Widget creer_v2(T&& arg) {
+template <typename T>  
+Widget creer_v2(T&& arg) {  
     return Widget(arg);  // arg a un nom → c'est une lvalue → TOUJOURS copie !
 }
 ```
@@ -37,9 +37,9 @@ La tentative n°1 échoue parce que `const T&` efface la distinction : tout devi
 ```cpp
 std::string nom = "Alice";
 
-creer_v2(nom);                   // T = string&, arg est une lvalue → copie ✅ (correct)
-creer_v2(std::string("Bob"));    // T = string, arg est une lvalue → copie ❌ (devrait move)
-creer_v2(std::move(nom));        // T = string, arg est une lvalue → copie ❌ (devrait move)
+creer_v2(nom);                   // T = string&, arg est une lvalue → copie ✅ (correct)  
+creer_v2(std::string("Bob"));    // T = string, arg est une lvalue → copie ❌ (devrait move)  
+creer_v2(std::move(nom));        // T = string, arg est une lvalue → copie ❌ (devrait move)  
 ```
 
 Le *perfect forwarding* résout ce problème : il transmet chaque argument **avec sa catégorie de valeur d'origine** intacte.
@@ -58,15 +58,15 @@ Une forwarding reference existe quand **deux conditions** sont réunies :
 2. La déduction de type est effectuée directement à partir de l'argument.
 
 ```cpp
-template <typename T>
-void f(T&& arg);           // ✅ Forwarding reference — T est déduit
+template <typename T>  
+void f(T&& arg);           // ✅ Forwarding reference — T est déduit  
 
-template <typename T>
-void g(std::vector<T>&& v); // ❌ PAS une forwarding reference
+template <typename T>  
+void g(std::vector<T>&& v); // ❌ PAS une forwarding reference  
                              //    c'est une référence rvalue vers vector<T>
 
-template <typename T>
-class Wrapper {
+template <typename T>  
+class Wrapper {  
     void h(T&& arg);        // ❌ PAS une forwarding reference
                              //    T est fixé à l'instanciation de la classe,
                              //    pas déduit à l'appel de h
@@ -96,8 +96,8 @@ La règle simplifiée : **si une `&` apparaît quelque part dans l'empilement, l
 Concrètement, quand vous appelez `f(arg)` :
 
 ```cpp
-template <typename T>
-void f(T&& arg);
+template <typename T>  
+void f(T&& arg);  
 
 std::string s = "Hello";
 
@@ -126,16 +126,16 @@ Le type `T` contient l'information sur la catégorie de valeur, mais `arg` reste
 - Si `T` est `X` (l'argument original était une rvalue) → `std::forward<T>(arg)` retourne une **rvalue reference** → déplacement.
 
 ```cpp
-template <typename T>
-Widget creer(T&& arg) {
+template <typename T>  
+Widget creer(T&& arg) {  
     return Widget(std::forward<T>(arg));  // ✅ Catégorie préservée
 }
 
 std::string nom = "Alice";
 
-creer(nom);                   // T = string& → forward retourne string& → copie ✅
-creer(std::string("Bob"));    // T = string  → forward retourne string&& → move ✅
-creer(std::move(nom));        // T = string  → forward retourne string&& → move ✅
+creer(nom);                   // T = string& → forward retourne string& → copie ✅  
+creer(std::string("Bob"));    // T = string  → forward retourne string&& → move ✅  
+creer(std::move(nom));        // T = string  → forward retourne string&& → move ✅  
 ```
 
 C'est le *perfect forwarding* : chaque argument est transmis exactement comme il a été reçu, sans perte d'information.
@@ -146,8 +146,8 @@ Comme `std::move`, `std::forward` est un cast conditionnel. Voici une version si
 
 ```cpp
 // Cas lvalue : T est X& → retourne X&
-template <typename T>
-constexpr T&& forward(std::remove_reference_t<T>& arg) noexcept {
+template <typename T>  
+constexpr T&& forward(std::remove_reference_t<T>& arg) noexcept {  
     return static_cast<T&&>(arg);
     // Si T = X&  → static_cast<X& &&>(arg) → static_cast<X&>(arg)  → lvalue
     // Si T = X   → static_cast<X&&>(arg)                            → rvalue
@@ -157,8 +157,8 @@ constexpr T&& forward(std::remove_reference_t<T>& arg) noexcept {
 Le paramètre template `T` est **toujours spécifié explicitement** — c'est une différence majeure avec `std::move` qui déduit son paramètre template :
 
 ```cpp
-std::forward<T>(arg);    // ✅ T spécifié explicitement — obligatoire
-std::forward(arg);       // ❌ Ne compile pas — T ne peut pas être déduit
+std::forward<T>(arg);    // ✅ T spécifié explicitement — obligatoire  
+std::forward(arg);       // ❌ Ne compile pas — T ne peut pas être déduit  
 ```
 
 C'est logique : `std::forward` a besoin de connaître `T` pour savoir si l'argument original était une lvalue ou une rvalue. Cette information est dans `T`, pas dans `arg`.
@@ -185,8 +185,8 @@ La règle est simple :
 
 ```cpp
 // ✅ forward dans un template avec forwarding reference
-template <typename T>
-void wrapper(T&& arg) {
+template <typename T>  
+void wrapper(T&& arg) {  
     destination(std::forward<T>(arg));
 }
 
@@ -213,8 +213,8 @@ Le perfect forwarding est la technique qui rend possible `std::make_unique`, `st
 Voici une implémentation simplifiée de `std::make_unique` qui illustre le perfect forwarding en action :
 
 ```cpp
-template <typename T, typename... Args>
-std::unique_ptr<T> mon_make_unique(Args&&... args) {
+template <typename T, typename... Args>  
+std::unique_ptr<T> mon_make_unique(Args&&... args) {  
     return std::unique_ptr<T>(
         new T(std::forward<Args>(args)...)
     );
@@ -266,9 +266,9 @@ vec.emplace_back(std::move(cle), 42);
 Sous le capot, `emplace_back` ressemble à ceci :
 
 ```cpp
-template <typename T, typename Alloc>
-template <typename... Args>
-void vector<T, Alloc>::emplace_back(Args&&... args) {
+template <typename T, typename Alloc>  
+template <typename... Args>  
+void vector<T, Alloc>::emplace_back(Args&&... args) {  
     // ... gestion de la capacité ...
     ::new (end_ptr) T(std::forward<Args>(args)...);  // Placement new + forward
     ++size_;
@@ -284,8 +284,8 @@ Le perfect forwarding est indispensable pour écrire des **wrappers** qui ajoute
 ### Wrapper avec logging
 
 ```cpp
-template <typename Func, typename... Args>
-decltype(auto) avec_log(const std::string& label, Func&& func, Args&&... args) {
+template <typename Func, typename... Args>  
+decltype(auto) avec_log(const std::string& label, Func&& func, Args&&... args) {  
     std::print("[LOG] Début de '{}'\n", label);
 
     decltype(auto) resultat = std::invoke(
@@ -298,8 +298,8 @@ decltype(auto) avec_log(const std::string& label, Func&& func, Args&&... args) {
 }
 
 // Utilisation — la sémantique des arguments est parfaitement préservée
-std::string nom = "Alice";
-auto widget = avec_log("création", creer_widget, std::move(nom));
+std::string nom = "Alice";  
+auto widget = avec_log("création", creer_widget, std::move(nom));  
 // nom est déplacé dans creer_widget, pas copié
 ```
 
@@ -312,8 +312,8 @@ Quelques points à noter :
 ### Wrapper avec mesure de temps
 
 ```cpp
-template <typename Func, typename... Args>
-decltype(auto) chrono_mesure(Func&& func, Args&&... args) {
+template <typename Func, typename... Args>  
+decltype(auto) chrono_mesure(Func&& func, Args&&... args) {  
     auto debut = std::chrono::high_resolution_clock::now();
 
     decltype(auto) resultat = std::invoke(
@@ -354,16 +354,16 @@ La version C++20 est plus lisible et suit exactement le même pattern que les fo
 C++20 permet aussi de **capturer** un argument par forwarding dans une lambda pour une exécution différée :
 
 ```cpp
-template <typename... Args>
-auto creer_differe(Args&&... args) {
+template <typename... Args>  
+auto creer_differe(Args&&... args) {  
     // Capture par perfect forwarding avec init capture
     return [...args = std::forward<Args>(args)]() mutable {
         return Widget(std::move(args)...);
     };
 }
 
-std::string nom = "Alice";
-auto factory = creer_differe(std::move(nom));
+std::string nom = "Alice";  
+auto factory = creer_differe(std::move(nom));  
 // nom a été déplacé dans la capture de la lambda
 
 auto widget = factory();  // Widget construit à l'exécution de la lambda
@@ -378,8 +378,8 @@ L'init capture `...args = std::forward<Args>(args)` déplace les rvalues dans la
 ### Piège n°1 : forward sans paramètre template explicite
 
 ```cpp
-template <typename T>
-void f(T&& arg) {
+template <typename T>  
+void f(T&& arg) {  
     g(std::forward(arg));       // ❌ Ne compile pas — T ne peut pas être déduit
     g(std::forward<T>(arg));    // ✅ T spécifié explicitement
 }
@@ -399,8 +399,8 @@ void f(std::string&& s) {
 ### Piège n°3 : forwarder le même argument plusieurs fois
 
 ```cpp
-template <typename T>
-void f(T&& arg) {
+template <typename T>  
+void f(T&& arg) {  
     g(std::forward<T>(arg));   // Peut déplacer arg
     h(std::forward<T>(arg));   // ⚠️ arg est potentiellement vidé !
 }
@@ -411,8 +411,8 @@ Si `arg` est une rvalue, le premier `std::forward` autorise un déplacement qui 
 La solution est de ne forwarder un argument qu'**une seule fois**, lors de sa dernière utilisation :
 
 ```cpp
-template <typename T>
-void f(T&& arg) {
+template <typename T>  
+void f(T&& arg) {  
     g(arg);                        // Première utilisation — lvalue, pas de move
     h(std::forward<T>(arg));       // Dernière utilisation — forward ici
 }
@@ -421,21 +421,21 @@ void f(T&& arg) {
 ### Piège n°4 : confondre forwarding reference et rvalue reference
 
 ```cpp
-template <typename T>
-class Container {
-public:
+template <typename T>  
+class Container {  
+public:  
     void push(T&& value);  // ❌ PAS une forwarding reference !
                             //    T est fixé à l'instanciation du template de classe
 };
 
-Container<std::string> c;
-std::string s = "Hello";
-c.push(s);              // ❌ Ne compile pas — T&& = string&&, n'accepte que les rvalues
+Container<std::string> c;  
+std::string s = "Hello";  
+c.push(s);              // ❌ Ne compile pas — T&& = string&&, n'accepte que les rvalues  
 
 // Pour une forwarding reference, il faut un paramètre template de la MÉTHODE :
-template <typename T>
-class Container {
-public:
+template <typename T>  
+class Container {  
+public:  
     template <typename U>
     void push(U&& value);  // ✅ Forwarding reference — U est déduit à l'appel
 };

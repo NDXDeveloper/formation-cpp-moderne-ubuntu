@@ -7,9 +7,9 @@
 En C++11, les paramètres d'une lambda doivent avoir un type explicite. Chaque lambda est écrite pour un ensemble de types spécifique :
 
 ```cpp
-auto add_int = [](int a, int b) { return a + b; };
-auto add_double = [](double a, double b) { return a + b; };
-auto add_string = [](const std::string& a, const std::string& b) { return a + b; };
+auto add_int = [](int a, int b) { return a + b; };  
+auto add_double = [](double a, double b) { return a + b; };  
+auto add_string = [](const std::string& a, const std::string& b) { return a + b; };  
 ```
 
 Trois lambdas pour la même opération logique — l'addition. Si on veut écrire du code générique, il faut recourir à un foncteur templaté ou à un template de fonction classique, perdant la concision et la localité des lambdas :
@@ -35,9 +35,9 @@ En C++14, on peut utiliser `auto` comme type de paramètre dans une lambda. Le c
 ```cpp
 auto add = [](auto a, auto b) { return a + b; };
 
-std::print("{}\n", add(3, 4));           // int + int → 7
-std::print("{}\n", add(1.5, 2.7));       // double + double → 4.2
-std::print("{}\n", add(std::string("Hello, "), std::string("World")));  // string → Hello, World
+std::print("{}\n", add(3, 4));           // int + int → 7  
+std::print("{}\n", add(1.5, 2.7));       // double + double → 4.2  
+std::print("{}\n", add(std::string("Hello, "), std::string("World")));  // string → Hello, World  
 ```
 
 Une seule lambda remplace les trois versions typées. Chaque appel avec un jeu de types différent instancie une spécialisation distincte de l'`operator()`, exactement comme un template.
@@ -47,8 +47,8 @@ Une seule lambda remplace les trois versions typées. Chaque appel avec un jeu d
 La lambda générique `[](auto a, auto b) { return a + b; }` est transformée en une closure dont l'`operator()` est un template :
 
 ```cpp
-class __lambda {
-public:
+class __lambda {  
+public:  
     template<typename T1, typename T2>
     auto operator()(T1 a, T2 b) const {
         return a + b;
@@ -92,9 +92,9 @@ auto wrapper = [](auto&& arg) {
     process(std::forward<decltype(arg)>(arg));
 };
 
-std::string s = "hello";
-wrapper(s);                    // arg est std::string& (lvalue)
-wrapper(std::string("temp"));  // arg est std::string&& (rvalue)
+std::string s = "hello";  
+wrapper(s);                    // arg est std::string& (lvalue)  
+wrapper(std::string("temp"));  // arg est std::string&& (rvalue)  
 ```
 
 ### Variadic `auto` — packs de paramètres
@@ -113,8 +113,8 @@ print_all(1, 2.5, "hello", 'c');  // 1 2.5 hello c
 Le compilateur génère un `operator()` avec un pack de templates :
 
 ```cpp
-class __lambda {
-public:
+class __lambda {  
+public:  
     template<typename... Args>
     void operator()(const Args&... args) const {
         (std::print("{} ", args), ...);
@@ -147,8 +147,8 @@ Les lambdas génériques avec `auto` ont une limitation : chaque `auto` est un t
 
 ```cpp
 // Avec auto : T1 et T2 sont des types potentiellement différents
-auto add = [](auto a, auto b) { return a + b; };
-add(1, 2.5);  // Fonctionne — int + double
+auto add = [](auto a, auto b) { return a + b; };  
+add(1, 2.5);  // Fonctionne — int + double  
 
 // Comment forcer le MÊME type pour a et b ?
 // Comment utiliser le type T à l'intérieur du corps ?
@@ -167,8 +167,8 @@ auto add = []<typename T>(T a, T b) { return a + b; };
 La lambda exige maintenant que les deux arguments aient le **même type** :
 
 ```cpp
-std::print("{}\n", add(3, 4));       // ✅ T = int
-std::print("{}\n", add(1.5, 2.7));   // ✅ T = double
+std::print("{}\n", add(3, 4));       // ✅ T = int  
+std::print("{}\n", add(1.5, 2.7));   // ✅ T = double  
 
 // add(1, 2.5);  // ❌ ERREUR : T ne peut pas être int ET double simultanément
 ```
@@ -237,8 +237,8 @@ auto convert_all = []<typename Target>(const auto& container) {
     return result;
 };
 
-std::vector<int> ints = {1, 2, 3, 4, 5};
-auto doubles = convert_all.operator()<double>(ints);
+std::vector<int> ints = {1, 2, 3, 4, 5};  
+auto doubles = convert_all.operator()<double>(ints);  
 // doubles = {1.0, 2.0, 3.0, 4.0, 5.0}
 ```
 
@@ -300,8 +300,8 @@ auto process = []<std::integral T1, std::floating_point T2>(T1 x, T2 y) {
 On peut contraindre les lambdas avec des concepts personnalisés pour des exigences métier spécifiques :
 
 ```cpp
-template<typename T>
-concept Printable = requires(T t) {
+template<typename T>  
+concept Printable = requires(T t) {  
     std::print("{}", t);  // T doit être formatable par std::print
 };
 
@@ -309,9 +309,9 @@ auto log_item = [](Printable auto const& item) {
     std::print("[LOG] {}\n", item);
 };
 
-log_item(42);              // ✅
-log_item("hello");         // ✅
-log_item(std::string{});   // ✅
+log_item(42);              // ✅  
+log_item("hello");         // ✅  
+log_item(std::string{});   // ✅  
 // log_item(std::mutex{});  // ❌ std::mutex n'est pas Printable
 ```
 
@@ -326,12 +326,12 @@ Les lambdas génériques sont idéales pour écrire des comparateurs réutilisab
 ```cpp
 auto descending = [](const auto& a, const auto& b) { return a > b; };
 
-std::vector<int> ints = {3, 1, 4, 1, 5};
-std::sort(ints.begin(), ints.end(), descending);
+std::vector<int> ints = {3, 1, 4, 1, 5};  
+std::sort(ints.begin(), ints.end(), descending);  
 // ints = {5, 4, 3, 1, 1}
 
-std::vector<std::string> words = {"banana", "apple", "cherry"};
-std::sort(words.begin(), words.end(), descending);
+std::vector<std::string> words = {"banana", "apple", "cherry"};  
+std::sort(words.begin(), words.end(), descending);  
 // words = {"cherry", "banana", "apple"}
 ```
 
@@ -375,8 +375,8 @@ Les lambdas génériques sont le moyen idiomatique de visiter un `std::variant` 
 
 ```cpp
 // Helper pour combiner des lambdas en un visiteur
-template<class... Ts>
-struct overloaded : Ts... { using Ts::operator()...; };
+template<class... Ts>  
+struct overloaded : Ts... { using Ts::operator()...; };  
 
 using JsonValue = std::variant<int, double, std::string, bool, std::nullptr_t>;
 
@@ -460,9 +460,9 @@ La déduction du type de retour fonctionne comme pour les lambdas non-génériqu
 auto identity = [](auto x) { return x; };
 
 // Le type de retour dépend de l'argument
-auto i = identity(42);          // int
-auto d = identity(3.14);        // double
-auto s = identity(std::string("hi"));  // std::string
+auto i = identity(42);          // int  
+auto d = identity(3.14);        // double  
+auto s = identity(std::string("hi"));  // std::string  
 ```
 
 Pour les expressions plus complexes, le trailing return type peut être nécessaire :
@@ -503,9 +503,9 @@ auto merge = [](auto&& container1, auto&& container2) {
     return result;
 };
 
-std::vector<int> a = {1, 2, 3};
-std::list<int> b = {4, 5, 6};
-auto merged = merge(a, b);  // std::vector<int>{1, 2, 3, 4, 5, 6}
+std::vector<int> a = {1, 2, 3};  
+std::list<int> b = {4, 5, 6};  
+auto merged = merge(a, b);  // std::vector<int>{1, 2, 3, 4, 5, 6}  
 ```
 
 La version templatée C++20 est nettement plus lisible :
@@ -531,8 +531,8 @@ Les lambdas génériques sont implicitement `constexpr` lorsque leur corps le pe
 ```cpp
 constexpr auto max_of = [](auto a, auto b) { return a > b ? a : b; };
 
-static_assert(max_of(3, 7) == 7);
-static_assert(max_of(2.5, 1.8) == 2.5);
+static_assert(max_of(3, 7) == 7);  
+static_assert(max_of(2.5, 1.8) == 2.5);  
 
 // Utilisable aussi avec des constantes de compilation
 constexpr int result = max_of(100, 42);

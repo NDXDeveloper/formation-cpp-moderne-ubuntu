@@ -33,8 +33,8 @@ Les accolades `{}` sont des *placeholders* (emplacements de substitution). Chaqu
 Contrairement à `printf`, la format string est vérifiée **à la compilation**. Une erreur de format est détectée avant l'exécution :
 
 ```cpp
-std::format("{} {} {}", 1, 2);       // Erreur de compilation : 3 placeholders, 2 arguments
-std::format("{:d}", "hello");          // Erreur de compilation : 'd' n'est pas valide pour un string
+std::format("{} {} {}", 1, 2);       // Erreur de compilation : 3 placeholders, 2 arguments  
+std::format("{:d}", "hello");          // Erreur de compilation : 'd' n'est pas valide pour un string  
 ```
 
 Cette vérification est rendue possible par le fait que la format string doit être une constante connue à la compilation (un littéral de chaîne ou un objet `consteval`). C'est un progrès fondamental par rapport à `printf`, où ces erreurs ne se manifestent qu'à l'exécution — souvent en production.
@@ -66,9 +66,9 @@ Par défaut, `std::print` écrit sur `stdout`. On peut spécifier un flux en pre
 std::print(stderr, "Erreur : fichier '{}' introuvable\n", filename);
 
 // Avec un FILE* quelconque
-FILE* log_file = std::fopen("app.log", "w");
-std::print(log_file, "[{}] {}\n", timestamp, message);
-std::fclose(log_file);
+FILE* log_file = std::fopen("app.log", "w");  
+std::print(log_file, "[{}] {}\n", timestamp, message);  
+std::fclose(log_file);  
 ```
 
 ### std::print vs std::format : quand utiliser lequel
@@ -80,8 +80,8 @@ std::fclose(log_file);
 std::print("Score : {}\n", score);
 
 // Construction d'une chaîne → std::format
-std::string log_entry = std::format("[{}] {} — score: {}", timestamp, name, score);
-logger.write(log_entry);
+std::string log_entry = std::format("[{}] {} — score: {}", timestamp, name, score);  
+logger.write(log_entry);  
 ```
 
 ## La syntaxe de formatage en détail
@@ -111,44 +111,44 @@ La largeur minimum du champ est spécifiée par un entier. L'alignement contrôl
 
 ```cpp
 // Alignement à gauche (<), à droite (>), centré (^)
-std::print("[{:<10}]", "hello");     // [hello     ]
-std::print("[{:>10}]", "hello");     // [     hello]
-std::print("[{:^10}]", "hello");     // [  hello   ]
+std::print("[{:<10}]", "hello");     // [hello     ]  
+std::print("[{:>10}]", "hello");     // [     hello]  
+std::print("[{:^10}]", "hello");     // [  hello   ]  
 
 // Caractère de remplissage personnalisé
-std::print("[{:*<10}]", "hello");    // [hello*****]
-std::print("[{:*>10}]", "hello");    // [*****hello]
-std::print("[{:-^20}]", "TITRE");    // [-------TITRE--------]
+std::print("[{:*<10}]", "hello");    // [hello*****]  
+std::print("[{:*>10}]", "hello");    // [*****hello]  
+std::print("[{:-^20}]", "TITRE");    // [-------TITRE--------]  
 ```
 
 La largeur peut aussi être dynamique, en la passant comme argument :
 
 ```cpp
-int width = 15;
-std::print("{:>{}}", "hello", width);   // [          hello]
+int width = 15;  
+std::print("{:>{}}", "hello", width);   // [          hello]  
 ```
 
 ### Formatage des entiers
 
 ```cpp
 // Bases numériques
-std::print("{:d}", 255);     // 255        (décimal — par défaut)
-std::print("{:b}", 255);     // 11111111   (binaire)
-std::print("{:o}", 255);     // 377        (octal)
-std::print("{:x}", 255);     // ff         (hexadécimal minuscule)
-std::print("{:X}", 255);     // FF         (hexadécimal majuscule)
+std::print("{:d}", 255);     // 255        (décimal — par défaut)  
+std::print("{:b}", 255);     // 11111111   (binaire)  
+std::print("{:o}", 255);     // 377        (octal)  
+std::print("{:x}", 255);     // ff         (hexadécimal minuscule)  
+std::print("{:X}", 255);     // FF         (hexadécimal majuscule)  
 
 // Préfixe de base avec #
-std::print("{:#b}", 255);    // 0b11111111
-std::print("{:#o}", 255);    // 0377
-std::print("{:#x}", 255);    // 0xff
+std::print("{:#b}", 255);    // 0b11111111  
+std::print("{:#o}", 255);    // 0377  
+std::print("{:#x}", 255);    // 0xff  
 
 // Séparateur de milliers (locale-dépendant)
 std::print("{:L}", 1'000'000);   // 1,000,000 (ou 1.000.000 selon la locale)
 
 // Padding avec des zéros
-std::print("{:08d}", 42);    // 00000042
-std::print("{:08x}", 255);   // 000000ff
+std::print("{:08d}", 42);    // 00000042  
+std::print("{:08x}", 255);   // 000000ff  
 ```
 
 ### Formatage des nombres flottants
@@ -158,25 +158,25 @@ std::print("{:08x}", 255);   // 000000ff
 std::print("{}", 3.14159);         // 3.14159
 
 // Notation fixe
-std::print("{:f}", 3.14159);       // 3.141590
-std::print("{:.2f}", 3.14159);     // 3.14
+std::print("{:f}", 3.14159);       // 3.141590  
+std::print("{:.2f}", 3.14159);     // 3.14  
 
 // Notation scientifique
-std::print("{:e}", 3.14159);       // 3.141590e+00
-std::print("{:.3e}", 0.000042);    // 4.200e-05
+std::print("{:e}", 3.14159);       // 3.141590e+00  
+std::print("{:.3e}", 0.000042);    // 4.200e-05  
 
 // Notation générale (choisit la plus compacte)
-std::print("{:g}", 3.14159);       // 3.14159
-std::print("{:g}", 0.000042);      // 4.2e-05
+std::print("{:g}", 3.14159);       // 3.14159  
+std::print("{:g}", 0.000042);      // 4.2e-05  
 
 // Largeur + précision
-std::print("{:10.2f}", 3.14159);   // [      3.14]
-std::print("{:010.2f}", 3.14159);  // [0000003.14]
+std::print("{:10.2f}", 3.14159);   // [      3.14]  
+std::print("{:010.2f}", 3.14159);  // [0000003.14]  
 
 // Signe explicite
-std::print("{:+.2f}", 3.14);       // +3.14
-std::print("{:+.2f}", -3.14);      // -3.14
-std::print("{: .2f}", 3.14);       // espace devant les positifs : " 3.14"
+std::print("{:+.2f}", 3.14);       // +3.14  
+std::print("{:+.2f}", -3.14);      // -3.14  
+std::print("{: .2f}", 3.14);       // espace devant les positifs : " 3.14"  
 ```
 
 ### Formatage des chaînes
@@ -198,12 +198,12 @@ Le spécificateur `?` (C++23) produit une représentation « debug » de la cha�
 
 ```cpp
 // Booléens : affichés en texte par défaut
-std::print("{}", true);        // true
-std::print("{}", false);       // false
+std::print("{}", true);        // true  
+std::print("{}", false);       // false  
 
 // Pointeurs
-int x = 42;
-std::print("{}", static_cast<void*>(&x));    // 0x7ffd5e8c1abc (adresse)
+int x = 42;  
+std::print("{}", static_cast<void*>(&x));    // 0x7ffd5e8c1abc (adresse)  
 ```
 
 ### Formatage des chrono types (C++20)
@@ -214,12 +214,12 @@ Le système de formatage s'intègre avec `<chrono>` pour formater directement le
 #include <chrono>
 #include <print>
 
-auto now = std::chrono::system_clock::now();
-std::print("Date : {:%Y-%m-%d %H:%M:%S}\n", now);
+auto now = std::chrono::system_clock::now();  
+std::print("Date : {:%Y-%m-%d %H:%M:%S}\n", now);  
 // Date : 2026-03-10 14:30:45
 
-auto duration = std::chrono::hours(2) + std::chrono::minutes(30);
-std::print("Durée : {:%H:%M}\n", duration);
+auto duration = std::chrono::hours(2) + std::chrono::minutes(30);  
+std::print("Durée : {:%H:%M}\n", duration);  
 // Durée : 02:30
 ```
 
@@ -240,8 +240,8 @@ struct Point {
 };
 
 // Spécialisation de std::formatter pour Point
-template <>
-struct std::formatter<Point> {
+template <>  
+struct std::formatter<Point> {  
     // parse() : interpréter les spécificateurs de format (après le ':')
     constexpr auto parse(std::format_parse_context& ctx) {
         return ctx.begin();   // Pas de spécificateur personnalisé
@@ -257,8 +257,8 @@ struct std::formatter<Point> {
 Le type est maintenant utilisable dans toute format string :
 
 ```cpp
-Point origin{0.0, 0.0};
-Point target{3.14, 2.72};
+Point origin{0.0, 0.0};  
+Point target{3.14, 2.72};  
 
 std::print("De {} vers {}\n", origin, target);
 // De (0.00, 0.00) vers (3.14, 2.72)
@@ -272,8 +272,8 @@ std::string s = std::format("Position : {}", target);
 On peut interpréter ses propres spécificateurs de format. Voici un `Point` qui supporte un mode compact (`c`) et un mode verbose (`v`) :
 
 ```cpp
-template <>
-struct std::formatter<Point> {
+template <>  
+struct std::formatter<Point> {  
     char mode = 'c';   // 'c' = compact, 'v' = verbose
 
     constexpr auto parse(std::format_parse_context& ctx) {
@@ -294,10 +294,10 @@ struct std::formatter<Point> {
 };
 
 // Utilisation :
-Point p{3.14, 2.72};
-std::print("{:c}\n", p);    // (3.14, 2.72)
-std::print("{:v}\n", p);    // Point(x=3.14, y=2.72)
-std::print("{}\n", p);      // (3.14, 2.72) — mode compact par défaut
+Point p{3.14, 2.72};  
+std::print("{:c}\n", p);    // (3.14, 2.72)  
+std::print("{:v}\n", p);    // Point(x=3.14, y=2.72)  
+std::print("{}\n", p);      // (3.14, 2.72) — mode compact par défaut  
 ```
 
 ### Hériter d'un formatter existant
@@ -309,8 +309,8 @@ struct UserId {
     uint64_t value;
 };
 
-template <>
-struct std::formatter<UserId> : std::formatter<uint64_t> {
+template <>  
+struct std::formatter<UserId> : std::formatter<uint64_t> {  
     auto format(const UserId& id, std::format_context& ctx) const {
         // Réutilise tout le formatage de uint64_t (largeur, padding, base, etc.)
         return std::formatter<uint64_t>::format(id.value, ctx);
@@ -318,8 +318,8 @@ struct std::formatter<UserId> : std::formatter<uint64_t> {
 };
 
 // Supporte automatiquement : {:08x}, {:>20}, {:b}, etc.
-UserId user{12345};
-std::print("User #{:08x}\n", user);    // User #00003039
+UserId user{12345};  
+std::print("User #{:08x}\n", user);    // User #00003039  
 ```
 
 ## std::format_to : écrire sans allocation
@@ -333,19 +333,19 @@ std::print("User #{:08x}\n", user);    // User #00003039
 #include <iterator>
 
 // Écrire dans un vector<char> existant
-std::vector<char> buffer;
-std::format_to(std::back_inserter(buffer), "x={}, y={}", 10, 20);
+std::vector<char> buffer;  
+std::format_to(std::back_inserter(buffer), "x={}, y={}", 10, 20);  
 // buffer contient les caractères de "x=10, y=20"
 
 // Écrire dans un string existant (append)
-std::string log;
-std::format_to(std::back_inserter(log), "[INFO] {}\n", "Démarrage");
-std::format_to(std::back_inserter(log), "[INFO] {}\n", "Prêt");
+std::string log;  
+std::format_to(std::back_inserter(log), "[INFO] {}\n", "Démarrage");  
+std::format_to(std::back_inserter(log), "[INFO] {}\n", "Prêt");  
 // Une seule allocation pour log, pas une par appel
 
 // Écrire dans un buffer de taille fixe
-char fixed_buf[64];
-auto result = std::format_to_n(fixed_buf, sizeof(fixed_buf) - 1, "Score: {}", 42);
+char fixed_buf[64];  
+auto result = std::format_to_n(fixed_buf, sizeof(fixed_buf) - 1, "Score: {}", 42);  
 *result.out = '\0';   // Terminer manuellement la chaîne
 ```
 
@@ -421,11 +421,11 @@ La correspondance est quasi directe — les spécificateurs changent légèremen
 
 ```cpp
 // printf                           → std::print
-printf("%d", 42);                   // std::print("{}", 42);
-printf("%08x", 255);                // std::print("{:08x}", 255);
-printf("%.2f", 3.14);              // std::print("{:.2f}", 3.14);
-printf("%-20s", "hello");           // std::print("{:<20}", "hello");
-printf("%+.1f", 3.14);             // std::print("{:+.1f}", 3.14);
+printf("%d", 42);                   // std::print("{}", 42);  
+printf("%08x", 255);                // std::print("{:08x}", 255);  
+printf("%.2f", 3.14);              // std::print("{:.2f}", 3.14);  
+printf("%-20s", "hello");           // std::print("{:<20}", "hello");  
+printf("%+.1f", 3.14);             // std::print("{:+.1f}", 3.14);  
 ```
 
 Le bénéfice principal : les `std::string` passent directement comme arguments, sans `.c_str()`. Et les erreurs de type deviennent des erreurs de compilation.

@@ -14,8 +14,8 @@
 
 ```cpp
 // Version simplifiée (l'implémentation réelle gère plus de cas)
-template <typename T>
-constexpr std::remove_reference_t<T>&& move(T&& arg) noexcept {
+template <typename T>  
+constexpr std::remove_reference_t<T>&& move(T&& arg) noexcept {  
     return static_cast<std::remove_reference_t<T>&&>(arg);
 }
 ```
@@ -81,11 +81,11 @@ Ici, `nom` est passé **par valeur** (une copie a lieu à l'appel), puis déplac
 ### Transfert dans un conteneur
 
 ```cpp
-std::vector<std::string> noms;
-std::string s = "un nom très long qui dépasse le small string optimization";
+std::vector<std::string> noms;  
+std::string s = "un nom très long qui dépasse le small string optimization";  
 
-noms.push_back(s);              // Copie de s dans le vector
-noms.push_back(std::move(s));   // Déplacement — s est vidé, pas de copie
+noms.push_back(s);              // Copie de s dans le vector  
+noms.push_back(std::move(s));   // Déplacement — s est vidé, pas de copie  
 ```
 
 ### Retour explicite depuis une variable locale (rarement nécessaire)
@@ -113,12 +113,12 @@ L'enthousiasme des développeurs qui découvrent `std::move` les pousse souvent 
 C'est l'erreur la plus dangereuse. Après un `std::move`, l'objet source est dans un **état valide mais indéterminé**. Le lire, le déréférencer ou appeler des méthodes qui supposent un état non-vide est un bug :
 
 ```cpp
-std::vector<int> donnees = {1, 2, 3, 4, 5};
-auto sauvegarde = std::move(donnees);
+std::vector<int> donnees = {1, 2, 3, 4, 5};  
+auto sauvegarde = std::move(donnees);  
 
 // ❌ donnees est dans un état indéterminé
-std::print("Taille : {}\n", donnees.size());  // Peut afficher 0, peut planter
-donnees[0] = 42;                               // 💥 Comportement indéfini potentiel
+std::print("Taille : {}\n", donnees.size());  // Peut afficher 0, peut planter  
+donnees[0] = 42;                               // 💥 Comportement indéfini potentiel  
 
 for (auto& x : donnees) { /* ... */ }          // ❌ Résultat imprévisible
 ```
@@ -134,8 +134,8 @@ Les seules opérations sûres après un `std::move` sont :
 `std::move` sur un objet `const` produit un `const T&&`. Aucun constructeur de déplacement n'accepte un `const T&&` (il ne pourrait pas vider l'objet source). Le compilateur sélectionne silencieusement le constructeur de **copie** — vous payez le coût d'une copie en croyant avoir un déplacement :
 
 ```cpp
-const std::string s = "Hello";
-std::string t = std::move(s);  // ⚠️ COPIE, pas déplacement !
+const std::string s = "Hello";  
+std::string t = std::move(s);  // ⚠️ COPIE, pas déplacement !  
                                  // std::move(s) → const string&&
                                  // Pas de match avec string(string&&)
                                  // Fallback vers string(const string&) → copie
@@ -177,8 +177,8 @@ std::string transformer(std::string input) {
 Déplacer un `int`, un `double`, un `bool` ou un pointeur brut est identique à les copier — ce sont des types scalaires sans ressources internes à transférer. `std::move` est inutile et ajoute du bruit :
 
 ```cpp
-int x = 42;
-int y = std::move(x);  // ⚠️ Inutile — copie un int, comme sans std::move
+int x = 42;  
+int y = std::move(x);  // ⚠️ Inutile — copie un int, comme sans std::move  
                          // x vaut toujours 42
 ```
 
@@ -187,8 +187,8 @@ int y = std::move(x);  // ⚠️ Inutile — copie un int, comme sans std::move
 Certains types utilisent une optimisation interne (SSO pour `std::string`, SBO pour `std::function`) où les petites données sont stockées directement dans l'objet, sans allocation sur le tas. Pour ces objets, le déplacement est une copie déguisée — il n'y a pas de pointeur interne à voler :
 
 ```cpp
-std::string court = "Hi";           // 2 caractères — SSO actif
-std::string t = std::move(court);   // "Déplacement" mais en réalité une copie
+std::string court = "Hi";           // 2 caractères — SSO actif  
+std::string t = std::move(court);   // "Déplacement" mais en réalité une copie  
                                      // des ~24 octets du buffer interne SSO
 ```
 
@@ -205,13 +205,13 @@ La bibliothèque standard est intégralement conçue pour tirer parti de `std::m
 Tous les conteneurs de la STL sont déplaçables. Le déplacement d'un conteneur transfère ses ressources internes (buffer, nœuds, buckets) en temps constant :
 
 ```cpp
-std::vector<int> v1(1'000'000, 42);
-std::vector<int> v2 = std::move(v1);
+std::vector<int> v1(1'000'000, 42);  
+std::vector<int> v2 = std::move(v1);  
 // v2 possède le million d'entiers
 // v1 est vide (size() == 0, capacity() == 0)
 
-std::map<std::string, int> m1 = {{"a", 1}, {"b", 2}};
-std::map<std::string, int> m2 = std::move(m1);
+std::map<std::string, int> m1 = {{"a", 1}, {"b", 2}};  
+std::map<std::string, int> m2 = std::move(m1);  
 // m2 possède l'arbre de m1
 // m1 est vide
 ```
@@ -221,8 +221,8 @@ std::map<std::string, int> m2 = std::move(m1);
 `std::swap` utilise la sémantique de mouvement depuis C++11. Échanger deux objets lourds est désormais trois déplacements (pas trois copies) :
 
 ```cpp
-std::vector<int> a(1'000'000);
-std::vector<int> b(2'000'000);
+std::vector<int> a(1'000'000);  
+std::vector<int> b(2'000'000);  
 
 std::swap(a, b);
 // Équivalent à :
@@ -237,8 +237,8 @@ std::swap(a, b);
 Plusieurs algorithmes de la STL utilisent le déplacement : `std::move` (l'algorithme, pas le cast), `std::move_backward`, et les algorithmes de partition/tri qui réarrangent les éléments :
 
 ```cpp
-std::vector<std::string> source = {"alpha", "beta", "gamma"};
-std::vector<std::string> destination(3);
+std::vector<std::string> source = {"alpha", "beta", "gamma"};  
+std::vector<std::string> destination(3);  
 
 // L'algorithme std::move déplace chaque élément
 std::move(source.begin(), source.end(), destination.begin());
@@ -257,8 +257,8 @@ std::vector<std::string> vec;
 
 std::string s = "une chaîne longue pour éviter le SSO";
 
-vec.push_back(s);              // Copie — s est une lvalue
-vec.push_back(std::move(s));   // Déplacement — s est vidé
+vec.push_back(s);              // Copie — s est une lvalue  
+vec.push_back(std::move(s));   // Déplacement — s est vidé  
 
 // emplace_back construit directement dans le vector
 vec.emplace_back("construction in-place");  // Ni copie ni déplacement
@@ -323,8 +323,8 @@ public:
 ### Erreur n°1 : utiliser après move
 
 ```cpp
-std::vector<int> data = {1, 2, 3};
-process(std::move(data));
+std::vector<int> data = {1, 2, 3};  
+process(std::move(data));  
 
 // ❌ Bug silencieux
 std::print("Taille : {}\n", data.size());
@@ -371,8 +371,8 @@ std::string s = std::move(std::string("Hello"));  // ⚠️ Inutile
 Pour détecter les problèmes liés à `std::move` lors de la compilation :
 
 ```bash
-g++ -std=c++20 -Wall -Wextra -Wpessimizing-move -Wredundant-move ...
-clang++ -std=c++20 -Wall -Wextra -Wpessimizing-move -Wredundant-move ...
+g++ -std=c++20 -Wall -Wextra -Wpessimizing-move -Wredundant-move ...  
+clang++ -std=c++20 -Wall -Wextra -Wpessimizing-move -Wredundant-move ...  
 ```
 
 ---

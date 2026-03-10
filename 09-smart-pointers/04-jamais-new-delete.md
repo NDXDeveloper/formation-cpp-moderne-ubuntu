@@ -32,12 +32,12 @@ C'est toujours la première question à se poser. Si la durée de vie de l'objet
 
 ```cpp
 // ❌ Allocation dynamique inutile
-auto config = std::make_unique<Config>("app.yaml");
-traiter(*config);
+auto config = std::make_unique<Config>("app.yaml");  
+traiter(*config);  
 
 // ✅ Variable locale — plus simple, plus rapide
-Config config("app.yaml");
-traiter(config);
+Config config("app.yaml");  
+traiter(config);  
 ```
 
 Les variables locales sont allouées sur la stack, détruites automatiquement en sortie de scope, et ne coûtent aucun appel à l'allocateur. C'est la forme la plus efficace et la plus sûre de gestion mémoire.
@@ -63,15 +63,15 @@ Si plusieurs parties du code doivent co-posséder la ressource sans relation hi�
 
 ```cpp
 // ❌ Ancien style — qui fait le delete ?
-Widget* shared_w = new Widget(42);
-module_a->set_widget(shared_w);
-module_b->set_widget(shared_w);
+Widget* shared_w = new Widget(42);  
+module_a->set_widget(shared_w);  
+module_b->set_widget(shared_w);  
 // delete shared_w; // Quand ? Qui ? Après A ou B ?
 
 // ✅ C++ moderne
-auto shared_w = std::make_shared<Widget>(42);
-module_a->set_widget(shared_w);
-module_b->set_widget(shared_w);
+auto shared_w = std::make_shared<Widget>(42);  
+module_a->set_widget(shared_w);  
+module_b->set_widget(shared_w);  
 // Libéré quand A et B n'en ont plus besoin
 ```
 
@@ -96,16 +96,16 @@ Combinez un conteneur avec des smart pointers :
 
 ```cpp
 // ❌ Ancien style — cauchemar de gestion mémoire
-std::vector<Animal*> zoo;
-zoo.push_back(new Chat());
-zoo.push_back(new Chien());
+std::vector<Animal*> zoo;  
+zoo.push_back(new Chat());  
+zoo.push_back(new Chien());  
 // ... qui fait le delete de chaque élément ?
 for (auto* a : zoo) delete a;  // Fragile, oubliable
 
 // ✅ C++ moderne
-std::vector<std::unique_ptr<Animal>> zoo;
-zoo.push_back(std::make_unique<Chat>());
-zoo.push_back(std::make_unique<Chien>());
+std::vector<std::unique_ptr<Animal>> zoo;  
+zoo.push_back(std::make_unique<Chat>());  
+zoo.push_back(std::make_unique<Chien>());  
 // Tout est libéré automatiquement avec le vector
 ```
 
@@ -179,8 +179,8 @@ public:
 `placement new` construit un objet à une adresse mémoire prédéterminée, sans allouer de mémoire. Il est utilisé dans les allocateurs, les conteneurs personnalisés, et les systèmes de *memory pooling* :
 
 ```cpp
-alignas(Widget) char buffer[sizeof(Widget)];
-Widget* w = new (buffer) Widget(42);  // Placement new — pas d'allocation
+alignas(Widget) char buffer[sizeof(Widget)];  
+Widget* w = new (buffer) Widget(42);  // Placement new — pas d'allocation  
 // ...
 w->~Widget();  // Destruction explicite obligatoire
 ```
@@ -195,8 +195,8 @@ Quand une API C attend un pointeur brut et prend la responsabilité de la libér
 // L'API C prend la propriété et appelle free() elle-même
 extern "C" void register_handler(Handler* h);
 
-auto h = std::make_unique<Handler>();
-register_handler(h.release());  // release() transfère la propriété à l'API C
+auto h = std::make_unique<Handler>();  
+register_handler(h.release());  // release() transfère la propriété à l'API C  
 ```
 
 Ici, `new` n'est pas utilisé directement (c'est `make_unique` + `release()`), mais le principe est le même : la propriété quitte le monde des smart pointers pour entrer dans une gestion manuelle. C'est justifié quand l'API l'exige.
@@ -217,8 +217,8 @@ Dans la réalité, vous ne partez pas toujours d'une page blanche. Les codebases
 
 ```bash
 # Recherche simple
-grep -rn '\bnew\b' src/ --include='*.cpp' --include='*.h'
-grep -rn '\bdelete\b' src/ --include='*.cpp' --include='*.h'
+grep -rn '\bnew\b' src/ --include='*.cpp' --include='*.h'  
+grep -rn '\bdelete\b' src/ --include='*.cpp' --include='*.h'  
 
 # Avec clang-tidy (plus précis, comprend le contexte C++)
 clang-tidy -checks='cppcoreguidelines-owning-memory' src/*.cpp
@@ -249,13 +249,13 @@ auto w = std::make_unique<Widget>(args);
 
 ```cpp
 // Avant — propriété ambiguë
-Widget* creer_widget();              // L'appelant doit-il delete ?
-void enregistrer(Widget* w);         // La fonction prend-elle la propriété ?
+Widget* creer_widget();              // L'appelant doit-il delete ?  
+void enregistrer(Widget* w);         // La fonction prend-elle la propriété ?  
 
 // Après — propriété explicite dans le type
-std::unique_ptr<Widget> creer_widget();          // Oui, l'appelant possède
-void enregistrer(std::unique_ptr<Widget> w);     // Oui, la fonction possède
-void utiliser(const Widget& w);                  // Non, simple observation
+std::unique_ptr<Widget> creer_widget();          // Oui, l'appelant possède  
+void enregistrer(std::unique_ptr<Widget> w);     // Oui, la fonction possède  
+void utiliser(const Widget& w);                  // Non, simple observation  
 ```
 
 **Étape 5 : valider.** Après chaque lot de modifications, exécutez les tests et Valgrind/AddressSanitizer pour vérifier qu'aucune régression mémoire n'a été introduite.

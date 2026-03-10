@@ -18,14 +18,14 @@ Les deux fonctions ont une interface identique : elles prennent le type comme pa
 #include <memory>
 
 // make_unique — retourne un std::unique_ptr<T>
-auto u1 = std::make_unique<int>(42);
-auto u2 = std::make_unique<std::string>("Hello");
-auto u3 = std::make_unique<std::vector<int>>(10, 0);  // vector de 10 zéros
+auto u1 = std::make_unique<int>(42);  
+auto u2 = std::make_unique<std::string>("Hello");  
+auto u3 = std::make_unique<std::vector<int>>(10, 0);  // vector de 10 zéros  
 
 // make_shared — retourne un std::shared_ptr<T>
-auto s1 = std::make_shared<int>(42);
-auto s2 = std::make_shared<std::string>("Hello");
-auto s3 = std::make_shared<std::vector<int>>(10, 0);
+auto s1 = std::make_shared<int>(42);  
+auto s2 = std::make_shared<std::string>("Hello");  
+auto s3 = std::make_shared<std::vector<int>>(10, 0);  
 
 // Tableaux (make_unique uniquement, C++14 / C++20)
 auto arr = std::make_unique<int[]>(100);  // 100 entiers initialisés à 0
@@ -153,8 +153,8 @@ Avec la construction directe (`shared_ptr(new T)`), les deux allocations sont in
 Avec `make_shared`, le bloc mémoire unique n'est libéré que quand **les deux compteurs** sont à zéro. Si des `weak_ptr` persistent longtemps après la destruction logique de l'objet, la mémoire de l'objet reste occupée (même si le destructeur a été appelé).
 
 ```cpp
-auto shared = std::make_shared<GrosBuffer>();  // 1 Mo + control block = 1 bloc
-std::weak_ptr<GrosBuffer> weak = shared;
+auto shared = std::make_shared<GrosBuffer>();  // 1 Mo + control block = 1 bloc  
+std::weak_ptr<GrosBuffer> weak = shared;  
 
 shared.reset();
 // Le destructeur de GrosBuffer est appelé → l'objet est "détruit"
@@ -271,8 +271,8 @@ auto v1 = std::make_shared<std::vector<int>>(10, 0);  // 10 zéros ✅
 La solution idiomatique est de passer par un `std::initializer_list` explicite :
 
 ```cpp
-auto init = std::initializer_list<int>{1, 2, 3, 4, 5};
-auto v = std::make_shared<std::vector<int>>(init);  // ✅
+auto init = std::initializer_list<int>{1, 2, 3, 4, 5};  
+auto v = std::make_shared<std::vector<int>>(init);  // ✅  
 ```
 
 Ou, si cette syntaxe est trop lourde, de construire directement :
@@ -289,8 +289,8 @@ Comme expliqué dans la section sur le compromis de `make_shared` : si l'objet f
 
 ```cpp
 // Objet de 10 Mo — on veut libérer la mémoire dès que possible
-auto p = std::shared_ptr<HugeBuffer>(new HugeBuffer());
-std::weak_ptr<HugeBuffer> w = p;
+auto p = std::shared_ptr<HugeBuffer>(new HugeBuffer());  
+std::weak_ptr<HugeBuffer> w = p;  
 
 p.reset();
 // Avec la construction directe : les 10 Mo sont libérés immédiatement ✅

@@ -18,8 +18,8 @@ L'approche la plus intuitive pour créer une matrice en C++ est un `vector<vecto
 
 ```cpp
 // Matrice 3×4 — approche naïve
-std::vector<std::vector<double>> matrix(3, std::vector<double>(4, 0.0));
-matrix[1][2] = 3.14;
+std::vector<std::vector<double>> matrix(3, std::vector<double>(4, 0.0));  
+matrix[1][2] = 3.14;  
 ```
 
 Cette approche est problématique à plusieurs niveaux. Chaque ligne est un `vector` indépendant, alloué séparément sur le heap. Les lignes ne sont pas contiguës en mémoire — parcourir la matrice provoque des cache misses à chaque changement de ligne. Rien ne garantit que toutes les lignes ont la même taille. Et le double déréférencement (`operator[]` sur le vector externe, puis sur le vector interne) a un coût.
@@ -45,8 +45,8 @@ L'alternative performante est de stocker les données dans un vecteur unique et 
 std::vector<double> data(3 * 4, 0.0);
 
 // Accès à l'élément (ligne, colonne) — row-major
-auto index = [cols = 4](int row, int col) { return row * cols + col; };
-data[index(1, 2)] = 3.14;
+auto index = [cols = 4](int row, int col) { return row * cols + col; };  
+data[index(1, 2)] = 3.14;  
 ```
 
 C'est performant — la mémoire est contiguë — mais le code est fragile et peu lisible. Le calcul d'index est sujet aux erreurs (confusion ligne/colonne, oubli de la largeur), il ne se généralise pas facilement à plus de deux dimensions, et il n'y a aucune vérification des bornes.
@@ -112,8 +112,8 @@ Quatre paramètres de template, dont deux ont des valeurs par défaut. Examinons
 Le type des données pointées — `double`, `float`, `int`, un type utilisateur, etc. Comme pour `std::span`, la constance se gère au niveau du type :
 
 ```cpp
-std::mdspan<const double, ...>  // Vue en lecture seule
-std::mdspan<double, ...>        // Vue en lecture-écriture
+std::mdspan<const double, ...>  // Vue en lecture seule  
+std::mdspan<double, ...>        // Vue en lecture-écriture  
 ```
 
 ### Extents : les dimensions
@@ -141,8 +141,8 @@ Les extents statiques permettent au compilateur d'optimiser le calcul d'index (m
 En pratique, le CTAD (Class Template Argument Deduction) simplifie la syntaxe. Quand les tailles sont passées au constructeur, le compilateur déduit des extents dynamiques :
 
 ```cpp
-std::vector<double> data(12);
-std::mdspan matrix(data.data(), 3, 4);  // Déduit mdspan<double, dextents<size_t, 2>>
+std::vector<double> data(12);  
+std::mdspan matrix(data.data(), 3, 4);  // Déduit mdspan<double, dextents<size_t, 2>>  
 ```
 
 ### LayoutPolicy : l'organisation en mémoire
@@ -185,8 +185,8 @@ Chaque dimension a un pas (*stride*) arbitraire, ce qui permet de représenter d
 
 ```cpp
 // Matrice 3×4 avec un stride de 5 sur les lignes (padding de 1 élément par ligne)
-std::array<size_t, 2> strides = {5, 1};
-std::layout_stride::mapping<std::dextents<size_t, 2>> map(
+std::array<size_t, 2> strides = {5, 1};  
+std::layout_stride::mapping<std::dextents<size_t, 2>> map(  
     std::dextents<size_t, 2>(3, 4), strides);
 std::mdspan<double, std::dextents<size_t, 2>, std::layout_stride> 
     matrix(ptr, map);
@@ -202,8 +202,8 @@ L'accessor par défaut (`std::default_accessor<T>`) effectue un simple déréfé
 
 ```cpp
 // Concept : un accessor avec vérification de bornes
-template <typename T>
-struct checked_accessor {
+template <typename T>  
+struct checked_accessor {  
     using element_type = T;
     using reference = T&;
     using data_handle_type = T*;
@@ -240,9 +240,9 @@ std::vector<uint8_t> pixels(1920 * 1080 * 3);
 std::mdspan image(pixels.data(), 1080, 1920, 3);
 
 // Accès naturel : image[ligne, colonne, canal]
-image[540, 960, 0] = 255;   // Rouge au centre de l'image
-image[540, 960, 1] = 128;   // Vert
-image[540, 960, 2] = 0;     // Bleu
+image[540, 960, 0] = 255;   // Rouge au centre de l'image  
+image[540, 960, 1] = 128;   // Vert  
+image[540, 960, 2] = 0;     // Bleu  
 
 // Conversion en niveaux de gris
 for (size_t y = 0; y < image.extent(0); ++y) {
@@ -336,8 +336,8 @@ Les simulations physiques (mécanique des fluides, éléments finis, automates c
 #include <vector>
 
 // Grille 3D pour une simulation thermique
-constexpr size_t NX = 100, NY = 100, NZ = 100;
-std::vector<double> temperature(NX * NY * NZ, 20.0);  // 20°C partout
+constexpr size_t NX = 100, NY = 100, NZ = 100;  
+std::vector<double> temperature(NX * NY * NZ, 20.0);  // 20°C partout  
 
 std::mdspan grid(temperature.data(), NX, NY, NZ);
 
@@ -345,11 +345,11 @@ std::mdspan grid(temperature.data(), NX, NY, NZ);
 grid[50, 50, 50] = 500.0;
 
 // Un pas de diffusion thermique (schéma aux différences finies simplifié)
-std::vector<double> next_temp(NX * NY * NZ);
-std::mdspan next(next_temp.data(), NX, NY, NZ);
+std::vector<double> next_temp(NX * NY * NZ);  
+std::mdspan next(next_temp.data(), NX, NY, NZ);  
 
-double alpha = 0.1;
-for (size_t x = 1; x + 1 < NX; ++x) {
+double alpha = 0.1;  
+for (size_t x = 1; x + 1 < NX; ++x) {  
     for (size_t y = 1; y + 1 < NY; ++y) {
         for (size_t z = 1; z + 1 < NZ; ++z) {
             next[x, y, z] = grid[x, y, z] + alpha * (
@@ -379,10 +379,10 @@ Le calcul d'index est effectué inline par le compilateur. Avec des extents stat
 `mdspan` supporte un nombre quelconque de dimensions — 1D, 2D, 3D, ou plus. Le nombre de dimensions est fixé à la compilation via les extents :
 
 ```cpp
-std::mdspan<double, std::dextents<size_t, 1>> vector_1d(ptr, 100);
-std::mdspan<double, std::dextents<size_t, 2>> matrix_2d(ptr, 10, 10);
-std::mdspan<double, std::dextents<size_t, 3>> tensor_3d(ptr, 10, 10, 10);
-std::mdspan<double, std::dextents<size_t, 4>> hyper_4d(ptr, 5, 5, 5, 5);
+std::mdspan<double, std::dextents<size_t, 1>> vector_1d(ptr, 100);  
+std::mdspan<double, std::dextents<size_t, 2>> matrix_2d(ptr, 10, 10);  
+std::mdspan<double, std::dextents<size_t, 3>> tensor_3d(ptr, 10, 10, 10);  
+std::mdspan<double, std::dextents<size_t, 4>> hyper_4d(ptr, 5, 5, 5, 5);  
 ```
 
 ### Méthodes d'inspection
@@ -390,12 +390,12 @@ std::mdspan<double, std::dextents<size_t, 4>> hyper_4d(ptr, 5, 5, 5, 5);
 ```cpp
 std::mdspan matrix(data.data(), 3, 4);
 
-matrix.rank();           // 2 — nombre de dimensions
-matrix.extent(0);        // 3 — taille de la première dimension
-matrix.extent(1);        // 4 — taille de la seconde dimension
-matrix.size();           // 12 — nombre total d'éléments
-matrix.empty();          // false
-matrix.data_handle();    // Pointeur brut sous-jacent
+matrix.rank();           // 2 — nombre de dimensions  
+matrix.extent(0);        // 3 — taille de la première dimension  
+matrix.extent(1);        // 4 — taille de la seconde dimension  
+matrix.size();           // 12 — nombre total d'éléments  
+matrix.empty();          // false  
+matrix.data_handle();    // Pointeur brut sous-jacent  
 ```
 
 ## Sous-vues avec std::submdspan
@@ -405,8 +405,8 @@ C++26 standardise `std::submdspan` pour extraire des sous-vues d'un `mdspan` —
 ```cpp
 #include <mdspan>
 
-std::vector<double> data(12);
-std::mdspan matrix(data.data(), 3, 4);
+std::vector<double> data(12);  
+std::mdspan matrix(data.data(), 3, 4);  
 
 // Extraire la ligne 1 (vue 1D)
 auto row_1 = std::submdspan(matrix, 1, std::full_extent);
