@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Configuration du serveur (legacy) -->
+<server name="api-prod" version="3.2">
+    <host>0.0.0.0</host>
+    <port>8080</port>
+    <workers>4</workers>
+
+    <database>
+        <host>db.internal</host>
+        <port>5432</port>
+        <credentials username="api_user" password="secret"/>
+    </database>
+
+    <endpoints>
+        <endpoint path="/health" method="GET" timeout="1000"/>
+        <endpoint path="/api/data" method="POST" timeout="5000"/>
+    </endpoints>
+
+    <logging level="info">
+        <output type="stdout"/>
+        <output type="file" path="/var/log/api/server.log"/>
+    </logging>
+</server>

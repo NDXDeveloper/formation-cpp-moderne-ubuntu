@@ -1,0 +1,19 @@
+# Configuration du serveur d'API
+server:
+  host: 0.0.0.0
+  port: 8080
+  workers: 4
+
+database:
+  host: db.internal
+  port: 5432
+  name: production
+  credentials:
+    username: api_user
+    password: secret123
+
+logging:
+  level: info
+  outputs:
+    - stdout
+    - file: /var/log/api/server.log
