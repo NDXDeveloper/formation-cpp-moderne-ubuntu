@@ -1,0 +1,18 @@
+syntax = "proto3";
+package myapp;
+
+enum Role {
+    ROLE_UNSPECIFIED = 0;
+    ROLE_ADMIN = 1;
+    ROLE_USER = 2;
+    ROLE_VIEWER = 3;
+}
+
+message User {
+    int32 id = 1;
+    string name = 2;
+    string email = 3;
+    Role role = 4;
+    optional string department = 5;
+    repeated string tags = 6;
+}

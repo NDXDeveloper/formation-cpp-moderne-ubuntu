@@ -1,0 +1,25 @@
+namespace myapp;
+
+enum Role : byte {
+    Unknown = 0,
+    Admin = 1,
+    User = 2,
+    Viewer = 3
+}
+
+table User {
+    id: int32;
+    name: string;
+    email: string;
+    role: Role = Unknown;
+    department: string;
+    tags: [string];
+    score: float = 0.0;
+}
+
+table UserList {
+    users: [User];
+    total_count: int32;
+}
+
+root_type UserList;

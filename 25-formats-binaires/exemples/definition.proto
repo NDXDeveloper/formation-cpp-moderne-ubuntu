@@ -1,0 +1,87 @@
+syntax = "proto3";
+package myapp.def;
+
+// === ServerConfig avec optional (l.146-151) ===
+message ServerConfig {
+    string host = 1;
+    int32 port = 2;
+    optional int32 workers = 3;
+    optional bool debug = 4;
+    optional TlsConfig tls = 5;
+    repeated string allowed_origins = 6;
+
+    message TlsConfig {
+        string cert_path = 1;
+        string key_path = 2;
+        bool verify_client = 3;
+    }
+}
+
+// === Cluster avec repeated (l.178-183) ===
+message Cluster {
+    string name = 1;
+    repeated string node_addresses = 2;
+    repeated int32 ports = 3;
+}
+
+// === Messages imbriqués (l.218-241) ===
+message DeploymentSpec {
+    string image = 1;
+    int32 replicas = 2;
+
+    message ResourceLimits {
+        int32 cpu_millicores = 1;
+        int32 memory_mb = 2;
+    }
+
+    ResourceLimits limits = 3;
+    ResourceLimits requests = 4;
+    HealthCheck health_check = 5;
+}
+
+message HealthCheck {
+    string path = 1;
+    int32 interval_seconds = 2;
+    int32 timeout_seconds = 3;
+}
+
+// === Enums (l.272-286) ===
+enum LogLevel {
+    LOG_LEVEL_UNSPECIFIED = 0;
+    LOG_LEVEL_TRACE = 1;
+    LOG_LEVEL_DEBUG = 2;
+    LOG_LEVEL_INFO = 3;
+    LOG_LEVEL_WARN = 4;
+    LOG_LEVEL_ERROR = 5;
+    LOG_LEVEL_FATAL = 6;
+}
+
+message LogConfig {
+    LogLevel level = 1;
+    string output = 2;
+}
+
+// === Oneof (l.326-336) ===
+message NotificationTarget {
+    string notification_id = 1;
+    string message = 2;
+
+    oneof target {
+        string email = 10;
+        string slack_channel = 11;
+        string webhook_url = 12;
+    }
+}
+
+// === Maps (l.372-383) ===
+message ServiceEndpoint {
+    string host = 1;
+    int32 port = 2;
+    bool healthy = 3;
+}
+
+message ServiceRegistry {
+    string cluster_name = 1;
+    map<string, ServiceEndpoint> services = 2;
+    map<string, string> metadata = 3;
+}

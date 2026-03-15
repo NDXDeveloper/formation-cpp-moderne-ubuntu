@@ -1,0 +1,17 @@
+syntax = "proto3";
+package myapp;
+
+message ServerConfig {
+    string host = 1;
+    int32 port = 2;
+    int32 workers = 3;
+
+    message TlsConfig {
+        string cert_path = 1;
+        string key_path = 2;
+        bool verify_client = 3;
+    }
+
+    optional TlsConfig tls = 4;
+    repeated string allowed_origins = 5;
+}
