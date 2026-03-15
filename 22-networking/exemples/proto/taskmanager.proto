@@ -1,0 +1,64 @@
+syntax = "proto3";
+
+package taskmanager.v1;
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/empty.proto";
+
+service TaskManager {
+    // Unaire
+    rpc CreateTask (CreateTaskRequest) returns (CreateTaskResponse);
+    rpc GetTask (GetTaskRequest) returns (GetTaskResponse);
+    rpc ListTasks (ListTasksRequest) returns (ListTasksResponse);
+
+    // Streaming serveur
+    rpc WatchTasks (WatchTasksRequest) returns (stream TaskEvent);
+}
+
+message Task {
+    string id = 1;
+    string title = 2;
+    string description = 3;
+    bool completed = 4;
+    google.protobuf.Timestamp created_at = 5;
+}
+
+message CreateTaskRequest {
+    string title = 1;
+    string description = 2;
+}
+
+message CreateTaskResponse {
+    Task task = 1;
+}
+
+message GetTaskRequest {
+    string task_id = 1;
+}
+
+message GetTaskResponse {
+    Task task = 1;
+}
+
+message ListTasksRequest {
+    int32 page_size = 1;
+    string page_token = 2;
+}
+
+message ListTasksResponse {
+    repeated Task tasks = 1;
+    string next_page_token = 2;
+}
+
+message WatchTasksRequest {}
+
+message TaskEvent {
+    enum EventType {
+        EVENT_TYPE_UNSPECIFIED = 0;
+        EVENT_TYPE_CREATED = 1;
+        EVENT_TYPE_UPDATED = 2;
+        EVENT_TYPE_DELETED = 3;
+    }
+    EventType type = 1;
+    Task task = 2;
+}

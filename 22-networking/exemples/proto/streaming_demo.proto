@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+package streaming.v1;
+
+import "google/protobuf/timestamp.proto";
+
+service MetricsService {
+    // Streaming serveur
+    rpc Subscribe (SubscribeRequest) returns (stream MetricEvent);
+
+    // Streaming client
+    rpc Ingest (stream MetricSample) returns (IngestSummary);
+
+    // Bidirectionnel
+    rpc InteractiveQuery (stream QueryRequest) returns (stream QueryResult);
+}
+
+message SubscribeRequest {
+    repeated string metric_names = 1;
+    int32 interval_ms = 2;
+}
+
+message MetricEvent {
+    string name = 1;
+    double value = 2;
+    google.protobuf.Timestamp timestamp = 3;
+}
+
+message MetricSample {
+    string name = 1;
+    double value = 2;
+    map<string, string> labels = 3;
+}
+
+message IngestSummary {
+    int64 samples_received = 1;
+    int64 samples_accepted = 2;
+    int64 samples_rejected = 3;
+    double duration_seconds = 4;
+}
+
+message QueryRequest {
+    string query = 1;
+    int32 max_results = 2;
+}
+
+message QueryResult {
+    string query = 1;
+    repeated MetricEvent results = 2;
+    string error = 3;
+}
