@@ -1,0 +1,15 @@
+#pragma once
+
+// Configuration de build — générée par CMake.
+
+// Dépendances optionnelles
+#cmakedefine01 MY_PROJECT_HAS_ZLIB
+#cmakedefine01 MY_PROJECT_HAS_SSL
+
+// Plateforme
+#define MY_PROJECT_SYSTEM_NAME   "@CMAKE_SYSTEM_NAME@"
+#define MY_PROJECT_COMPILER_ID   "@CMAKE_CXX_COMPILER_ID@"
+#define MY_PROJECT_COMPILER_VER  "@CMAKE_CXX_COMPILER_VERSION@"
+
+// Type de build
+#define MY_PROJECT_BUILD_TYPE    "@CMAKE_BUILD_TYPE@"

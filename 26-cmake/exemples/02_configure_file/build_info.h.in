@@ -1,0 +1,4 @@
+#pragma once
+
+#define MY_PROJECT_GIT_HASH     "@GIT_COMMIT_HASH@"
+#define MY_PROJECT_BUILD_DATE   "@BUILD_TIMESTAMP@"

@@ -1,0 +1,9 @@
+#pragma once
+
+// Version du projet — générée automatiquement par CMake
+// Ne pas modifier ce fichier manuellement.
+
+#define @PROJECT_NAME@_VERSION       "@PROJECT_VERSION@"
+#define @PROJECT_NAME@_VERSION_MAJOR  @PROJECT_VERSION_MAJOR@
+#define @PROJECT_NAME@_VERSION_MINOR  @PROJECT_VERSION_MINOR@
+#define @PROJECT_NAME@_VERSION_PATCH  @PROJECT_VERSION_PATCH@
