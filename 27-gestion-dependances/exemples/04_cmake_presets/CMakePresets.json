@@ -1,0 +1,56 @@
+{
+    "version": 6,
+    "cmakeMinimumRequired": { "major": 3, "minor": 25, "patch": 0 },
+    "configurePresets": [
+        {
+            "name": "base",
+            "hidden": true,
+            "generator": "Ninja",
+            "cacheVariables": {
+                "CMAKE_CXX_COMPILER": "g++-15",
+                "DEMO_BUILD_TESTS": "ON"
+            }
+        },
+        {
+            "name": "debug",
+            "inherits": "base",
+            "displayName": "Debug",
+            "binaryDir": "${sourceDir}/build-debug",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "release",
+            "inherits": "base",
+            "displayName": "Release",
+            "binaryDir": "${sourceDir}/build-release",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release",
+                "DEMO_BUILD_TESTS": "OFF"
+            }
+        }
+    ],
+    "buildPresets": [
+        { "name": "debug", "configurePreset": "debug" },
+        { "name": "release", "configurePreset": "release" }
+    ],
+    "testPresets": [
+        {
+            "name": "debug",
+            "configurePreset": "debug",
+            "output": { "outputOnFailure": true }
+        }
+    ],
+    "workflowPresets": [
+        {
+            "name": "ci",
+            "displayName": "CI Pipeline",
+            "steps": [
+                { "type": "configure", "name": "debug" },
+                { "type": "build", "name": "debug" },
+                { "type": "test", "name": "debug" }
+            ]
+        }
+    ]
+}
