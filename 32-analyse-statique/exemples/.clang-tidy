@@ -1,0 +1,22 @@
+---
+# Fichier .clang-tidy de démonstration (section 32.1.1)
+Checks: >
+  -*,
+  bugprone-*,
+  performance-*,
+  modernize-*,
+  readability-*,
+  clang-analyzer-*,
+  -modernize-use-trailing-return-type,
+  -readability-identifier-length
+
+WarningsAsErrors: ''
+
+HeaderFilterRegex: '.*'
+
+CheckOptions:
+  readability-function-cognitive-complexity.Threshold: 25
+  modernize-use-auto.MinTypeNameLength: 5
+
+SystemHeaders: false
+UseColor: true
