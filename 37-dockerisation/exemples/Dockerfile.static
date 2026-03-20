@@ -1,0 +1,26 @@
+# ============================================================================
+# Section 37.5 : Distroless / scratch
+# Description : Build statique + image scratch (aucune dépendance runtime)
+# Fichier source : 05-distroless.md
+# ============================================================================
+
+# Stage BUILD — linkage statique
+FROM ubuntu:24.04 AS build
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    g++ cmake ninja-build \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /src
+COPY CMakeLists.txt .
+COPY src/ src/
+COPY include/ include/
+RUN cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release \
+    -DCMAKE_EXE_LINKER_FLAGS="-static" \
+    -DCMAKE_INSTALL_PREFIX=/install
+RUN cmake --build build --parallel $(nproc)
+RUN cmake --install build
+
+# Stage RUNTIME — image vide
+FROM scratch
+COPY --from=build /install/bin/myapp /myapp
+ENTRYPOINT ["/myapp"]

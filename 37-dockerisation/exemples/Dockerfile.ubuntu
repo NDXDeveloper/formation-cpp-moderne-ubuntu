@@ -1,0 +1,27 @@
+# ============================================================================
+# Section 37.2 : Multi-stage builds
+# Description : Build Ubuntu 24.04 + Runtime Ubuntu 24.04 minimal
+# Fichier source : 02-multi-stage-builds.md, 02.1-stage-compilation.md
+# ============================================================================
+
+# Stage BUILD
+FROM ubuntu:24.04 AS build
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    g++ cmake ninja-build \
+    && rm -rf /var/lib/apt/lists/*
+WORKDIR /src
+COPY CMakeLists.txt .
+COPY src/ src/
+COPY include/ include/
+RUN cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/install
+RUN cmake --build build --parallel $(nproc)
+RUN cmake --install build
+
+# Stage RUNTIME
+FROM ubuntu:24.04 AS runtime
+RUN groupadd --gid 10001 appgroup \
+    && useradd --uid 10001 --gid appgroup --no-create-home --shell /bin/false appuser
+COPY --from=build /install/bin/myapp /usr/local/bin/myapp
+USER appuser
+ENTRYPOINT ["/usr/local/bin/myapp"]
