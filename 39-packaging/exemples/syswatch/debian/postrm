@@ -1,0 +1,35 @@
+#!/bin/sh
+# ============================================================================
+# Section 39.1.2 : Scripts de controle
+# Description : Script post-desinstallation — nettoyage des donnees
+# Fichier source : 01.2-scripts-controle.md
+# ============================================================================
+set -e
+
+case "$1" in
+    remove)
+        if [ -d /run/systemd/system ]; then
+            systemctl daemon-reload
+        fi
+        ;;
+    purge)
+        # Supprimer les donnees et logs crees en dehors du paquet
+        rm -rf /var/lib/syswatch
+        rm -rf /var/log/syswatch
+        rm -rf /etc/syswatch
+
+        # Supprimer l'utilisateur systeme
+        if getent passwd syswatch > /dev/null 2>&1; then
+            deluser --system syswatch 2>/dev/null || true
+        fi
+        if getent group syswatch > /dev/null 2>&1; then
+            delgroup --system syswatch 2>/dev/null || true
+        fi
+
+        if [ -d /run/systemd/system ]; then
+            systemctl daemon-reload
+        fi
+        ;;
+    upgrade|failed-upgrade|abort-install|abort-upgrade|disappear)
+        ;;
+esac

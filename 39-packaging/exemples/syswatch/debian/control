@@ -1,0 +1,20 @@
+# ============================================================================
+# Section 39.1.1 : Structure d'un paquet DEB
+# Description : Fichier control — metadonnees du paquet syswatch
+# Fichier source : 01.1-structure-deb.md
+# ============================================================================
+
+Package: syswatch
+Version: 1.2.0-1
+Section: utils
+Priority: optional
+Architecture: amd64
+Depends: libc6 (>= 2.35), libstdc++6 (>= 12)
+Installed-Size: 50
+Maintainer: Equipe SRE <sre@exemple.com>
+Homepage: https://github.com/exemple/syswatch
+Description: Outil de monitoring systeme haute performance
+ Syswatch collecte des metriques CPU, memoire et disque
+ en temps reel et les expose via un endpoint Prometheus.
+ .
+ Concu pour les environnements de production Ubuntu.

@@ -1,0 +1,36 @@
+#!/bin/sh
+# ============================================================================
+# Section 39.1.2 : Scripts de controle
+# Description : Script post-installation — creation utilisateur et service
+# Fichier source : 01.2-scripts-controle.md
+# ============================================================================
+set -e
+
+case "$1" in
+    configure)
+        # Creer l'utilisateur systeme si absent
+        if ! getent passwd syswatch > /dev/null 2>&1; then
+            adduser --system --group --no-create-home \
+                    --home /nonexistent \
+                    --shell /usr/sbin/nologin \
+                    syswatch
+        fi
+
+        # Repertoires de donnees
+        install -d -o syswatch -g syswatch -m 0750 /var/lib/syswatch
+        install -d -o syswatch -g syswatch -m 0750 /var/log/syswatch
+
+        # Activer et demarrer le service
+        if [ -d /run/systemd/system ]; then
+            systemctl daemon-reload
+            systemctl enable syswatch.service
+            systemctl start syswatch.service
+        fi
+        ;;
+    abort-upgrade|abort-remove|abort-deconfigure)
+        ;;
+    *)
+        echo "postinst: action inconnue '$1'" >&2
+        exit 1
+        ;;
+esac

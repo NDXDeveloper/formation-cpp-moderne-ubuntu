@@ -1,0 +1,9 @@
+# ============================================================================
+# Section 39.1.1 : Structure d'un paquet DEB
+# Description : Fichier de configuration par defaut de syswatch
+# Fichier source : 01.1-structure-deb.md
+# ============================================================================
+
+interval: 10
+output: prometheus
+port: 9090

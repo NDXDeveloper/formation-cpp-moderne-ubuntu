@@ -1,0 +1,13 @@
+# ============================================================================
+# Section 39.4 : Distribution via gestionnaires de paquets
+# Description : Configuration reprepro — fichier conf/distributions
+# Fichier source : 04-distribution-apt-snap.md
+# ============================================================================
+
+Origin: Exemple SRE
+Label: Syswatch Repository
+Codename: stable
+Architectures: amd64 arm64
+Components: main
+Description: Depot interne pour les outils SRE
+SignWith: sre@exemple.com

@@ -1,0 +1,38 @@
+# ============================================================================
+# Section 39.3 : AppImage et distribution universelle
+# Description : Configuration Snap pour syswatch
+# Fichier source : 03-appimage.md
+# ============================================================================
+
+name: syswatch
+version: '1.2.0'
+summary: Outil de monitoring systeme haute performance
+description: |
+  Syswatch collecte des metriques CPU, memoire et disque
+  en temps reel et les expose via un endpoint Prometheus.
+base: core24
+confinement: strict
+
+grade: stable
+
+apps:
+  syswatch:
+    command: usr/bin/syswatch
+    daemon: simple
+    plugs:
+      - network
+      - network-bind
+      - system-observe
+
+parts:
+  syswatch:
+    plugin: cmake
+    source: .
+    cmake-parameters:
+      - -DCMAKE_BUILD_TYPE=Release
+      - -G Ninja
+    build-packages:
+      - g++
+      - ninja-build
+    stage-packages:
+      - libstdc++6

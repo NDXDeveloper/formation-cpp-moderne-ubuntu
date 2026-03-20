@@ -1,0 +1,13 @@
+# ============================================================================
+# Section 39.3 : AppImage et distribution universelle
+# Description : Fichier .desktop pour l'AppImage syswatch
+# Fichier source : 03-appimage.md
+# ============================================================================
+
+[Desktop Entry]
+Type=Application
+Name=syswatch
+Exec=syswatch
+Icon=syswatch
+Categories=Utility;
+Terminal=true

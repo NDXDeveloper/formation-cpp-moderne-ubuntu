@@ -1,0 +1,23 @@
+#!/bin/sh
+# ============================================================================
+# Section 39.1.2 : Scripts de controle
+# Description : Script pre-desinstallation — arret du service
+# Fichier source : 01.2-scripts-controle.md
+# ============================================================================
+set -e
+
+case "$1" in
+    remove|deconfigure)
+        # Arreter le service
+        if [ -d /run/systemd/system ]; then
+            systemctl stop syswatch.service 2>/dev/null || true
+            systemctl disable syswatch.service 2>/dev/null || true
+        fi
+        ;;
+    upgrade)
+        # En cas de mise a jour, juste arreter (le postinst redemarrera)
+        if [ -d /run/systemd/system ]; then
+            systemctl stop syswatch.service 2>/dev/null || true
+        fi
+        ;;
+esac

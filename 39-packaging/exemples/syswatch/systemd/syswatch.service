@@ -1,0 +1,18 @@
+# ============================================================================
+# Section 39.1.1 : Structure d'un paquet DEB
+# Description : Unit systemd pour le service syswatch
+# Fichier source : 01.1-structure-deb.md
+# ============================================================================
+
+[Unit]
+Description=Syswatch Monitoring System
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/syswatch
+Restart=on-failure
+User=syswatch
+
+[Install]
+WantedBy=multi-user.target

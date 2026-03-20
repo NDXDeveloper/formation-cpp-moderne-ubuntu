@@ -1,0 +1,27 @@
+# ============================================================================
+# Section 39.1.3 : Construction avec dpkg-deb
+# Description : Configuration nfpm pour generer .deb et .rpm
+# Fichier source : 01.3-dpkg-deb.md
+# ============================================================================
+
+name: syswatch
+version: 1.2.0
+release: 1
+arch: amd64
+maintainer: "Equipe SRE <sre@exemple.com>"
+description: "Outil de monitoring systeme haute performance"
+section: utils
+depends:
+  - libc6 (>= 2.34)
+  - libstdc++6 (>= 12)
+contents:
+  - src: build/syswatch
+    dst: /usr/bin/syswatch
+  - src: config/syswatch.yaml
+    dst: /etc/syswatch/syswatch.yaml
+    type: config
+  - src: systemd/syswatch.service
+    dst: /usr/lib/systemd/system/syswatch.service
+scripts:
+  postinstall: debian/postinst
+  postremove: debian/postrm

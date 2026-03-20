@@ -1,0 +1,10 @@
+#!/bin/sh
+# ============================================================================
+# Section 39.3 : AppImage et distribution universelle
+# Description : Script AppRun — point d'entree de l'AppImage syswatch
+# Fichier source : 03-appimage.md
+# ============================================================================
+SELF=$(readlink -f "$0")
+HERE=$(dirname "$SELF")
+export LD_LIBRARY_PATH="${HERE}/usr/lib:${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+exec "${HERE}/usr/bin/syswatch" "$@"
