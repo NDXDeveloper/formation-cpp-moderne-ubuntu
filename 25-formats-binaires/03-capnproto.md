@@ -113,22 +113,22 @@ Cap'n Proto n'est pas un remplacement universel de Protobuf. Ses compromis doive
 
 ```bash
 # Depuis les paquets (version stable)
-sudo apt update
-sudo apt install capnproto libcapnp-dev
+sudo apt update  
+sudo apt install capnproto libcapnp-dev  
 
 # Vérifier l'installation
-capnp --version
-capnpc-c++ --version
+capnp --version  
+capnpc-c++ --version  
 ```
 
 Pour la dernière version depuis les sources :
 
 ```bash
-git clone https://github.com/capnproto/capnproto.git
-cd capnproto/c++
-cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release
-cmake --build build -j$(nproc)
-sudo cmake --install build
+git clone https://github.com/capnproto/capnproto.git  
+cd capnproto/c++  
+cmake -B build -G Ninja -DCMAKE_BUILD_TYPE=Release  
+cmake --build build -j$(nproc)  
+sudo cmake --install build  
 ```
 
 Intégration CMake :
@@ -138,8 +138,8 @@ find_package(CapnProto REQUIRED)
 
 capnp_generate_cpp(CAPNP_SRCS CAPNP_HDRS schema/message.capnp)
 
-add_executable(my_app main.cpp ${CAPNP_SRCS})
-target_link_libraries(my_app PRIVATE CapnProto::capnp)
+add_executable(my_app main.cpp ${CAPNP_SRCS})  
+target_link_libraries(my_app PRIVATE CapnProto::capnp)  
 # Pour le RPC :
 # target_link_libraries(my_app PRIVATE CapnProto::capnp-rpc)
 ```

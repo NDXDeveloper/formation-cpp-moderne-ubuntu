@@ -103,7 +103,7 @@ Ce chapitre se concentre sur les **formats textuels** et leurs librairies de ré
 - **Section 24.2** — YAML avec yaml-cpp : le format de prédilection de l'écosystème DevOps.  
 - **Section 24.3** — TOML avec toml++ : l'alternative moderne, claire et sans ambiguïté.  
 - **Section 24.4** — XML avec pugixml : pour l'interfaçage avec les systèmes legacy.  
-- **Section 24.5** — Bonnes pratiques de validation de schémas, applicables à tous les formats.
+- **Section 24.5** — Bonnes pratiques de validation de schémas, applicables à tous les formats.  
 - **Section 24.6** — Expressions régulières en C++ : `std::regex` et les alternatives performantes (CTRE, RE2, PCRE2).
 
 Les formats binaires (Protocol Buffers, FlatBuffers, MessagePack) font l'objet du **chapitre 25**, qui suit immédiatement.

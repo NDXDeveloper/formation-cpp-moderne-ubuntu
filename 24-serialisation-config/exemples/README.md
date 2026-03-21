@@ -158,32 +158,32 @@ Pipeline OK : 0.0.0.0:8080
 
 **06_1_std_regex** :
 ```
-Correspondance : 2026-03-21, Année: 2026, Mois: 03, Jour: 21
-IPv4 valide: 192.168.1.1
-Dupont (nom), Jean (prenom), 42 (age)
-E001, E042, E107, E999
-Erreur regex détectée
+Correspondance : 2026-03-21, Année: 2026, Mois: 03, Jour: 21  
+IPv4 valide: 192.168.1.1  
+Dupont (nom), Jean (prenom), 42 (age)  
+E001, E042, E107, E999  
+Erreur regex détectée  
 ```
 
 **06_2_ctre** :
 ```
-Trouvé : 2026-03-21
-static_assert OK, match complet/partiel correct
-Année: 2026, Mois: 03, Jour: 21
-E001, E042, E107, E999
+Trouvé : 2026-03-21  
+static_assert OK, match complet/partiel correct  
+Année: 2026, Mois: 03, Jour: 21  
+E001, E042, E107, E999  
 ```
 
 **06_3_re2** :
 ```
-Format de date valide, Date : 21/3/2026
-Niveau: ERROR, Port: 5432
-Pattern pre-compile OK
+Format de date valide, Date : 21/3/2026  
+Niveau: ERROR, Port: 5432  
+Pattern pre-compile OK  
 ```
 
 **06_3_pcre2** :
 ```
-Prix USD : 42.99, Prix USD : 100
-Date: 2026-03-21, Année: 2026, Mois: 03, Jour: 21
+Prix USD : 42.99, Prix USD : 100  
+Date: 2026-03-21, Année: 2026, Mois: 03, Jour: 21  
 ```
 
 #### Compilation CTRE (FetchContent)
@@ -191,12 +191,12 @@ Date: 2026-03-21, Année: 2026, Mois: 03, Jour: 21
 CTRE est header-only et se telecharge via CMake FetchContent :
 
 ```cmake
-include(FetchContent)
-FetchContent_Declare(ctre
+include(FetchContent)  
+FetchContent_Declare(ctre  
     GIT_REPOSITORY https://github.com/hanickadot/compile-time-regular-expressions.git
     GIT_TAG v3.9.0)
-FetchContent_MakeAvailable(ctre)
-target_link_libraries(mon_projet PRIVATE ctre::ctre)
+FetchContent_MakeAvailable(ctre)  
+target_link_libraries(mon_projet PRIVATE ctre::ctre)  
 ```
 
 ## Prerequis

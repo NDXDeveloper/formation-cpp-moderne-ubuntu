@@ -176,9 +176,9 @@ Tous les tests passent !
 
 **Compilation Cap'n Proto :**
 ```bash
-capnp compile -oc++ sensor.capnp
-g++-15 -std=c++23 -O2 -o 04_capnp_writer 04_capnp_writer.cpp sensor.capnp.c++ -lcapnp -lkj
-g++-15 -std=c++23 -O2 -o 04_capnp_reader 04_capnp_reader.cpp sensor.capnp.c++ -lcapnp -lkj
+capnp compile -oc++ sensor.capnp  
+g++-15 -std=c++23 -O2 -o 04_capnp_writer 04_capnp_writer.cpp sensor.capnp.c++ -lcapnp -lkj  
+g++-15 -std=c++23 -O2 -o 04_capnp_reader 04_capnp_reader.cpp sensor.capnp.c++ -lcapnp -lkj  
 ```
 
 **Execution (pipeline zero-copy) :**
@@ -188,10 +188,10 @@ g++-15 -std=c++23 -O2 -o 04_capnp_reader 04_capnp_reader.cpp sensor.capnp.c++ -l
 
 **Sortie attendue :**
 ```
-ID:          42
-Temperature: 23.5 C
-Location:    Paris
-Tags:
+ID:          42  
+Temperature: 23.5 C  
+Location:    Paris  
+Tags:  
   - indoor
   - lab-3
 ```

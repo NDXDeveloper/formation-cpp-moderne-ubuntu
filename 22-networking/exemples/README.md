@@ -108,8 +108,8 @@ io_uring cleanup OK
 - **Execution** : `./ex03_iouring_file /etc/hostname`
 - **Sortie attendue** :
 ```
-Soumission de 1 lectures asynchrones (N octets)
-Lecture terminee : N octets lus, 0 erreurs
+Soumission de 1 lectures asynchrones (N octets)  
+Lecture terminee : N octets lus, 0 erreurs  
 ```
 - **Prerequis** : `sudo apt install liburing-dev`
 

@@ -153,10 +153,10 @@ Les sections suivantes détaillent chaque format, son installation, son intégra
 
 ## Organisation du chapitre
 
-- **Section 25.1** — Protocol Buffers : définition de messages `.proto`, génération de code, sérialisation/désérialisation, intégration CMake, évolution de schéma.
-- **Section 25.2** — FlatBuffers : schémas `.fbs`, zero-copy serialization, accès direct aux données, cas d'usage temps réel.
-- **Section 25.3** — Cap'n Proto : zéro-copie sans étape d'encodage, schémas, RPC intégré, comparaison avec FlatBuffers et Protobuf.
-- **Section 25.4** — MessagePack : sérialisation schema-less, intégration header-only, remplacement de JSON.
+- **Section 25.1** — Protocol Buffers : définition de messages `.proto`, génération de code, sérialisation/désérialisation, intégration CMake, évolution de schéma.  
+- **Section 25.2** — FlatBuffers : schémas `.fbs`, zero-copy serialization, accès direct aux données, cas d'usage temps réel.  
+- **Section 25.3** — Cap'n Proto : zéro-copie sans étape d'encodage, schémas, RPC intégré, comparaison avec FlatBuffers et Protobuf.  
+- **Section 25.4** — MessagePack : sérialisation schema-less, intégration header-only, remplacement de JSON.  
 - **Section 25.5** — Comparaison de performances et cas d'usage : benchmarks, arbre de décision, combinaison de formats dans un projet.
 
 ---

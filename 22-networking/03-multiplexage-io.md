@@ -12,8 +12,8 @@ Considérons ce scénario concret :
 // Serveur naïf : bloquant, un seul client à la fois
 int client_fd = accept(server_fd, nullptr, nullptr);  // Bloque jusqu'à une connexion
 
-char buffer[4096];
-ssize_t n = recv(client_fd, buffer, sizeof(buffer), 0);  // Bloque jusqu'à réception
+char buffer[4096];  
+ssize_t n = recv(client_fd, buffer, sizeof(buffer), 0);  // Bloque jusqu'à réception  
 // Pendant ce recv(), AUCUN autre client ne peut être servi
 ```
 
