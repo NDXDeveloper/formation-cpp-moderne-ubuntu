@@ -145,10 +145,67 @@ TOML valide : true
 Pipeline OK : 0.0.0.0:8080
 ```
 
-## Prérequis
+### Expressions regulieres (section 24.6)
+
+| Fichier | Section | Description | Fichier source | Compilation |
+|---------|---------|-------------|----------------|-------------|
+| `06_1_std_regex.cpp` | 24.6.1 | std::regex complet — regex_search (captures, prefix/suffix), regex_match (IPv4), regex_replace ($1/$2), sregex_iterator, regex_error | `06.1-std-regex.md` | `g++-15 -std=c++23 -O2 -o 06_1_std_regex 06_1_std_regex.cpp` |
+| `06_2_ctre.cpp` | 24.6.2 | CTRE (Compile-Time Regex) — search, match (static_assert), captures avec get<N>(), search_all. Necessite FetchContent pour CTRE. | `06.2-ctre.md` | Via CMake FetchContent (voir ci-dessous) |
+| `06_3_re2.cpp` | 24.6.3 | RE2 (Google) — FullMatch, PartialMatch, captures typees (int, string), pattern pre-compile | `06.3-re2-pcre2.md` | `g++-15 -std=c++23 -O2 -o 06_3_re2 06_3_re2.cpp -lre2` |
+| `06_3_pcre2.cpp` | 24.6.3 | PCRE2 wrapper RAII — lookbehind (impossible avec RE2), JIT, iteration sur captures | `06.3-re2-pcre2.md` | `g++-15 -std=c++23 -O2 -o 06_3_pcre2 06_3_pcre2.cpp -lpcre2-8` |
+
+#### Sorties attendues
+
+**06_1_std_regex** :
+```
+Correspondance : 2026-03-21, Année: 2026, Mois: 03, Jour: 21
+IPv4 valide: 192.168.1.1
+Dupont (nom), Jean (prenom), 42 (age)
+E001, E042, E107, E999
+Erreur regex détectée
+```
+
+**06_2_ctre** :
+```
+Trouvé : 2026-03-21
+static_assert OK, match complet/partiel correct
+Année: 2026, Mois: 03, Jour: 21
+E001, E042, E107, E999
+```
+
+**06_3_re2** :
+```
+Format de date valide, Date : 21/3/2026
+Niveau: ERROR, Port: 5432
+Pattern pre-compile OK
+```
+
+**06_3_pcre2** :
+```
+Prix USD : 42.99, Prix USD : 100
+Date: 2026-03-21, Année: 2026, Mois: 03, Jour: 21
+```
+
+#### Compilation CTRE (FetchContent)
+
+CTRE est header-only et se telecharge via CMake FetchContent :
+
+```cmake
+include(FetchContent)
+FetchContent_Declare(ctre
+    GIT_REPOSITORY https://github.com/hanickadot/compile-time-regular-expressions.git
+    GIT_TAG v3.9.0)
+FetchContent_MakeAvailable(ctre)
+target_link_libraries(mon_projet PRIVATE ctre::ctre)
+```
+
+## Prerequis
 
 - **Compilateur** : g++-15 (ou compatible C++23 avec `<print>`)
 - **nlohmann/json** : `sudo apt install nlohmann-json3-dev`
 - **yaml-cpp** : `sudo apt install libyaml-cpp-dev` (linker avec `-lyaml-cpp`)
 - **toml++** : `sudo apt install libtomlplusplus-dev` (header-only, pas de link)
 - **pugixml** : `sudo apt install libpugixml-dev` (linker avec `-lpugixml`)
+- **RE2** : `sudo apt install libre2-dev` (linker avec `-lre2`)
+- **PCRE2** : `sudo apt install libpcre2-dev` (linker avec `-lpcre2-8`)
+- **CTRE** : Via CMake FetchContent (header-only, pas d'installation systeme)

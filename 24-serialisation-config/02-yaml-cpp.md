@@ -114,9 +114,9 @@ int main() {
 
 Quelques différences notables avec nlohmann/json apparaissent immédiatement :
 
-- L'extraction typée se fait via `.as<T>()` (au lieu de `.get<T>()`).
-- `.as<T>(default_value)` accepte une valeur par défaut en paramètre, combinant l'accès et le fallback en un seul appel.
-- Le test d'existence d'un nœud utilise la conversion implicite en `bool` (`if (node["key"])`), ce qui est concis mais nécessite une attention particulière (voir les pièges ci-dessous).
+- L'extraction typée se fait via `.as<T>()` (au lieu de `.get<T>()`).  
+- `.as<T>(default_value)` accepte une valeur par défaut en paramètre, combinant l'accès et le fallback en un seul appel.  
+- Le test d'existence d'un nœud utilise la conversion implicite en `bool` (`if (node["key"])`), ce qui est concis mais nécessite une attention particulière (voir les pièges ci-dessous).  
 - L'itération sur les maps produit des paires de `YAML::Node` — la clé est elle-même un nœud, pas une `std::string`.
 
 ---
@@ -221,15 +221,15 @@ summary: >
 
 **YAML est le bon choix quand :**
 
-- Le fichier de configuration est destiné à être écrit et maintenu par des humains, et la lisibilité est prioritaire.
-- Le projet s'insère dans un écosystème qui utilise déjà YAML (Kubernetes, CI/CD, Ansible).
-- Les commentaires dans les fichiers de configuration sont nécessaires.
+- Le fichier de configuration est destiné à être écrit et maintenu par des humains, et la lisibilité est prioritaire.  
+- Le projet s'insère dans un écosystème qui utilise déjà YAML (Kubernetes, CI/CD, Ansible).  
+- Les commentaires dans les fichiers de configuration sont nécessaires.  
 - Le format multi-documents est utile.
 
 **YAML n'est pas le bon choix quand :**
 
-- Les données sont échangées entre programmes sans intervention humaine — JSON ou un format binaire est plus simple et sans ambiguïté.
-- La structure du fichier doit être validée strictement — les pièges de typage implicite rendent YAML fragile pour les données critiques.
+- Les données sont échangées entre programmes sans intervention humaine — JSON ou un format binaire est plus simple et sans ambiguïté.  
+- La structure du fichier doit être validée strictement — les pièges de typage implicite rendent YAML fragile pour les données critiques.  
 - Le projet n'a pas de dépendance existante à YAML — TOML (section 24.3) offre une syntaxe plus simple, sans les pièges de YAML, pour les fichiers de configuration.
 
 ---
@@ -439,16 +439,16 @@ Les deux héritent de `YAML::Exception`, qui hérite de `std::runtime_error`. Le
 
 Les sous-sections suivantes détaillent les deux opérations principales avec yaml-cpp :
 
-- **24.2.1 — Lecture de fichiers de configuration** : chargement de fichiers, navigation dans l'arbre, gestion des multi-documents, conversion vers les types métier, patterns de validation et traitement des pièges YAML.
+- **24.2.1 — Lecture de fichiers de configuration** : chargement de fichiers, navigation dans l'arbre, gestion des multi-documents, conversion vers les types métier, patterns de validation et traitement des pièges YAML.  
 - **24.2.2 — Écriture YAML** : génération de YAML avec `YAML::Emitter`, contrôle du formatage de sortie, écriture vers fichier, génération de manifestes et cas d'usage courants.
 
 ---
 
 ## Prérequis pour cette section
 
-- Section 24.1 (nlohmann/json) — les concepts de DOM, parsing, sérialisation et gestion d'erreurs sont identiques dans leur principe.
-- Conteneurs STL : `std::vector`, `std::map`, `std::string` *(chapitres 13-14)*
-- Templates et spécialisation *(chapitre 16)* — pour comprendre le mécanisme `YAML::convert<T>`.
+- Section 24.1 (nlohmann/json) — les concepts de DOM, parsing, sérialisation et gestion d'erreurs sont identiques dans leur principe.  
+- Conteneurs STL : `std::vector`, `std::map`, `std::string` *(chapitres 13-14)*  
+- Templates et spécialisation *(chapitre 16)* — pour comprendre le mécanisme `YAML::convert<T>`.  
 - CMake et gestion des dépendances *(chapitres 26-27)*
 
 ⏭️ [Lecture de fichiers de configuration](/24-serialisation-config/02.1-lecture-config.md)

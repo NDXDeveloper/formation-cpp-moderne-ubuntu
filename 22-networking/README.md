@@ -54,9 +54,9 @@ C++ est souvent choisi précisément parce que les performances réseau comptent
 
 Avant d'aborder ce chapitre, assurez-vous d'être à l'aise avec :
 
-- **La gestion de la mémoire** (chapitre 5) — Les buffers réseau impliquent de l'allocation, du dimensionnement et de la gestion de durée de vie. Les smart pointers (chapitre 9) seront vos alliés pour gérer les ressources réseau.
-- **Les smart pointers et RAII** (chapitres 6 et 9) — Les sockets sont des ressources système : elles doivent être fermées proprement. Le pattern RAII est la manière idiomatique de garantir cela en C++.
-- **Les threads et la concurrence** (chapitre 21) — Le networking et la concurrence sont intimement liés. Les serveurs multi-threads, les pools de connexions et la programmation asynchrone supposent une bonne compréhension des primitives de synchronisation.
+- **La gestion de la mémoire** (chapitre 5) — Les buffers réseau impliquent de l'allocation, du dimensionnement et de la gestion de durée de vie. Les smart pointers (chapitre 9) seront vos alliés pour gérer les ressources réseau.  
+- **Les smart pointers et RAII** (chapitres 6 et 9) — Les sockets sont des ressources système : elles doivent être fermées proprement. Le pattern RAII est la manière idiomatique de garantir cela en C++.  
+- **Les threads et la concurrence** (chapitre 21) — Le networking et la concurrence sont intimement liés. Les serveurs multi-threads, les pools de connexions et la programmation asynchrone supposent une bonne compréhension des primitives de synchronisation.  
 - **Les appels système POSIX** (chapitres 19-20) — L'API sockets s'inscrit dans la continuité des appels système que vous avez déjà manipulés pour le système de fichiers et les signaux.
 
 ---
@@ -121,9 +121,9 @@ Cette progression n'est pas un accident pédagogique. Un développeur qui utilis
 
 Tout au long de ce chapitre, les exemples de code suivent ces conventions :
 
-- **Gestion d'erreurs systématique** — Chaque appel système est vérifié. En production réseau, ignorer une erreur de `send()` ou de `connect()` est une source de bugs subtils et difficiles à reproduire.
-- **RAII pour les ressources réseau** — Les file descriptors de sockets sont encapsulés dans des wrappers RAII. Vous ne verrez pas de `close()` appelé manuellement dans du code de haut niveau.
-- **IPv4 et IPv6** — Les exemples privilégient `getaddrinfo` plutôt que des adresses codées en dur, pour supporter les deux protocoles de manière transparente.
+- **Gestion d'erreurs systématique** — Chaque appel système est vérifié. En production réseau, ignorer une erreur de `send()` ou de `connect()` est une source de bugs subtils et difficiles à reproduire.  
+- **RAII pour les ressources réseau** — Les file descriptors de sockets sont encapsulés dans des wrappers RAII. Vous ne verrez pas de `close()` appelé manuellement dans du code de haut niveau.  
+- **IPv4 et IPv6** — Les exemples privilégient `getaddrinfo` plutôt que des adresses codées en dur, pour supporter les deux protocoles de manière transparente.  
 - **C++ moderne** — Les exemples utilisent C++17 au minimum, avec des incursions en C++20/C++23 lorsque les fonctionnalités le justifient (par exemple `std::expected` pour la gestion d'erreurs réseau).
 
 ---
@@ -132,10 +132,10 @@ Tout au long de ce chapitre, les exemples de code suivent ces conventions :
 
 Ce chapitre s'articule étroitement avec plusieurs autres parties de la formation :
 
-- **Chapitre 21 (Threads et concurrence)** — Les serveurs réseau sont intrinsèquement concurrents. Les patterns de synchronisation vus au chapitre 21 seront directement appliqués ici.
-- **Chapitre 24 (Sérialisation JSON/YAML)** — Les données échangées sur le réseau doivent être sérialisées. JSON est le format dominant pour les API REST, tandis que Protocol Buffers (section 22.6) est le choix performant pour le RPC.
-- **Chapitre 25 (Formats binaires)** — Protocol Buffers, introduit ici dans le contexte gRPC, est couvert en profondeur au chapitre 25 en tant que format de sérialisation autonome.
-- **Chapitre 37 (Dockerisation)** — Les applications réseau sont les premières candidates à la conteneurisation. La configuration des ports, des réseaux Docker et des health checks fait le lien direct avec ce chapitre.
+- **Chapitre 21 (Threads et concurrence)** — Les serveurs réseau sont intrinsèquement concurrents. Les patterns de synchronisation vus au chapitre 21 seront directement appliqués ici.  
+- **Chapitre 24 (Sérialisation JSON/YAML)** — Les données échangées sur le réseau doivent être sérialisées. JSON est le format dominant pour les API REST, tandis que Protocol Buffers (section 22.6) est le choix performant pour le RPC.  
+- **Chapitre 25 (Formats binaires)** — Protocol Buffers, introduit ici dans le contexte gRPC, est couvert en profondeur au chapitre 25 en tant que format de sérialisation autonome.  
+- **Chapitre 37 (Dockerisation)** — Les applications réseau sont les premières candidates à la conteneurisation. La configuration des ports, des réseaux Docker et des health checks fait le lien direct avec ce chapitre.  
 - **Chapitre 40 (Observabilité)** — En production, le monitoring réseau (latence, throughput, erreurs de connexion) est critique. Les métriques Prometheus et le tracing OpenTelemetry vus au chapitre 40 s'appliquent directement aux services réseau.
 
 ---

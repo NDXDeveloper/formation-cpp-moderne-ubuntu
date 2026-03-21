@@ -411,15 +411,15 @@ Après le déplacement, c'est le thread client qui possède le socket et qui le 
 
 **Avantages :**
 
-- Simple à comprendre et à implémenter.
-- Chaque client est traité indépendamment — un client lent ne bloque pas les autres.
+- Simple à comprendre et à implémenter.  
+- Chaque client est traité indépendamment — un client lent ne bloque pas les autres.  
 - Le code de `handle_client` est strictement linéaire, facile à raisonner.
 
 **Limites :**
 
-- **Coût des threads** — Chaque thread consomme environ 8 MiB de stack par défaut sur Linux. À 1 000 clients simultanés, c'est 8 GiB rien que pour les stacks. À 10 000 clients, c'est intenable.
-- **Overhead de création** — Créer et détruire un thread par connexion a un coût non négligeable (appel système `clone`, allocation de stack, structures noyau). Pour des connexions de courte durée (requêtes HTTP), ce coût peut dépasser le temps de traitement.
-- **Complexité de synchronisation** — Si les threads partagent des ressources (compteurs, caches, état global), il faut des mutex (chapitre 21), ce qui ajoute de la complexité et des risques de deadlock.
+- **Coût des threads** — Chaque thread consomme environ 8 MiB de stack par défaut sur Linux. À 1 000 clients simultanés, c'est 8 GiB rien que pour les stacks. À 10 000 clients, c'est intenable.  
+- **Overhead de création** — Créer et détruire un thread par connexion a un coût non négligeable (appel système `clone`, allocation de stack, structures noyau). Pour des connexions de courte durée (requêtes HTTP), ce coût peut dépasser le temps de traitement.  
+- **Complexité de synchronisation** — Si les threads partagent des ressources (compteurs, caches, état global), il faut des mutex (chapitre 21), ce qui ajoute de la complexité et des risques de deadlock.  
 - **Gestion du cycle de vie** — Le `vector<jthread>` croît indéfiniment dans cet exemple. Un vrai serveur devrait nettoyer les threads terminés.
 
 Le modèle un-thread-par-client est adapté pour des serveurs gérant **quelques centaines** de connexions simultanées avec des traitements substantiels (calculs, accès base de données). Au-delà, il faut un thread pool ou un modèle événementiel (section 22.3).
@@ -600,8 +600,8 @@ Le thread principal ne fait que `accept()` et pousser les sockets dans la queue 
 
 Le nombre de workers dépend de la nature du traitement :
 
-- **I/O bound** (lecture réseau, accès disque, requêtes base de données) — Plus de workers que de cœurs CPU. Les threads passent l'essentiel de leur temps à attendre, donc un ratio de 2x à 4x le nombre de cœurs est raisonnable.
-- **CPU bound** (calculs, compression, chiffrement) — Un worker par cœur CPU. Au-delà, les threads se disputent le CPU et les context switches dégradent les performances.
+- **I/O bound** (lecture réseau, accès disque, requêtes base de données) — Plus de workers que de cœurs CPU. Les threads passent l'essentiel de leur temps à attendre, donc un ratio de 2x à 4x le nombre de cœurs est raisonnable.  
+- **CPU bound** (calculs, compression, chiffrement) — Un worker par cœur CPU. Au-delà, les threads se disputent le CPU et les context switches dégradent les performances.  
 - **Mixte** — Commencez avec le nombre de cœurs et mesurez avec un profiler.
 
 `std::thread::hardware_concurrency()` retourne le nombre de cœurs logiques de la machine — c'est un bon point de départ :
@@ -1003,8 +1003,8 @@ Ces outils sont vos compagnons quotidiens pour le développement et le diagnosti
 
 Cette section a assemblé les appels système de la section 22.1 en serveurs et clients fonctionnels, explorant trois architectures fondamentales :
 
-- **Séquentiel** — Un client à la fois. Simple mais inutilisable dès qu'on a plusieurs clients. Bon pour comprendre le flux de base.
-- **Multi-threadé** — Un thread par client. Facile à raisonner mais ne passe pas à l'échelle au-delà de quelques centaines de connexions.
+- **Séquentiel** — Un client à la fois. Simple mais inutilisable dès qu'on a plusieurs clients. Bon pour comprendre le flux de base.  
+- **Multi-threadé** — Un thread par client. Facile à raisonner mais ne passe pas à l'échelle au-delà de quelques centaines de connexions.  
 - **Thread pool** — Nombre fixe de threads avec file d'attente partagée. Meilleur contrôle des ressources, mais chaque worker bloque encore sur les I/O de sa connexion.
 
 Vous avez aussi vu comment implémenter un protocole applicatif avec framing par longueur préfixée, comment gérer l'arrêt propre avec le self-pipe trick, et comment utiliser les outils Linux pour le diagnostic.

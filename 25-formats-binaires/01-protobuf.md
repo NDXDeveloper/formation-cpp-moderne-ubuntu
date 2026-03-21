@@ -12,10 +12,10 @@ Protocol Buffers — universellement abrégé **Protobuf** — est un mécanisme
 
 En 2026, Protobuf est le format de sérialisation binaire par défaut dans les contextes suivants :
 
-- **gRPC** — le framework RPC de Google utilise Protobuf comme format de sérialisation natif (cf. section 22.6).
-- **Kubernetes et l'écosystème Cloud Native** — etcd (le store de configuration de Kubernetes) utilise Protobuf pour son stockage interne, et l'API Kubernetes elle-même supporte Protobuf en alternative à JSON.
-- **Big Data et streaming** — Apache Kafka, Apache Pulsar et Google Pub/Sub supportent Protobuf nativement via des schema registries.
-- **Stockage structuré** — Google Bigtable, Spanner, et de nombreux systèmes de stockage utilisent Protobuf pour sérialiser les enregistrements.
+- **gRPC** — le framework RPC de Google utilise Protobuf comme format de sérialisation natif (cf. section 22.6).  
+- **Kubernetes et l'écosystème Cloud Native** — etcd (le store de configuration de Kubernetes) utilise Protobuf pour son stockage interne, et l'API Kubernetes elle-même supporte Protobuf en alternative à JSON.  
+- **Big Data et streaming** — Apache Kafka, Apache Pulsar et Google Pub/Sub supportent Protobuf nativement via des schema registries.  
+- **Stockage structuré** — Google Bigtable, Spanner, et de nombreux systèmes de stockage utilisent Protobuf pour sérialiser les enregistrements.  
 - **Machine Learning** — TensorFlow utilise Protobuf pour ses graphes de modèles (`.pb`), ses configurations et ses formats d'échange.
 
 ---
@@ -87,7 +87,7 @@ message User {
 
 Avec les valeurs `id=42`, `name="alice"`, `email="alice@example.com"` :
 
-- **JSON** : `{"id":42,"name":"alice","email":"alice@example.com"}` → **52 octets**
+- **JSON** : `{"id":42,"name":"alice","email":"alice@example.com"}` → **52 octets**  
 - **Protobuf** : encodage binaire → **~28 octets**
 
 Le gain de 46% est typique pour les messages de petite taille. Sur des messages avec de nombreux champs numériques ou des champs absents, le ratio peut dépasser 80%.
@@ -193,10 +193,10 @@ int main() {
 
 Plusieurs observations sur ce code :
 
-- Les accesseurs sont générés automatiquement : `host()`, `set_host()`, `port()`, `set_port()`, `mutable_tls()`, `add_allowed_origins()`.
-- Les sous-messages sont manipulés via des pointeurs retournés par `mutable_*()`. Le message parent possède le sous-message — pas de gestion manuelle de mémoire.
-- `has_tls()` teste la présence du champ `optional`. Pour les champs non-optional en proto3, cette méthode n'existe pas (le champ a toujours sa valeur par défaut).
-- `SerializeToString` et `ParseFromIstream` gèrent la sérialisation/désérialisation en une seule ligne. Ils retournent un `bool` indiquant le succès.
+- Les accesseurs sont générés automatiquement : `host()`, `set_host()`, `port()`, `set_port()`, `mutable_tls()`, `add_allowed_origins()`.  
+- Les sous-messages sont manipulés via des pointeurs retournés par `mutable_*()`. Le message parent possède le sous-message — pas de gestion manuelle de mémoire.  
+- `has_tls()` teste la présence du champ `optional`. Pour les champs non-optional en proto3, cette méthode n'existe pas (le champ a toujours sa valeur par défaut).  
+- `SerializeToString` et `ParseFromIstream` gèrent la sérialisation/désérialisation en une seule ligne. Ils retournent un `bool` indiquant le succès.  
 - Les champs `repeated` exposent une interface similaire à `std::vector` avec `add_*()`, `*_size()`, et accès par index.
 
 ---
@@ -339,17 +339,17 @@ Créé par Kenton Varda (l'un des auteurs originaux de Protobuf chez Google), **
 
 ## Ce que couvrent les sous-sections
 
-- **25.1.1 — Définition de messages `.proto`** : syntaxe proto3, types scalaires, messages imbriqués, enums, oneof, maps, imports, packages et conventions de nommage.
-- **25.1.2 — Génération de code C++** : invocation de `protoc`, intégration CMake avancée, structure du code généré, API des classes de messages.
+- **25.1.1 — Définition de messages `.proto`** : syntaxe proto3, types scalaires, messages imbriqués, enums, oneof, maps, imports, packages et conventions de nommage.  
+- **25.1.2 — Génération de code C++** : invocation de `protoc`, intégration CMake avancée, structure du code généré, API des classes de messages.  
 - **25.1.3 — Sérialisation / Désérialisation** : encodage binaire, encodage JSON, streaming, gestion des erreurs, évolution de schéma et rétrocompatibilité.
 
 ---
 
 ## Prérequis
 
-- Concepts de sérialisation du chapitre 24 (parsing, validation, conversion de types).
-- CMake : `add_library`, `target_link_libraries`, `target_include_directories` *(chapitre 26)*.
-- Move semantics *(chapitre 10)* — les classes générées supportent le move.
+- Concepts de sérialisation du chapitre 24 (parsing, validation, conversion de types).  
+- CMake : `add_library`, `target_link_libraries`, `target_include_directories` *(chapitre 26)*.  
+- Move semantics *(chapitre 10)* — les classes générées supportent le move.  
 - gRPC *(section 22.6)* — recommandé mais pas obligatoire. Protobuf est utilisable indépendamment de gRPC.
 
 ⏭️ [Définition de messages .proto](/25-formats-binaires/01.1-definition-proto.md)

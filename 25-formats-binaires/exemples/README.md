@@ -166,11 +166,49 @@ unpack_error : ...
 Tous les tests passent !
 ```
 
-## Prérequis
+### Cap'n Proto (section 25.3)
+
+| Fichier | Section | Description |
+|---------|---------|-------------|
+| `sensor.capnp` | 25.3.1 | Schema Cap'n Proto — struct Sensor (id, temperature, location, tags) |
+| `04_capnp_writer.cpp` | 25.3.1 | Construction d'un message Cap'n Proto (zero-copy write sur stdout) |
+| `04_capnp_reader.cpp` | 25.3.1 | Lecture d'un message Cap'n Proto (zero-copy read depuis stdin) |
+
+**Compilation Cap'n Proto :**
+```bash
+capnp compile -oc++ sensor.capnp
+g++-15 -std=c++23 -O2 -o 04_capnp_writer 04_capnp_writer.cpp sensor.capnp.c++ -lcapnp -lkj
+g++-15 -std=c++23 -O2 -o 04_capnp_reader 04_capnp_reader.cpp sensor.capnp.c++ -lcapnp -lkj
+```
+
+**Execution (pipeline zero-copy) :**
+```bash
+./04_capnp_writer | ./04_capnp_reader
+```
+
+**Sortie attendue :**
+```
+ID:          42
+Temperature: 23.5 C
+Location:    Paris
+Tags:
+  - indoor
+  - lab-3
+```
+
+**Nettoyage :**
+```bash
+rm -f 04_capnp_writer 04_capnp_reader sensor.capnp.h sensor.capnp.c++
+```
+
+---
+
+## Prerequis
 
 - **Compilateur** : g++-15 (ou compatible C++23 avec `<print>`)
 - **protobuf** : `sudo apt install protobuf-compiler libprotobuf-dev` (compilateur `protoc` + librairie, linker avec `-lprotobuf`)
 - **flatbuffers** : `sudo apt install flatbuffers-compiler libflatbuffers-dev` (compilateur `flatc` + headers, linker avec `-lflatbuffers`)
+- **capnproto** : `sudo apt install capnproto libcapnp-dev` (compilateur `capnp` + librairie, linker avec `-lcapnp -lkj`)
 - **msgpack-cxx** : `sudo apt install libmsgpack-cxx-dev` (header-only, pas de link)
 - **nlohmann/json** : `sudo apt install nlohmann-json3-dev` (pour `03_1_msgpack_json.cpp`)
 

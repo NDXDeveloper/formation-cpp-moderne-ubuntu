@@ -4,7 +4,7 @@
 
 > 🎯 Niveau : Avancé
 
-Ce module traite un problème transversal à toute application système ou réseau : comment structurer les données échangées. Fichiers de configuration (JSON, YAML, TOML, XML), sérialisation d'objets C++, et formats binaires performants (Protobuf, FlatBuffers, MessagePack). Le choix du format a un impact direct sur la performance, la compatibilité inter-langages, et la maintenabilité — ce n'est pas une décision à prendre par défaut.
+Ce module traite un problème transversal à toute application système ou réseau : comment structurer les données échangées. Fichiers de configuration (JSON, YAML, TOML, XML), expressions régulières (std::regex, CTRE, RE2, PCRE2), sérialisation d'objets C++, et formats binaires performants (Protobuf, FlatBuffers, Cap'n Proto, MessagePack). Le choix du format et des outils de parsing a un impact direct sur la performance, la compatibilité inter-langages, et la maintenabilité — ce n'est pas une décision à prendre par défaut.
 
 ---
 
@@ -13,9 +13,10 @@ Ce module traite un problème transversal à toute application système ou rése
 1. **Utiliser** nlohmann/json pour parser et sérialiser du JSON en C++, avec gestion robuste des erreurs et validation des données.
 2. **Parser** des fichiers de configuration YAML avec yaml-cpp et TOML avec toml++, en connaissant les pièges spécifiques à chaque format.
 3. **Implémenter** la sérialisation/désérialisation avec Protocol Buffers : définition de messages `.proto`, génération de code C++, évolution de schémas.
-4. **Comprendre** le modèle zéro-copy de FlatBuffers et le format compact de MessagePack, et identifier les cas d'usage où chacun est pertinent.
-5. **Choisir** le format de sérialisation adapté à un contexte donné (configuration, IPC, réseau, stockage) en fonction de la performance, la taille, la lisibilité et la compatibilité.
-6. **Appliquer** les bonnes pratiques de validation de schémas pour éviter les erreurs silencieuses au parsing.
+4. **Maîtriser** les expressions régulières en C++ : `std::regex` (standard), CTRE (compile-time, C++20), RE2 (temps linéaire garanti, Google) et PCRE2 (Perl-compatible, JIT), et choisir le moteur adapté au contexte.
+5. **Comprendre** le modèle zéro-copy de FlatBuffers et Cap'n Proto, et le format compact de MessagePack, et identifier les cas d'usage où chacun est pertinent.
+6. **Choisir** le format de sérialisation adapté à un contexte donné (configuration, IPC, réseau, stockage) en fonction de la performance, la taille, le zero-copy, la lisibilité et la compatibilité.
+7. **Appliquer** les bonnes pratiques de validation de schémas pour éviter les erreurs silencieuses au parsing.
 
 ---
 
@@ -39,15 +40,17 @@ Les quatre formats texte courants pour la configuration et l'échange de donnée
 - **TOML avec toml++** : header-only, typage strict (les dates sont des dates, pas des chaînes), syntaxe non ambiguë — adapté aux fichiers de configuration applicatifs.
 - **XML avec pugixml** : parsing DOM léger, XPath pour les requêtes — pertinent pour l'intégration avec des systèmes legacy, SOAP, ou des formats de données existants (SVG, Maven, etc.).
 - **Validation de schémas** : vérifier que les données parsées respectent une structure attendue avant de les utiliser — techniques de validation programmatique en C++.
+- **Expressions régulières** : `std::regex` (API standard, performances limitées), CTRE (Compile-Time Regular Expressions, C++20, zero-cost runtime), RE2 (Google, temps linéaire garanti, protection ReDoS), PCRE2 (Perl-compatible, JIT, fonctionnalités avancées). Benchmarks comparatifs et guide de choix selon que le pattern est statique ou dynamique.
 
 ### Chapitre 25 — Formats Binaires et Sérialisation Performante
 
-Les formats binaires pour les cas où le texte (JSON, YAML) est trop lent, trop volumineux, ou insuffisamment typé. Protobuf est le standard de facto ; FlatBuffers et MessagePack couvrent des niches spécifiques.
+Les formats binaires pour les cas où le texte (JSON, YAML) est trop lent, trop volumineux, ou insuffisamment typé. Protobuf est le standard de facto ; FlatBuffers, Cap'n Proto et MessagePack couvrent des niches spécifiques.
 
 - **Protocol Buffers (Protobuf)** : définition de messages dans des fichiers `.proto` (syntaxe proto3), génération de code C++ avec `protoc`, sérialisation/désérialisation (`SerializeToString`, `ParseFromString`), évolution de schémas (ajout de champs, backward/forward compatibility), intégration directe avec gRPC.
 - **FlatBuffers** : sérialisation zéro-copy — les données sont accessibles directement dans le buffer sans phase de désérialisation. Temps de désérialisation nul au prix d'un accès un peu plus verbeux. Pertinent pour le game development, les systèmes embarqués, et les cas où la latence de désérialisation est critique.
+- **Cap'n Proto** : zéro-copie dans les deux directions (lecture et écriture) — le format wire EST le format mémoire. Pas d'étape d'encodage/décodage. RPC intégré natif avec pipelining de promesses. Pertinent pour l'IPC haute performance, les proxies, le stockage mmap-friendly.
 - **MessagePack** : format binaire compact compatible avec le modèle de données JSON. Plus petit et plus rapide que JSON, mais sans schéma — adapté aux caches, logs binaires, et communication inter-services où JSON est trop verbeux.
-- **Comparaison de performances** : taille sérialisée, temps de sérialisation/désérialisation, compatibilité inter-langages, évolution de schémas — critères de décision selon le cas d'usage.
+- **Comparaison de performances** : taille sérialisée, temps de sérialisation/désérialisation, zero-copy, compatibilité inter-langages, évolution de schémas — critères de décision selon le cas d'usage.
 
 ---
 
@@ -67,8 +70,9 @@ Les formats binaires pour les cas où le texte (JSON, YAML) est trop lent, trop 
 
 À l'issue de ce module, vous savez :
 - Parser et produire du JSON, YAML, TOML et XML en C++ avec les librairies de référence, en gérant les erreurs de parsing proprement.
+- Utiliser les expressions régulières avec le bon moteur selon le contexte : CTRE pour les patterns statiques, RE2 pour les patterns dynamiques sûrs, PCRE2 pour les fonctionnalités avancées.
 - Sérialiser des objets C++ avec nlohmann/json (`to_json`/`from_json`) et avec Protobuf (`.proto` + `protoc`).
-- Choisir entre Protobuf, FlatBuffers et MessagePack selon les contraintes de performance, taille et compatibilité.
+- Choisir entre Protobuf, FlatBuffers, Cap'n Proto et MessagePack selon les contraintes de performance, taille, zero-copy et compatibilité.
 - Valider les données parsées avant de les utiliser, et anticiper les pièges spécifiques à chaque format (booléens YAML, clés absentes JSON).
 - Éviter les formats binaires maison quand un standard existe, et gérer l'endianness quand c'est inévitable.
 

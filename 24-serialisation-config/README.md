@@ -99,11 +99,12 @@ Quel que soit le format choisi, certains principes s'appliquent systématiquemen
 
 Ce chapitre se concentre sur les **formats textuels** et leurs librairies de référence en C++ :
 
-- **Section 24.1** — JSON avec nlohmann/json : le format universel et la librairie C++ la plus populaire pour le manipuler.
-- **Section 24.2** — YAML avec yaml-cpp : le format de prédilection de l'écosystème DevOps.
-- **Section 24.3** — TOML avec toml++ : l'alternative moderne, claire et sans ambiguïté.
-- **Section 24.4** — XML avec pugixml : pour l'interfaçage avec les systèmes legacy.
+- **Section 24.1** — JSON avec nlohmann/json : le format universel et la librairie C++ la plus populaire pour le manipuler.  
+- **Section 24.2** — YAML avec yaml-cpp : le format de prédilection de l'écosystème DevOps.  
+- **Section 24.3** — TOML avec toml++ : l'alternative moderne, claire et sans ambiguïté.  
+- **Section 24.4** — XML avec pugixml : pour l'interfaçage avec les systèmes legacy.  
 - **Section 24.5** — Bonnes pratiques de validation de schémas, applicables à tous les formats.
+- **Section 24.6** — Expressions régulières en C++ : `std::regex` et les alternatives performantes (CTRE, RE2, PCRE2).
 
 Les formats binaires (Protocol Buffers, FlatBuffers, MessagePack) font l'objet du **chapitre 25**, qui suit immédiatement.
 
@@ -113,11 +114,11 @@ Les formats binaires (Protocol Buffers, FlatBuffers, MessagePack) font l'objet d
 
 Pour aborder ce chapitre confortablement, les notions suivantes doivent être acquises :
 
-- Gestion de la mémoire et smart pointers *(chapitre 9)*
-- Move semantics et références rvalue *(chapitre 10)*
-- Conteneurs de la STL, en particulier `std::vector`, `std::map` et `std::unordered_map` *(chapitres 13-14)*
-- `std::optional` et `std::variant` *(section 12.2)*
-- CMake et gestion des dépendances avec Conan ou vcpkg *(chapitres 26-27)*
+- Gestion de la mémoire et smart pointers *(chapitre 9)*  
+- Move semantics et références rvalue *(chapitre 10)*  
+- Conteneurs de la STL, en particulier `std::vector`, `std::map` et `std::unordered_map` *(chapitres 13-14)*  
+- `std::optional` et `std::variant` *(section 12.2)*  
+- CMake et gestion des dépendances avec Conan ou vcpkg *(chapitres 26-27)*  
 - `std::filesystem` pour la manipulation de fichiers *(section 19.1)*
 
 ---

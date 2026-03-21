@@ -132,9 +132,9 @@ Les types Protobuf correspondent directement à des types C++ :
 
 Les numéros de champs (`= 1`, `= 2`, etc.) sont l'identifiant binaire de chaque champ dans le format sérialisé. Ils sont **fondamentaux** pour la compatibilité :
 
-- Les numéros de 1 à 15 sont encodés sur 1 octet — utilisez-les pour les champs les plus fréquents.
-- Les numéros de 16 à 2047 sont encodés sur 2 octets.
-- **Ne réutilisez jamais** un numéro de champ supprimé. Si vous retirez un champ, réservez son numéro avec `reserved`.
+- Les numéros de 1 à 15 sont encodés sur 1 octet — utilisez-les pour les champs les plus fréquents.  
+- Les numéros de 16 à 2047 sont encodés sur 2 octets.  
+- **Ne réutilisez jamais** un numéro de champ supprimé. Si vous retirez un champ, réservez son numéro avec `reserved`.  
 - Vous pouvez **ajouter** de nouveaux champs à tout moment (avec de nouveaux numéros) sans casser la compatibilité. Les anciens clients ignoreront les champs inconnus, les nouveaux clients utiliseront les valeurs par défaut pour les champs absents.
 
 ```protobuf
@@ -298,16 +298,16 @@ Cas d'usage         Protocoles      API publiques,     Communication
 
 ### Quand choisir gRPC
 
-- **Communication inter-services** — C'est le cas d'usage principal. Deux services backend qui se parlent bénéficient du contrat fort, de la performance, et de la génération de code multi-langage.
-- **Streaming de données** — Flux de métriques, événements temps réel, synchronisation continue. Les quatre patterns de streaming couvrent tous les cas.
-- **Performance critique** — Quand la latence et le throughput de la sérialisation comptent (trading, gaming, ML serving).
+- **Communication inter-services** — C'est le cas d'usage principal. Deux services backend qui se parlent bénéficient du contrat fort, de la performance, et de la génération de code multi-langage.  
+- **Streaming de données** — Flux de métriques, événements temps réel, synchronisation continue. Les quatre patterns de streaming couvrent tous les cas.  
+- **Performance critique** — Quand la latence et le throughput de la sérialisation comptent (trading, gaming, ML serving).  
 - **Architecture polyglotte** — Un fichier `.proto` génère du code compatible dans tous les langages supportés, garantissant la cohérence de l'interface.
 
 ### Quand ne PAS choisir gRPC
 
-- **API publiques consommées par des navigateurs** — Les navigateurs ne supportent pas gRPC nativement (gRPC-Web existe mais ajoute de la complexité). REST/JSON reste le standard pour les API web.
-- **Intégration avec des systèmes legacy** — Si vos partenaires s'attendent à du REST/JSON, forcer gRPC crée de la friction inutile.
-- **Debugging simple** — Un `curl` suffit pour tester une API REST. Tester un service gRPC nécessite des outils spécifiques (`grpcurl`, `grpcui`, `evans`).
+- **API publiques consommées par des navigateurs** — Les navigateurs ne supportent pas gRPC nativement (gRPC-Web existe mais ajoute de la complexité). REST/JSON reste le standard pour les API web.  
+- **Intégration avec des systèmes legacy** — Si vos partenaires s'attendent à du REST/JSON, forcer gRPC crée de la friction inutile.  
+- **Debugging simple** — Un `curl` suffit pour tester une API REST. Tester un service gRPC nécessite des outils spécifiques (`grpcurl`, `grpcui`, `evans`).  
 - **Prototypage rapide** — Définir un `.proto`, configurer le build, générer le code — c'est un overhead non négligeable pour un prototype. Un serveur cpp-httplib avec du JSON est plus rapide à mettre en place.
 
 ---
@@ -340,8 +340,8 @@ grpcurl -plaintext -d '{"name": "Alice"}' \
 
 gRPC s'intègre nativement avec les standards d'observabilité :
 
-- **OpenTelemetry** (chapitre 40) — Tracing distribué automatique des appels gRPC entre services.
-- **Prometheus** — Métriques de latence, throughput et erreurs par méthode RPC.
+- **OpenTelemetry** (chapitre 40) — Tracing distribué automatique des appels gRPC entre services.  
+- **Prometheus** — Métriques de latence, throughput et erreurs par méthode RPC.  
 - **Health checking** — Protocole standard `grpc.health.v1.Health` pour les checks Kubernetes.
 
 ---
@@ -395,9 +395,9 @@ Les quatre sous-sections qui suivent vous guident à travers chaque étape :
 
 Avant d'aborder les sous-sections, assurez-vous d'être à l'aise avec :
 
-- **CMake** (chapitre 26) — La configuration du build gRPC est plus complexe que la moyenne. `find_package`, `FetchContent` et les commandes custom de CMake seront utilisés.
-- **Héritage et polymorphisme** (chapitre 7) — Le serveur gRPC fonctionne par héritage d'une classe de base générée.
-- **Sérialisation** (chapitre 25) — Les concepts de Protocol Buffers sont couverts en profondeur au chapitre 25. Cette section se concentre sur l'aspect RPC.
+- **CMake** (chapitre 26) — La configuration du build gRPC est plus complexe que la moyenne. `find_package`, `FetchContent` et les commandes custom de CMake seront utilisés.  
+- **Héritage et polymorphisme** (chapitre 7) — Le serveur gRPC fonctionne par héritage d'une classe de base générée.  
+- **Sérialisation** (chapitre 25) — Les concepts de Protocol Buffers sont couverts en profondeur au chapitre 25. Cette section se concentre sur l'aspect RPC.  
 - **Docker** (chapitre 37) — Les exemples de déploiement utilisent des conteneurs.
 
 ---

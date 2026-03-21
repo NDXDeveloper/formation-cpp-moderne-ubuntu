@@ -204,7 +204,7 @@
     - 12.13.1 [Avantages des modules sur les headers](/12-nouveautes-cpp17-26/13.1-avantages-modules.md)
     - 12.13.2 [État du support (GCC 15, Clang 20, MSVC)](/12-nouveautes-cpp17-26/13.2-etat-support.md) 
     - 12.13.3 [Maturité en 2026 : Ce qui fonctionne, ce qui reste limité](/12-nouveautes-cpp17-26/13.3-maturite-2026.md) 
-- **12.14 [C++26 : Standard ratifié — Les grandes nouveautés](/12-nouveautes-cpp17-26/14-cpp26-overview.md)** 🔥 
+- **12.14 [C++26 : Les grandes nouveautés (en ratification)](/12-nouveautes-cpp17-26/14-cpp26-overview.md)** 🔥 
     - 12.14.1 [Contrats (Contracts) : Préconditions, postconditions, assertions](/12-nouveautes-cpp17-26/14.1-contracts.md)
     - 12.14.2 [Réflexion statique (Static Reflection)](/12-nouveautes-cpp17-26/14.2-static-reflection.md)
     - 12.14.3 [Pattern Matching : inspect et is](/12-nouveautes-cpp17-26/14.3-pattern-matching.md)
@@ -335,7 +335,14 @@
     - 22.1.2 [bind, listen, accept, connect](/22-networking/01.2-operations-sockets.md)
     - 22.1.3 [send, recv, sendto, recvfrom](/22-networking/01.3-envoi-reception.md)
 - 22.2 [Client/Serveur basique en C++](/22-networking/02-client-serveur.md)
-- 22.3 [Multiplexage I/O : select, poll, epoll](/22-networking/03-multiplexage-io.md)
+- 22.3 [Multiplexage I/O et I/O asynchrone](/22-networking/03-multiplexage-io.md)
+    - 22.3.1 [select et poll : Interfaces POSIX classiques](/22-networking/03.1-select-poll.md)
+    - 22.3.2 [epoll : Le standard Linux](/22-networking/03.2-epoll.md)
+    - **22.3.3 [io_uring : I/O asynchrone haute performance (Linux 5.1+)](/22-networking/03.3-io-uring.md)** 🔥
+        - 22.3.3.1 [Architecture : Submission Queue et Completion Queue](/22-networking/03.3.1-architecture-sq-cq.md)
+        - 22.3.3.2 [liburing : Interface C/C++ simplifiée](/22-networking/03.3.2-liburing.md)
+        - 22.3.3.3 [Cas d'usage : networking, fichiers, timeouts](/22-networking/03.3.3-cas-usage.md)
+    - 22.3.4 [Comparaison : select vs poll vs epoll vs io_uring](/22-networking/03.4-comparaison-multiplexage.md)
 - 22.4 [Librairies réseau modernes](/22-networking/04-librairies-reseau.md)
     - 22.4.1 [Standalone Asio : Networking sans Boost](/22-networking/04.1-standalone-asio.md)
     - 22.4.2 [Boost.Asio : Écosystème complet](/22-networking/04.2-boost-asio.md)
@@ -369,6 +376,11 @@
 - 24.3 [TOML : Alternative moderne (toml++)](/24-serialisation-config/03-toml.md)
 - 24.4 [XML : Parsing avec pugixml (legacy systems)](/24-serialisation-config/04-xml-pugixml.md)
 - 24.5 [Bonnes pratiques : Validation de schémas](/24-serialisation-config/05-validation-schemas.md)
+- **24.6 [Expressions régulières en C++ : std::regex et alternatives performantes](/24-serialisation-config/06-regex.md)** ⭐
+    - 24.6.1 [std::regex : API standard et limites de performance](/24-serialisation-config/06.1-std-regex.md)
+    - 24.6.2 [CTRE : Compile-Time Regular Expressions (C++20)](/24-serialisation-config/06.2-ctre.md) 🔥
+    - 24.6.3 [RE2 et PCRE2 : Alternatives runtime performantes](/24-serialisation-config/06.3-re2-pcre2.md)
+    - 24.6.4 [Benchmarks et guide de choix](/24-serialisation-config/06.4-benchmarks-choix.md)
 
 ### 25. [Formats Binaires et Sérialisation Performante](/25-formats-binaires/README.md)
 - **25.1 [Protocol Buffers (Protobuf) : Sérialisation Google](/25-formats-binaires/01-protobuf.md)** ⭐
@@ -376,8 +388,12 @@
     - 25.1.2 [Génération de code C++](/25-formats-binaires/01.2-generation-code.md)
     - 25.1.3 [Sérialisation/Désérialisation](/25-formats-binaires/01.3-serialisation.md)
 - 25.2 [FlatBuffers : Zéro-copy serialization](/25-formats-binaires/02-flatbuffers.md)
-- 25.3 [MessagePack : JSON binaire compact](/25-formats-binaires/03-messagepack.md)
-- 25.4 [Comparaison de performances et cas d'usage](/25-formats-binaires/04-comparaison-performances.md)
+- **25.3 [Cap'n Proto : Zéro-copie sans étape d'encodage](/25-formats-binaires/03-capnproto.md)** ⭐
+    - 25.3.1 [Philosophie : le format wire EST le format mémoire](/25-formats-binaires/03.1-philosophie-capnproto.md)
+    - 25.3.2 [Schémas, génération de code et RPC intégré](/25-formats-binaires/03.2-schemas-rpc.md)
+    - 25.3.3 [Cap'n Proto vs FlatBuffers vs Protobuf : compromis](/25-formats-binaires/03.3-capnproto-vs-flatbuffers.md)
+- 25.4 [MessagePack : JSON binaire compact](/25-formats-binaires/04-messagepack.md)
+- 25.5 [Comparaison de performances et cas d'usage](/25-formats-binaires/05-comparaison-performances.md)
 
 ---
 
@@ -688,7 +704,7 @@
     - 48.2.2 [Meeting C++](/48-ressources/02.2-meeting-cpp.md)
     - 48.2.3 [C++ Now](/48-ressources/02.3-cpp-now.md)
     - 48.2.4 [ACCU Conference](/48-ressources/02.4-accu.md)
-- 48.3 [Standards et évolutions futures (C++26 ratifié, cap sur C++29)](/48-ressources/03-standards-futurs.md) 
+- 48.3 [Standards et évolutions futures (C++26 en ratification, cap sur C++29)](/48-ressources/03-standards-futurs.md) 
     - 48.3.1 [Calendrier du comité ISO et processus de standardisation](/48-ressources/03.1-calendrier-iso.md)
     - 48.3.2 [Suivre les proposals (open-std.org, GitHub)](/48-ressources/03.2-suivre-proposals.md)
     - **48.3.3 [Premières proposals C++29 : Ce qui se prépare](/48-ressources/03.3-cpp29-preview.md)** 
@@ -726,7 +742,7 @@
 | **Fichiers Markdown** | ~415 |
 | **Durée estimée** | 120-170h |
 | **Niveau couvert** | Débutant → Expert |
-| **Standards C++** | C++11 → C++26 (ratifié) |
+| **Standards C++** | C++11 → C++26 (en ratification) |
 | **Compilateurs couverts** | GCC 15, Clang 20 |
 | **Dernière mise à jour** | Mars 2026 |
 

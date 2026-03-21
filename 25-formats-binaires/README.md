@@ -44,7 +44,7 @@ Un avantage souvent sous-estimé est la **rétrocompatibilité structurée**. Pr
 
 ## Panorama des formats couverts
 
-Ce chapitre couvre les trois formats binaires les plus utilisés en C++ en 2026, chacun avec un positionnement distinct :
+Ce chapitre couvre les quatre formats binaires les plus utilisés en C++ en 2026, chacun avec un positionnement distinct :
 
 ### Protocol Buffers (Protobuf)
 
@@ -59,6 +59,14 @@ Son modèle repose sur la **définition de messages dans des fichiers `.proto`**
 Créé par Google en 2014, initialement pour les jeux mobiles. FlatBuffers se distingue par son approche **zero-copy** : les données sérialisées sont accessibles directement dans le buffer, sans phase de désérialisation. Le programme lit les champs directement dans le buffer réseau ou mémoire mappé, ce qui élimine le coût d'allocation et de copie.
 
 **Cas d'usage typiques :** jeux vidéo, applications mobiles, systèmes temps réel, traitement de flux à très haute fréquence, mémoire mappée (mmap).
+
+### Cap'n Proto
+
+Créé par Kenton Varda (ancien développeur de Protobuf v2 chez Google) en 2013. Cap'n Proto pousse le concept de zéro-copie encore plus loin que FlatBuffers : le format wire **est** le format mémoire. Il n'y a littéralement aucune étape d'encodage ou de décodage — les structures en mémoire sont directement transmissibles sur le réseau ou écrites sur disque.
+
+Cap'n Proto inclut également un système RPC intégré, ce qui le positionne comme une alternative complète à gRPC+Protobuf dans certains contextes.
+
+**Cas d'usage typiques :** systèmes à très faible latence, communication inter-processus, stockage mmap, situations où le overhead d'encodage/décodage de Protobuf est mesurable.
 
 ### MessagePack
 
@@ -107,10 +115,10 @@ Le choix entre ces formats dépend de plusieurs facteurs liés au contexte du pr
 
 Les formats binaires ne remplacent pas les formats textuels — ils servent des contextes différents. Un même projet utilise souvent les deux :
 
-- **Configuration** → TOML, YAML ou JSON (écrits par des humains, lus au démarrage).
-- **Communication inter-services** → Protobuf/gRPC (haute performance, schéma contractuel).
-- **Stockage de sessions ou cache** → MessagePack (compact, rapide, schema-less).
-- **Export de données pour analyse** → JSON ou CSV (compatibilité universelle avec les outils d'analyse).
+- **Configuration** → TOML, YAML ou JSON (écrits par des humains, lus au démarrage).  
+- **Communication inter-services** → Protobuf/gRPC (haute performance, schéma contractuel).  
+- **Stockage de sessions ou cache** → MessagePack (compact, rapide, schema-less).  
+- **Export de données pour analyse** → JSON ou CSV (compatibilité universelle avec les outils d'analyse).  
 - **Formats de fichiers internes** → FlatBuffers (mmap, accès aléatoire, performances de lecture).
 
 L'erreur serait d'utiliser un format binaire pour un fichier de configuration (illisible, impossible à debugger sans outils) ou un format textuel pour la communication haute fréquence entre services (overhead inutile, latence de parsing).
@@ -147,16 +155,17 @@ Les sections suivantes détaillent chaque format, son installation, son intégra
 
 - **Section 25.1** — Protocol Buffers : définition de messages `.proto`, génération de code, sérialisation/désérialisation, intégration CMake, évolution de schéma.
 - **Section 25.2** — FlatBuffers : schémas `.fbs`, zero-copy serialization, accès direct aux données, cas d'usage temps réel.
-- **Section 25.3** — MessagePack : sérialisation schema-less, intégration header-only, remplacement de JSON.
-- **Section 25.4** — Comparaison de performances et cas d'usage : benchmarks, arbre de décision, combinaison de formats dans un projet.
+- **Section 25.3** — Cap'n Proto : zéro-copie sans étape d'encodage, schémas, RPC intégré, comparaison avec FlatBuffers et Protobuf.
+- **Section 25.4** — MessagePack : sérialisation schema-less, intégration header-only, remplacement de JSON.
+- **Section 25.5** — Comparaison de performances et cas d'usage : benchmarks, arbre de décision, combinaison de formats dans un projet.
 
 ---
 
 ## Prérequis
 
-- Chapitre 24, en particulier les concepts de sérialisation/désérialisation et de validation (sections 24.1 et 24.5).
-- CMake et gestion des dépendances *(chapitres 26-27)* — l'intégration de `protoc` et `flatc` dans CMake est un cas d'usage avancé.
-- Networking et gRPC *(section 22.6)* — recommandé pour Protobuf, car les deux sont étroitement liés.
+- Chapitre 24, en particulier les concepts de sérialisation/désérialisation et de validation (sections 24.1 et 24.5).  
+- CMake et gestion des dépendances *(chapitres 26-27)* — l'intégration de `protoc` et `flatc` dans CMake est un cas d'usage avancé.  
+- Networking et gRPC *(section 22.6)* — recommandé pour Protobuf, car les deux sont étroitement liés.  
 - Move semantics *(chapitre 10)* — les structures générées par Protobuf exploitent la sémantique de mouvement.
 
 ⏭️ [Protocol Buffers (Protobuf) : Sérialisation Google](/25-formats-binaires/01-protobuf.md)

@@ -28,7 +28,7 @@ L'écosystème réseau C++ s'articule autour de quelques acteurs majeurs :
 
 Asio existe sous deux formes :
 
-- **Standalone Asio** — La librairie seule, header-only, sans dépendance externe. C'est la version recommandée pour les nouveaux projets.
+- **Standalone Asio** — La librairie seule, header-only, sans dépendance externe. C'est la version recommandée pour les nouveaux projets.  
 - **Boost.Asio** — La version intégrée à Boost, avec accès à l'écosystème Boost complet (Boost.Beast pour HTTP/WebSocket, Boost.SSL, etc.).
 
 Les deux partagent le même code et la même API. La différence est l'espace de noms (`asio::` vs `boost::asio::`) et les dépendances.
@@ -178,7 +178,7 @@ Si vous hésitez entre les deux, la section 22.4.3 tranchera.
 
 Asio avec coroutines nécessite un compilateur supportant C++20 :
 
-- **GCC 12+** (recommandé : GCC 14/15 pour un support coroutines mature)
+- **GCC 12+** (recommandé : GCC 14/15 pour un support coroutines mature)  
 - **Clang 16+** (avec `-fcoroutines` ou nativement en Clang 18+)
 
 Les exemples de cette section utilisent C++20 au minimum, avec `-std=c++20` ou `-std=c++23`.
@@ -191,9 +191,9 @@ La version standalone recommandée en 2026 est **Asio 1.30+**, qui offre un supp
 
 Vous bénéficierez pleinement de ces sections si vous êtes à l'aise avec :
 
-- Les **lambdas** et captures (chapitre 11) — nécessaires pour les callbacks.
-- Les **smart pointers** `shared_ptr` / `enable_shared_from_this` (chapitre 9) — pattern fondamental pour la gestion de durée de vie des sessions.
-- Les **move semantics** (chapitre 10) — les sockets Asio sont déplaçables mais non copiables.
+- Les **lambdas** et captures (chapitre 11) — nécessaires pour les callbacks.  
+- Les **smart pointers** `shared_ptr` / `enable_shared_from_this` (chapitre 9) — pattern fondamental pour la gestion de durée de vie des sessions.  
+- Les **move semantics** (chapitre 10) — les sockets Asio sont déplaçables mais non copiables.  
 - Les **coroutines C++20** (section 12.6) — pour le style de programmation recommandé. Si vous n'êtes pas familier avec les coroutines, les exemples avec callbacks restent accessibles.
 
 ---

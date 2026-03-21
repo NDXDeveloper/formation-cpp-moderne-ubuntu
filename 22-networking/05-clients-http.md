@@ -14,7 +14,7 @@ Pour ces cas, Beast est surdimensionné. Vous n'avez pas besoin d'un `io_context
 
 Ces deux librairies ciblent le même besoin mais avec des approches radicalement différentes :
 
-- **cpr** — Un wrapper C++ élégant autour de **libcurl**, la librairie HTTP la plus éprouvée de l'écosystème Unix. Toute la puissance de curl (HTTPS, proxies, cookies, redirections, HTTP/2) avec une API C++ moderne.
+- **cpr** — Un wrapper C++ élégant autour de **libcurl**, la librairie HTTP la plus éprouvée de l'écosystème Unix. Toute la puissance de curl (HTTPS, proxies, cookies, redirections, HTTP/2) avec une API C++ moderne.  
 - **cpp-httplib** — Une librairie **header-only** sans dépendance externe, qui implémente HTTP/1.1 en pur C++. Client **et** serveur minimaliste intégrés.
 
 ---
@@ -736,9 +736,9 @@ svr.listen("0.0.0.0", 8080);
 
 Le serveur cpp-httplib n'est pas un concurrent de Nginx ou de Beast. Il est idéal pour :
 
-- **Tests d'intégration** — Mocker une API externe dans vos tests. Démarrez un serveur cpp-httplib dans votre fixture de test, configurez les réponses attendues, et faites vos requêtes dessus.
-- **Outils de développement** — Un serveur web embarqué pour servir une interface de debug, des métriques, ou une page de status.
-- **Prototypes** — Valider rapidement une architecture avant de migrer vers Beast ou un framework plus robuste.
+- **Tests d'intégration** — Mocker une API externe dans vos tests. Démarrez un serveur cpp-httplib dans votre fixture de test, configurez les réponses attendues, et faites vos requêtes dessus.  
+- **Outils de développement** — Un serveur web embarqué pour servir une interface de debug, des métriques, ou une page de status.  
+- **Prototypes** — Valider rapidement une architecture avant de migrer vers Beast ou un framework plus robuste.  
 - **Endpoints de health check** — Un `/health` ou `/ready` minimaliste pour Kubernetes, intégré directement dans votre application.
 
 ---
@@ -791,26 +791,26 @@ if (!r.error && r.status_code == 200) {
 
 ### Choisissez cpr quand :
 
-- Vous êtes **client uniquement** (pas de serveur HTTP à écrire).
-- Vous avez besoin de **HTTP/2** ou **HTTP/3**.
-- Vous avez besoin de fonctionnalités avancées : proxies SOCKS, certificate pinning, authentification Digest/NTLM, cookies persistants.
-- Vous avez besoin de **requêtes asynchrones** (futures).
-- Vous êtes en **production** et vous voulez la robustesse de libcurl (40+ ans de corrections de bugs et de cas limites HTTP).
+- Vous êtes **client uniquement** (pas de serveur HTTP à écrire).  
+- Vous avez besoin de **HTTP/2** ou **HTTP/3**.  
+- Vous avez besoin de fonctionnalités avancées : proxies SOCKS, certificate pinning, authentification Digest/NTLM, cookies persistants.  
+- Vous avez besoin de **requêtes asynchrones** (futures).  
+- Vous êtes en **production** et vous voulez la robustesse de libcurl (40+ ans de corrections de bugs et de cas limites HTTP).  
 - Le fait de dépendre de libcurl n'est pas un problème (ce n'est pas un problème sur Linux — curl est omniprésent).
 
 ### Choisissez cpp-httplib quand :
 
-- Vous voulez **zéro dépendance** externe (un seul header suffit).
-- Vous avez besoin d'un **serveur HTTP simple** en plus du client.
-- Vous faites du **prototypage rapide** ou des **tests d'intégration**.
-- Votre cas d'usage est simple : quelques requêtes GET/POST, pas de HTTP/2, pas de proxy.
-- Vous êtes dans un environnement contraint où installer libcurl est compliqué (cross-compilation, embedded).
+- Vous voulez **zéro dépendance** externe (un seul header suffit).  
+- Vous avez besoin d'un **serveur HTTP simple** en plus du client.  
+- Vous faites du **prototypage rapide** ou des **tests d'intégration**.  
+- Votre cas d'usage est simple : quelques requêtes GET/POST, pas de HTTP/2, pas de proxy.  
+- Vous êtes dans un environnement contraint où installer libcurl est compliqué (cross-compilation, embedded).  
 - Vous voulez un temps de compilation minimal (un seul header vs la chaîne CMake de cpr + curl).
 
 ### Ni l'un ni l'autre quand :
 
-- Vous construisez un **serveur HTTP haute performance** → Boost.Beast (section 22.4.2).
-- Vous avez besoin d'intégration dans une **boucle événementielle Asio** → Boost.Beast.
+- Vous construisez un **serveur HTTP haute performance** → Boost.Beast (section 22.4.2).  
+- Vous avez besoin d'intégration dans une **boucle événementielle Asio** → Boost.Beast.  
 - Vous faites du **WebSocket** → Boost.Beast ou une librairie dédiée.
 
 ---
@@ -819,7 +819,7 @@ if (!r.error && r.status_code == 200) {
 
 Pour les besoins de client HTTP en C++ — interroger une API, télécharger des données, envoyer des métriques — deux librairies couvrent l'essentiel :
 
-- **cpr** est le choix de production. Backed par libcurl, il offre une API C++ élégante avec une couverture protocolaire exhaustive (HTTPS, HTTP/2, proxies, auth, cookies, async). C'est le `requests` de Python porté en C++.
+- **cpr** est le choix de production. Backed par libcurl, il offre une API C++ élégante avec une couverture protocolaire exhaustive (HTTPS, HTTP/2, proxies, auth, cookies, async). C'est le `requests` de Python porté en C++.  
 - **cpp-httplib** est le choix de simplicité. Header-only, zéro dépendance, client + serveur intégrés. Idéal pour le prototypage, les tests, et les outils internes.
 
 Dans les deux cas, l'intégration avec une librairie JSON (`nlohmann/json`, Boost.JSON) est triviale, et les bonnes pratiques sont les mêmes : toujours mettre un timeout, vérifier les erreurs réseau **et** les codes HTTP, et implémenter des retries avec backoff pour les erreurs transitoires.

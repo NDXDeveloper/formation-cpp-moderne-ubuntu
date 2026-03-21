@@ -165,16 +165,16 @@ nlohmann/json est le bon choix dans la grande majorité des cas d'usage JSON en 
 
 **Cas d'usage idéaux :**
 
-- Lecture et écriture de fichiers de configuration JSON.
-- Communication avec des API REST (parsing de réponses HTTP, construction de requêtes).
-- Sérialisation d'état applicatif pour la persistance ou le débogage.
-- Prototypage rapide nécessitant une manipulation JSON flexible.
+- Lecture et écriture de fichiers de configuration JSON.  
+- Communication avec des API REST (parsing de réponses HTTP, construction de requêtes).  
+- Sérialisation d'état applicatif pour la persistance ou le débogage.  
+- Prototypage rapide nécessitant une manipulation JSON flexible.  
 - Projets où la clarté du code prime sur la performance brute du parsing.
 
 **Cas où une alternative peut être préférable :**
 
-- **Parsing de très gros volumes JSON (centaines de Mo)** — simdjson exploite les instructions SIMD du processeur pour parser du JSON à plusieurs Go/s. Si le parsing JSON est un goulot d'étranglement mesuré par profiling, simdjson est l'alternative à évaluer.
-- **Contraintes mémoire très strictes** — RapidJSON utilise un allocateur en arène et consomme significativement moins de mémoire que nlohmann/json pour les documents volumineux, au prix d'une API moins ergonomique.
+- **Parsing de très gros volumes JSON (centaines de Mo)** — simdjson exploite les instructions SIMD du processeur pour parser du JSON à plusieurs Go/s. Si le parsing JSON est un goulot d'étranglement mesuré par profiling, simdjson est l'alternative à évaluer.  
+- **Contraintes mémoire très strictes** — RapidJSON utilise un allocateur en arène et consomme significativement moins de mémoire que nlohmann/json pour les documents volumineux, au prix d'une API moins ergonomique.  
 - **Sérialisation haute fréquence entre services** — si la performance est critique et que les deux extrémités du canal sont sous votre contrôle, un format binaire (Protobuf, FlatBuffers) sera plus approprié que JSON quel que soit le parser.
 
 En pratique, la grande majorité des projets C++ qui manipulent du JSON n'ont pas ces contraintes extrêmes, et nlohmann/json offre le meilleur rapport productivité/fiabilité.
@@ -225,19 +225,19 @@ La librairie opère selon un modèle **DOM (Document Object Model)** : le JSON e
 
 Les sous-sections suivantes détaillent chaque aspect de l'utilisation de nlohmann/json dans un projet C++ professionnel :
 
-- **24.1.1 — Installation et intégration** : les différentes méthodes d'installation (Conan, vcpkg, FetchContent, header-only direct) et la configuration CMake recommandée.
-- **24.1.2 — Parsing de fichiers JSON** : lecture depuis fichier, chaîne et flux, parsing strict vs tolérant, mode SAX pour les gros documents.
-- **24.1.3 — Sérialisation d'objets C++** : conversion bidirectionnelle avec les types utilisateur, macros vs fonctions manuelles, gestion des champs optionnels et de l'héritage.
+- **24.1.1 — Installation et intégration** : les différentes méthodes d'installation (Conan, vcpkg, FetchContent, header-only direct) et la configuration CMake recommandée.  
+- **24.1.2 — Parsing de fichiers JSON** : lecture depuis fichier, chaîne et flux, parsing strict vs tolérant, mode SAX pour les gros documents.  
+- **24.1.3 — Sérialisation d'objets C++** : conversion bidirectionnelle avec les types utilisateur, macros vs fonctions manuelles, gestion des champs optionnels et de l'héritage.  
 - **24.1.4 — Gestion des erreurs de parsing** : hiérarchie des exceptions, parsing sans exception, messages d'erreur exploitables, et patterns de validation.
 
 ---
 
 ## Prérequis pour cette section
 
-- Conteneurs STL : `std::vector`, `std::map`, `std::string` *(chapitres 13-14)*
-- `std::optional` *(section 12.2)*
-- Gestion des exceptions en C++ *(chapitre 17)*
-- CMake et gestion des dépendances *(chapitres 26-27)*
+- Conteneurs STL : `std::vector`, `std::map`, `std::string` *(chapitres 13-14)*  
+- `std::optional` *(section 12.2)*  
+- Gestion des exceptions en C++ *(chapitre 17)*  
+- CMake et gestion des dépendances *(chapitres 26-27)*  
 - Flux d'entrée/sortie (`std::ifstream`, `std::ofstream`) ou `std::filesystem` *(section 19.1)*
 
 ⏭️ [Installation et intégration](/24-serialisation-config/01.1-installation.md)

@@ -2,7 +2,7 @@
 
 ![License](https://img.shields.io/badge/License-CC%20BY%204.0-blue.svg)
 ![C++ Version](https://img.shields.io/badge/C%2B%2B-11%20→%2026-00599C.svg)
-![Ubuntu](https://img.shields.io/badge/Ubuntu-22.04%2B-E95420.svg)
+![Ubuntu](https://img.shields.io/badge/Ubuntu-24.04%2B-E95420.svg)
 ![Modules](https://img.shields.io/badge/Modules-17%2F17-green.svg)
 ![Langue](https://img.shields.io/badge/Langue-Français-blue.svg)
 
@@ -85,8 +85,8 @@ PARTIE VII : Projet et Professionnalisation (Module 17)
 | 4 | C++ Moderne (C++11→26) | 🌿 Intermédiaire | Smart pointers, move semantics, lambdas, C++26 |
 | 5 | Librairie Standard (STL) | 🌿 Intermédiaire | Conteneurs, algorithmes, ranges, templates |
 | 6 | Gestion des erreurs | 🌿 Intermédiaire | Exceptions, std::expected, Contrats C++26 |
-| 7 | Programmation Système | 🌳 Avancé | Threads, sockets, signaux, IPC |
-| 8 | Parsing et formats | 🌳 Avancé | JSON, YAML, Protobuf, FlatBuffers |
+| 7 | Programmation Système | 🌳 Avancé | Threads, sockets TCP/UDP, epoll, io_uring, Asio, gRPC, signaux, IPC |
+| 8 | Parsing et formats | 🌳 Avancé | JSON, YAML, TOML, XML, regex (CTRE/RE2/PCRE2), Protobuf, FlatBuffers, Cap'n Proto, MessagePack |
 | 9 | Build Systems | 🌳 Avancé | CMake 3.31+, Ninja, Conan 2.0 |
 | 10 | Débogage et profiling | 🌳 Avancé | GDB, Valgrind, perf, sanitizers |
 | 11 | Tests et qualité | 🌳 Avancé | Google Test, couverture, benchmark |
@@ -105,7 +105,7 @@ PARTIE VII : Projet et Professionnalisation (Module 17)
 
 ### Prérequis
 
-- Ubuntu 22.04+ (ou WSL2 sous Windows)
+- Ubuntu 24.04+ (ou WSL2 sous Windows)
 - ~10 Go d'espace disque
 - Motivation et curiosité 🙂
 
@@ -165,7 +165,7 @@ int main() {
 
 ```bash
 # Compilation (nécessite GCC 14+ pour std::print)
-g++ -std=c++23 -o hello hello.cpp
+g++-15 -std=c++23 -o hello hello.cpp
 ./hello
 ```
 
@@ -247,7 +247,7 @@ formation-cpp-moderne-ubuntu/
 > Non, et ce n'est pas l'objectif. Elle est complémentaire — plus orientée pratique et industrie, moins théorique.
 
 **Q : Le contenu est-il à jour ?**
-> La formation couvre C++26 comme standard ratifié, avec GCC 15 et Clang 20 comme compilateurs de référence. CMake 3.31+, Conan 2.x et les Safety Profiles sont traités dans leur état de mars 2026.
+> La formation couvre C++26 (en cours de ratification en 2026), avec GCC 15 et Clang 20 comme compilateurs de référence. CMake 3.31+, Conan 2.x et les Safety Profiles sont traités dans leur état de mars 2026.
 
 **Q : Puis-je utiliser ce contenu pour enseigner ?**
 > Oui ! La licence CC BY 4.0 le permet, avec attribution.
@@ -316,8 +316,4 @@ Merci aussi à tous les développeurs qui partagent leur savoir en open source. 
 
 </div> 
 
-<div align="center">
-<p align="center">
-  <img src="assets/underconstruction.jpeg" alt="En construction" width="200"/>
-</p>
-</div> 
+

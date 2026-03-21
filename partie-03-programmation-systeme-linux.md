@@ -12,11 +12,13 @@ Cette partie descend au niveau du système d'exploitation. Après avoir acquis l
 - Vous serez capable d'installer et de gérer des handlers de signaux POSIX (`sigaction`) en tenant compte des contraintes spécifiques aux environnements multi-threadés.
 - Vous serez capable de concevoir des programmes concurrents avec `std::thread`, `std::jthread` (C++20), mutex, variables de condition, et opérations atomiques avec contrôle du memory ordering.
 - Vous serez capable d'identifier et de prévenir les data races, deadlocks et problèmes de thread-safety à l'aide des outils appropriés (ThreadSanitizer, `std::scoped_lock`).
-- Vous serez capable de programmer des communications réseau TCP/UDP via l'API POSIX (sockets, `epoll`) et via les librairies modernes (Standalone Asio, Boost.Asio).
+- Vous serez capable de programmer des communications réseau TCP/UDP via l'API POSIX (sockets, `epoll`, `io_uring` avec liburing), via les librairies modernes (Standalone Asio, Boost.Asio) et via les clients HTTP (cpr, cpp-httplib).
 - Vous serez capable d'implémenter des services gRPC avec Protocol Buffers, y compris le streaming bidirectionnel.
+- Vous comprendrez les compromis entre les modèles readiness (`epoll`) et completion (`io_uring`), et saurez choisir le mécanisme adapté à votre cas d'usage.
 - Vous serez capable de gérer des processus fils (`fork`/`exec`) et de mettre en place des mécanismes IPC : pipes, shared memory (`mmap`), message queues POSIX.
 - Vous serez capable de parser et d'écrire des fichiers de configuration dans les formats courants : JSON (nlohmann/json), YAML (yaml-cpp), TOML (toml++), XML (pugixml).
-- Vous serez capable de choisir un format de sérialisation binaire (Protobuf, FlatBuffers, MessagePack) en fonction des contraintes de performance, de taille et de compatibilité.
+- Vous maîtriserez les expressions régulières en C++ avec le bon outil selon le contexte : `std::regex` (standard), CTRE (compile-time, C++20), RE2 (temps linéaire garanti, Google) et PCRE2 (Perl-compatible, JIT).
+- Vous serez capable de choisir un format de sérialisation binaire (Protobuf, FlatBuffers, Cap'n Proto, MessagePack) en fonction des contraintes de performance, de taille, de zero-copy et de compatibilité.
 
 ---
 
@@ -38,7 +40,7 @@ Cette partie descend au niveau du système d'exploitation. Après avoir acquis l
 
 ## Fil conducteur
 
-Le Module 7 suit la progression naturelle des interactions avec le système : on commence par le filesystem (chapitre 19), la couche la plus accessible, puis on descend vers les signaux (chapitre 20) qui imposent des contraintes strictes sur ce qu'un handler peut faire. Les threads (chapitre 21) constituent le cœur du module — c'est le chapitre le plus dense, couvrant `std::thread`, `std::jthread`, synchronisation, atomiques et algorithmes parallèles. Le networking (chapitre 22) étend la concurrence au réseau, des sockets POSIX bruts jusqu'à gRPC. Les IPC (chapitre 23) complètent le tableau en couvrant les mécanismes de communication entre processus sur la même machine. Le Module 8 traite un problème transversal à tous ces contextes : comment structurer les données échangées. Les formats texte (JSON, YAML, TOML) servent la configuration et les APIs REST, tandis que les formats binaires (Protobuf, FlatBuffers, MessagePack) répondent aux contraintes de performance des communications réseau et IPC traitées dans le module précédent. À la sortie de cette partie, vous savez écrire des programmes C++ qui exploitent les capacités du système Linux et communiquent efficacement, localement ou sur le réseau.
+Le Module 7 suit la progression naturelle des interactions avec le système : on commence par le filesystem (chapitre 19), la couche la plus accessible, puis on descend vers les signaux (chapitre 20) qui imposent des contraintes strictes sur ce qu'un handler peut faire. Les threads (chapitre 21) constituent le cœur du module — c'est le chapitre le plus dense, couvrant `std::thread`, `std::jthread`, synchronisation, atomiques et algorithmes parallèles. Le networking (chapitre 22) étend la concurrence au réseau, des sockets POSIX bruts jusqu'à `io_uring`, Asio, les clients HTTP et gRPC. Les IPC (chapitre 23) complètent le tableau en couvrant les mécanismes de communication entre processus sur la même machine. Le Module 8 traite un problème transversal à tous ces contextes : comment structurer les données échangées. Les formats texte (JSON, YAML, TOML, XML) et les expressions régulières (CTRE, RE2, PCRE2) servent la configuration, le parsing et les APIs REST, tandis que les formats binaires (Protobuf, FlatBuffers, Cap'n Proto, MessagePack) répondent aux contraintes de performance des communications réseau et IPC traitées dans le module précédent. À la sortie de cette partie, vous savez écrire des programmes C++ qui exploitent les capacités du système Linux et communiquent efficacement, localement ou sur le réseau.
 
 ---
 

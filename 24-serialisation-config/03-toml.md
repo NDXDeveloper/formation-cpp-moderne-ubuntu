@@ -82,11 +82,11 @@ La règle pratique : si le fichier est principalement écrit par un humain et lu
 
 ### Caractéristiques principales
 
-- **Header-only** — un seul `#include <toml++/toml.hpp>`, aucune librairie à linker.
-- **Conformité complète** — passe l'intégralité de la test suite officielle TOML v1.0.0.
-- **API ergonomique** — navigation par `[]`, extraction typée, conversions vers les types STL.
-- **Types natifs riches** — supporte les dates, heures et timestamps TOML comme types de première classe.
-- **Messages d'erreur détaillés** — positions ligne:colonne dans le fichier source.
+- **Header-only** — un seul `#include <toml++/toml.hpp>`, aucune librairie à linker.  
+- **Conformité complète** — passe l'intégralité de la test suite officielle TOML v1.0.0.  
+- **API ergonomique** — navigation par `[]`, extraction typée, conversions vers les types STL.  
+- **Types natifs riches** — supporte les dates, heures et timestamps TOML comme types de première classe.  
+- **Messages d'erreur détaillés** — positions ligne:colonne dans le fichier source.  
 - **Performance** — parsing rapide, empreinte mémoire raisonnable.
 
 ---
@@ -606,17 +606,17 @@ Grâce au typage explicite de TOML, certaines classes de bugs n'existent pas : u
 
 **TOML est le bon choix quand :**
 
-- Le fichier est un fichier de configuration applicative écrit et maintenu par des humains.
-- La structure est plate ou modérément imbriquée (2-3 niveaux).
-- La clarté et l'absence d'ambiguïté priment sur la compacité.
-- Le projet n'est pas contraint par un écosystème imposant un autre format.
+- Le fichier est un fichier de configuration applicative écrit et maintenu par des humains.  
+- La structure est plate ou modérément imbriquée (2-3 niveaux).  
+- La clarté et l'absence d'ambiguïté priment sur la compacité.  
+- Le projet n'est pas contraint par un écosystème imposant un autre format.  
 - Des dates et heures apparaissent dans la configuration.
 
 **TOML n'est pas le bon choix quand :**
 
-- La structure est profondément imbriquée (plus de 3 niveaux) — la syntaxe TOML devient lourde avec les chemins de sections à rallonge (`[a.b.c.d.e]`).
-- Le format est imposé par l'écosystème (Kubernetes → YAML, API REST → JSON).
-- Les ancres, références ou multi-documents sont nécessaires (fonctionnalités YAML absentes de TOML).
+- La structure est profondément imbriquée (plus de 3 niveaux) — la syntaxe TOML devient lourde avec les chemins de sections à rallonge (`[a.b.c.d.e]`).  
+- Le format est imposé par l'écosystème (Kubernetes → YAML, API REST → JSON).  
+- Les ancres, références ou multi-documents sont nécessaires (fonctionnalités YAML absentes de TOML).  
 - Le fichier est principalement généré et consommé par des machines — JSON ou un format binaire est plus adapté.
 
 ---

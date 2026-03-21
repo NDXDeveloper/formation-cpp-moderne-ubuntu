@@ -722,4 +722,4 @@ Les deux approches ne sont pas mutuellement exclusives. Un projet peut utiliser 
 
 **Tester la validation autant que le code métier.** Les fonctions de validation méritent leurs propres tests unitaires : cas nominaux, champs manquants, types incorrects, valeurs limites, combinaisons invalides de champs. Un bug dans la validation est doublement dangereux — il laisse passer des données invalides qui causeront des erreurs silencieuses en aval.
 
-⏭️ [Formats Binaires et Sérialisation Performante](/25-formats-binaires/README.md)
+⏭️ [Expressions régulières en C++ : std::regex et alternatives performantes](/24-serialisation-config/06-regex.md)

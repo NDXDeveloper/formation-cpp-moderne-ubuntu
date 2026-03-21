@@ -13,7 +13,7 @@ Ce module descend au niveau du système d'exploitation. Filesystem, signaux POSI
 1. **Manipuler** le système de fichiers via `std::filesystem` (C++17) et les appels système POSIX (`open`, `read`, `write`, `close`), et choisir l'API appropriée selon le contexte.
 2. **Implémenter** des handlers de signaux POSIX avec `sigaction` en respectant les contraintes async-signal-safe.
 3. **Concevoir** des programmes concurrents avec `std::thread`, `std::jthread` (C++20), mutex, condition variables, et opérations atomiques avec contrôle du memory ordering.
-4. **Programmer** des communications réseau TCP/UDP via l'API POSIX (sockets, `epoll`) et via les librairies modernes (Standalone Asio, Boost.Asio, cpr, gRPC).
+4. **Programmer** des communications réseau TCP/UDP via l'API POSIX (sockets, `epoll`, `io_uring` avec liburing), via les librairies modernes (Standalone Asio, Boost.Asio), les clients HTTP (cpr, cpp-httplib) et gRPC.
 5. **Implémenter** des mécanismes IPC : `fork`/`exec`, pipes, shared memory (`mmap`), message queues POSIX.
 6. **Détecter** les data races et problèmes de concurrence avec ThreadSanitizer (`-fsanitize=thread`).
 
@@ -68,7 +68,8 @@ Programmation réseau de bas niveau (sockets POSIX) jusqu'aux librairies moderne
 
 - Sockets TCP/UDP : création (`socket()`), opérations serveur (`bind`, `listen`, `accept`), opérations client (`connect`), envoi/réception (`send`, `recv`, `sendto`, `recvfrom`).
 - Client/Serveur basique : implémentation TCP complète, gestion des connexions multiples.
-- Multiplexage I/O : `select` (portable, limité à 1024 FDs), `poll` (sans cette limite), `epoll` (Linux, scalable à des milliers de connexions) — edge-triggered vs level-triggered.
+- Multiplexage I/O : `select` (portable, limité à 1024 FDs), `poll` (sans cette limite), `epoll` (Linux, scalable à des milliers de connexions — edge-triggered vs level-triggered), `io_uring` (Linux 5.1+, I/O asynchrone haute performance — submission/completion queues, zero-syscall, batching, zero-copy networking).
+- Comparaison des modèles : readiness notification (`epoll`) vs completion notification (`io_uring`), guide de choix selon le workload.
 - Librairies modernes : Standalone Asio (networking sans Boost, asynchrone avec callbacks/coroutines), Boost.Asio (écosystème complet), critères de choix entre les deux.
 - Clients HTTP : cpr (wrapper C++ autour de libcurl, API simple), cpp-httplib (header-only, client et serveur).
 - gRPC et Protocol Buffers : définition de services `.proto`, génération de code C++, implémentation client/serveur, streaming bidirectionnel.
@@ -104,7 +105,7 @@ Création et gestion de processus fils, et les quatre mécanismes principaux de 
 - Manipuler le filesystem via `std::filesystem` et les appels POSIX, en choisissant l'API selon les contraintes.
 - Installer des signal handlers corrects avec `sigaction` en respectant les contraintes async-signal-safe.
 - Écrire des programmes concurrents avec mutex, condition variables, atomiques, et `std::jthread`, sans data races.
-- Programmer des serveurs réseau TCP avec `epoll` ou Asio, et des services gRPC avec streaming.
+- Programmer des serveurs réseau TCP avec `epoll`, `io_uring` ou Asio, effectuer des requêtes HTTP avec cpr/cpp-httplib, et implémenter des services gRPC avec streaming.
 - Créer des processus fils avec `fork`/`exec` et communiquer via pipes, shared memory ou message queues.
 - Diagnostiquer les problèmes de concurrence avec ThreadSanitizer.
 

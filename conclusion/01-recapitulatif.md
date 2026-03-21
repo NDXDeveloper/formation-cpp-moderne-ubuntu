@@ -121,7 +121,7 @@ Les signaux POSIX (`SIGINT`, `SIGTERM`, `SIGSEGV`) sont compris : installation d
 
 La **programmation concurrente** est une compétence centrale : création et gestion de threads (`std::thread`, `std::jthread`), synchronisation (mutex, `lock_guard`, `unique_lock`, `scoped_lock`), variables de condition, atomiques et memory ordering, programmation asynchrone (`std::async`, `std::future`), thread-safety et détection de data races. Vous connaissez les algorithmes parallèles et leur application en contexte multi-thread.
 
-En **networking**, vous maîtrisez les sockets TCP/UDP (API POSIX), le multiplexage I/O (`select`, `poll`, `epoll`), les librairies réseau modernes (Standalone Asio, Boost.Asio), les clients HTTP (cpr, cpp-httplib) et la communication RPC haute performance avec gRPC et Protocol Buffers (définition de services `.proto`, génération de code, streaming bidirectionnel).
+En **networking**, vous maîtrisez les sockets TCP/UDP (API POSIX), le multiplexage I/O (`select`, `poll`, `epoll`, `io_uring` avec liburing pour l'I/O asynchrone haute performance), les librairies réseau modernes (Standalone Asio, Boost.Asio), les clients HTTP (cpr, cpp-httplib) et la communication RPC haute performance avec gRPC et Protocol Buffers (définition de services `.proto`, génération de code, streaming bidirectionnel). Vous comprenez les compromis entre les modèles readiness (`epoll`) et completion (`io_uring`), et vous savez choisir le mécanisme adapté à votre cas d'usage.
 
 La communication inter-processus est couverte : `fork`/`exec`, pipes, shared memory (`mmap`), message queues POSIX.
 
@@ -138,11 +138,13 @@ Vous savez lire, écrire et valider les formats de données courants en C++ :
 - **YAML** avec yaml-cpp (fichiers de configuration).  
 - **TOML** avec toml++ (alternative moderne).  
 - **XML** avec pugixml (systèmes legacy).  
-- **Protocol Buffers** (sérialisation binaire performante, définition de messages `.proto`, génération de code).  
-- **FlatBuffers** (zéro-copy serialization).  
-- **MessagePack** (JSON binaire compact).
+- **Expressions régulières** : `std::regex` (API standard), CTRE (compile-time, C++20), RE2 (Google, temps linéaire garanti) et PCRE2 (Perl-compatible, JIT). Vous savez choisir le moteur adapté (pattern statique → CTRE, pattern dynamique sûr → RE2, fonctionnalités avancées → PCRE2).
+- **Protocol Buffers** (sérialisation binaire performante, définition de messages `.proto`, génération de code).
+- **FlatBuffers** (zéro-copy serialization, accès direct sans désérialisation).
+- **Cap'n Proto** (zéro-copie dans les deux directions, format wire = format mémoire, RPC intégré).
+- **MessagePack** (JSON binaire compact, schema-less).
 
-Vous connaissez les compromis entre ces formats (lisibilité, performance, taille, schéma) et appliquez les bonnes pratiques de validation de schémas.
+Vous connaissez les compromis entre ces formats (lisibilité, performance, taille, schéma, zero-copy) et appliquez les bonnes pratiques de validation de schémas.
 
 ---
 

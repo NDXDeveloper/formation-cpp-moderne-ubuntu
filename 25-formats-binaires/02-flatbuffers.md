@@ -533,7 +533,7 @@ FlatBuffers supporte l'évolution de schéma avec des règles similaires à Prot
 
 ### Modifications compatibles
 
-- **Ajouter un champ à la fin d'une table.** Les anciens buffers n'auront pas ce champ ; les lecteurs verront la valeur par défaut.
+- **Ajouter un champ à la fin d'une table.** Les anciens buffers n'auront pas ce champ ; les lecteurs verront la valeur par défaut.  
 - **Déprécier un champ** (avec l'attribut `deprecated`). Le champ reste dans le schéma pour préserver les offsets, mais les accesseurs ne sont plus générés.
 
 ```fbs
@@ -551,9 +551,9 @@ table User {
 
 ### Modifications incompatibles
 
-- **Ajouter un champ au milieu de la table** — décale les identifiants implicites des champs suivants.
-- **Supprimer un champ** — utiliser `deprecated` à la place.
-- **Changer le type d'un champ.**
+- **Ajouter un champ au milieu de la table** — décale les identifiants implicites des champs suivants.  
+- **Supprimer un champ** — utiliser `deprecated` à la place.  
+- **Changer le type d'un champ.**  
 - **Modifier la taille ou l'ordre des champs d'un `struct`.**
 
 Pour forcer un identifiant de champ stable (indépendant de la position), l'attribut `id` peut être utilisé, rendant le schéma similaire aux numéros de champs Protobuf :
@@ -573,17 +573,17 @@ table User {
 
 **FlatBuffers est le bon choix quand :**
 
-- La latence de désérialisation est un goulot d'étranglement mesuré par profiling.
-- Les données sont lues beaucoup plus souvent qu'elles ne sont écrites (le coût de construction est plus élevé que Protobuf, mais la lecture est quasi-gratuite).
-- L'accès aléatoire à des champs spécifiques est nécessaire sans parser le message entier.
-- Le buffer peut être utilisé directement via `mmap` (fichiers de données, cache on-disk, assets de jeu).
+- La latence de désérialisation est un goulot d'étranglement mesuré par profiling.  
+- Les données sont lues beaucoup plus souvent qu'elles ne sont écrites (le coût de construction est plus élevé que Protobuf, mais la lecture est quasi-gratuite).  
+- L'accès aléatoire à des champs spécifiques est nécessaire sans parser le message entier.  
+- Le buffer peut être utilisé directement via `mmap` (fichiers de données, cache on-disk, assets de jeu).  
 - La mémoire est contrainte et les allocations doivent être minimisées.
 
 **FlatBuffers n'est pas le bon choix quand :**
 
-- L'écosystème impose Protobuf (gRPC, Kubernetes, la plupart des schema registries).
-- La construction de messages est plus fréquente que la lecture — le `FlatBufferBuilder` est plus complexe que l'API Protobuf.
-- La compacité maximale est prioritaire — Protobuf produit des messages légèrement plus compacts grâce à l'encodage varint (FlatBuffers utilise des tailles fixes pour les scalaires et ajoute des vtables).
+- L'écosystème impose Protobuf (gRPC, Kubernetes, la plupart des schema registries).  
+- La construction de messages est plus fréquente que la lecture — le `FlatBufferBuilder` est plus complexe que l'API Protobuf.  
+- La compacité maximale est prioritaire — Protobuf produit des messages légèrement plus compacts grâce à l'encodage varint (FlatBuffers utilise des tailles fixes pour les scalaires et ajoute des vtables).  
 - L'équipe n'a pas de contrainte de performance justifiant la complexité additionnelle.
 
 ---
@@ -609,4 +609,4 @@ Pour de nombreux projets, Protobuf reste le choix par défaut grâce à son éco
 
 La section 25.3 couvre MessagePack, qui adopte une troisième approche : la compacité d'un format binaire sans la contrainte d'un schéma.
 
-⏭️ [MessagePack : JSON binaire compact](/25-formats-binaires/03-messagepack.md)
+⏭️ [Cap'n Proto : Zéro-copie sans étape d'encodage](/25-formats-binaires/03-capnproto.md)

@@ -10,10 +10,10 @@
 
 XML (eXtensible Markup Language) a dominé le monde de l'échange de données et de la configuration pendant plus d'une décennie, des années 2000 au milieu des années 2010. Bien que JSON, YAML et TOML l'aient largement remplacé pour les nouveaux projets, XML reste profondément ancré dans de nombreux domaines :
 
-- **Protocoles d'entreprise** — SOAP, SAML, XMPP, les web services WS-*, les flux bancaires (ISO 20022, FIX/FIXML).
-- **Formats documentaires** — XHTML, DocBook, SVG, MathML, les formats Office Open XML (.docx, .xlsx).
-- **Configuration d'outils** — fichiers Maven (pom.xml), configurations Spring, descripteurs de déploiement Java EE, manifestes Android.
-- **Formats industriels** — COLLADA (3D), GML (géospatial), HL7/CDA (santé), UBL (facturation électronique).
+- **Protocoles d'entreprise** — SOAP, SAML, XMPP, les web services WS-*, les flux bancaires (ISO 20022, FIX/FIXML).  
+- **Formats documentaires** — XHTML, DocBook, SVG, MathML, les formats Office Open XML (.docx, .xlsx).  
+- **Configuration d'outils** — fichiers Maven (pom.xml), configurations Spring, descripteurs de déploiement Java EE, manifestes Android.  
+- **Formats industriels** — COLLADA (3D), GML (géospatial), HL7/CDA (santé), UBL (facturation électronique).  
 - **Systèmes legacy** — toute application d'entreprise développée entre 2000 et 2015 a de fortes chances d'utiliser XML pour ses échanges de données.
 
 Un développeur C++ travaillant dans un environnement professionnel sera tôt ou tard confronté à du XML, non pas par choix mais par nécessité d'interfaçage. Cette section fournit les outils pour le gérer efficacement avec pugixml, sans prétendre que XML est le bon choix pour un nouveau projet.
@@ -68,11 +68,11 @@ Plusieurs librairies XML existent en C++ : Xerces-C++ (lourde, conforme aux stan
 
 ### Caractéristiques principales
 
-- **Header-only** (optionnellement compilable en librairie statique) — un header `pugixml.hpp` et un source `pugixml.cpp`, ou un amalgamé single-file.
-- **Très rapide** — l'un des parsers XML les plus performants disponibles, grâce à un parsing in-situ qui minimise les allocations.
-- **API C++ idiomatique** — types légers avec sémantique de valeur, itérateurs compatibles STL, pas de gestion manuelle de mémoire.
-- **XPath intégré** — requêtes XPath 1.0 pour la navigation dans les documents complexes.
-- **Empreinte minimale** — environ 150 Ko compilé, pas de dépendance externe.
+- **Header-only** (optionnellement compilable en librairie statique) — un header `pugixml.hpp` et un source `pugixml.cpp`, ou un amalgamé single-file.  
+- **Très rapide** — l'un des parsers XML les plus performants disponibles, grâce à un parsing in-situ qui minimise les allocations.  
+- **API C++ idiomatique** — types légers avec sémantique de valeur, itérateurs compatibles STL, pas de gestion manuelle de mémoire.  
+- **XPath intégré** — requêtes XPath 1.0 pour la navigation dans les documents complexes.  
+- **Empreinte minimale** — environ 150 Ko compilé, pas de dépendance externe.  
 - **Pas de validation DTD/XSD** — pugixml est un parser non-validant. C'est un choix délibéré : pour la grande majorité des cas d'utilisation, la validation structurelle applicative est préférable à la validation par schéma XML.
 
 ---
@@ -739,16 +739,16 @@ if (!host || std::string_view(host.text().as_string()).empty()) {
 
 **pugixml est le bon choix quand :**
 
-- Le projet doit interfacer avec un système existant qui produit ou consomme du XML.
-- Le document XML est relativement simple (configuration, données structurées) et ne nécessite pas de validation par schéma XSD.
-- La performance de parsing est importante (pugixml est parmi les plus rapides).
-- XPath est nécessaire pour naviguer dans des documents à structure variable.
+- Le projet doit interfacer avec un système existant qui produit ou consomme du XML.  
+- Le document XML est relativement simple (configuration, données structurées) et ne nécessite pas de validation par schéma XSD.  
+- La performance de parsing est importante (pugixml est parmi les plus rapides).  
+- XPath est nécessaire pour naviguer dans des documents à structure variable.  
 - Le programme doit modifier et réécrire des documents XML existants en préservant leur structure.
 
 **pugixml n'est pas le bon choix quand :**
 
-- Une validation stricte par DTD ou XSD est requise — utiliser Xerces-C++ ou libxml2.
-- Le XML utilise des fonctionnalités avancées comme XSLT — utiliser libxslt.
+- Une validation stricte par DTD ou XSD est requise — utiliser Xerces-C++ ou libxml2.  
+- Le XML utilise des fonctionnalités avancées comme XSLT — utiliser libxslt.  
 - Le choix du format est libre — JSON, YAML ou TOML sont préférables pour tout nouveau projet.
 
 ---

@@ -86,6 +86,33 @@ Tous les exemples sont compilés avec `g++-15 -std=c++23 -Wall -Wextra -pthread`
 - **Compilation** : `g++-15 -std=c++23 -Wall -Wextra -pthread -o ex03_epoll ex03_epoll.cpp`
 - **Sortie attendue** : Client connecté, echo "Hello epoll!", 3 timers expirés, arrêt propre
 
+### ex03_iouring_init.cpp
+- **Section** : 22.3.3.2 — liburing : Interface C/C++ simplifiée
+- **Description** : Initialisation d'une instance io_uring, obtention d'un SQE, cleanup
+- **Fichier source** : `03.3.2-liburing.md`
+- **Compilation** : `g++-15 -std=c++23 -O2 -o ex03_iouring_init ex03_iouring_init.cpp -luring`
+- **Sortie attendue** :
+```
+io_uring initialise OK
+  SQ entries: 256
+  CQ entries: 512
+  SQE obtenu OK
+io_uring cleanup OK
+```
+
+### ex03_iouring_file.cpp
+- **Section** : 22.3.3.3 — Cas d'usage : networking, fichiers, timeouts
+- **Description** : Lecture asynchrone d'un fichier par blocs de 64 Ko avec io_uring. Toutes les lectures sont soumises avant la première completion.
+- **Fichier source** : `03.3.3-cas-usage.md`
+- **Compilation** : `g++-15 -std=c++23 -O2 -o ex03_iouring_file ex03_iouring_file.cpp -luring`
+- **Execution** : `./ex03_iouring_file /etc/hostname`
+- **Sortie attendue** :
+```
+Soumission de 1 lectures asynchrones (N octets)
+Lecture terminee : N octets lus, 0 erreurs
+```
+- **Prerequis** : `sudo apt install liburing-dev`
+
 ---
 
 ## Section 22.4.1 — Standalone Asio
